@@ -1,0 +1,15 @@
+{
+  "name": "kenshin-converter-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot — converts H.265/AC3/DTS videos to H.264/AAC for browser playback",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.64.0"
+  }
+}
