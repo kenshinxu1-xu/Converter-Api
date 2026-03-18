@@ -61,12 +61,26 @@ def fmt_time(seconds) -> str:
     s = int(seconds % 60)
     return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
 
+def resolve_url(url: str) -> str:
+    """Follow redirects and return final URL"""
+    try:
+        r = requests.head(url, allow_redirects=True, timeout=15,
+                          headers={"User-Agent": "Mozilla/5.0"})
+        return r.url
+    except:
+        return url
+
 def get_info(path_or_url: str) -> dict | None:
     """Get video codec info via ffprobe (sync)"""
+    # Resolve redirects for URLs
+    if path_or_url.startswith("http"):
+        path_or_url = resolve_url(path_or_url)
     try:
         result = subprocess.run(
             ["ffprobe", "-v", "quiet", "-print_format", "json",
-             "-show_streams", "-show_format", path_or_url],
+             "-show_streams", "-show_format",
+             "-user_agent", "Mozilla/5.0",
+             path_or_url],
             capture_output=True, text=True, timeout=60
         )
         data    = json.loads(result.stdout)
@@ -132,19 +146,37 @@ def convert_to_hls_sync(input_path: str, job_id: str, progress_cb=None):
         "error":    None,
     }
 
+    # CPU count for threading
+    import multiprocessing
+    cpu = multiprocessing.cpu_count()
+
+    # Resolve redirect URL if needed
+    actual_input = input_path
+    if input_path.startswith("http"):
+        actual_input = resolve_url(input_path)
+
     cmd = [
         "ffmpeg", "-y", "-loglevel", "info",
-        "-i", input_path,
-        # Video → H.264 original quality
-        "-c:v", "libx264", "-preset", "fast", "-crf", "18",
-        "-profile:v", "high", "-level:v", "4.2",
+        # Faster input reading
+        "-user_agent", "Mozilla/5.0",
+        "-reconnect", "1",
+        "-reconnect_streamed", "1",
+        "-reconnect_delay_max", "5",
+        "-i", actual_input,
+        # Video → H.264 ULTRAFAST (3-5x faster than fast!)
+        "-c:v", "libx264",
+        "-preset", "ultrafast",   # ← KEY: ultrafast instead of fast
+        "-crf", "23",             # slightly lower quality but WAY faster
+        "-profile:v", "baseline", # simplest profile = fastest encode
+        "-level:v", "3.1",
         "-pix_fmt", "yuv420p",
+        "-threads", str(cpu),     # use ALL CPU cores
         "-g", "48", "-sc_threshold", "0",
-        # Audio → AAC stereo (fixes AC3/DTS/5.1/TrueHD)
-        "-c:a", "aac", "-b:a", "192k", "-ac", "2", "-ar", "48000",
+        # Audio → AAC stereo (fixes AC3/DTS/5.1/TrueHD/OPUS)
+        "-c:a", "aac", "-b:a", "128k", "-ac", "2", "-ar", "44100",
         # HLS
         "-f", "hls",
-        "-hls_time", "4",
+        "-hls_time", "6",
         "-hls_list_size", "0",
         "-hls_segment_type", "mpegts",
         "-hls_flags", "independent_segments",
@@ -280,6 +312,7 @@ async def start_http():
 async def process_convert(update: Update, input_source: str, display_name: str = ""):
     is_url   = input_source.startswith("http")
     job_id   = uuid.uuid4().hex[:10]
+    dl_dir   = None  # will be set if URL is downloaded
 
     status_msg = await update.message.reply_text(
         "🔍 *Codec check kar raha hoon...*",
@@ -319,8 +352,39 @@ async def process_convert(update: Update, input_source: str, display_name: str =
             await edit(msg)
             return
 
-        # ── Start convert ──
-        await edit(info_text + "⚙️ *Convert ho rahi hai...*\n`[░░░░░░░░░░] 0%`")
+        # ── Download URL first (more reliable than streaming to FFmpeg) ──
+        actual_source = input_source
+        dl_dir = None
+        if input_source.startswith("http"):
+            await edit(info_text + "📥 *Downloading file first...*\n(FFmpeg direct stream se zyada fast hai)")
+            dl_dir      = TMP / f"dl_{job_id}"
+            dl_dir.mkdir(parents=True, exist_ok=True)
+            lo          = input_source.lower().split("?")[0]
+            ext         = ".mkv" if ".mkv" in lo else ".mp4" if ".mp4" in lo else ".mp4"
+            dl_dest     = str(dl_dir / f"input{ext}")
+            last_dl_edit = [time.time()]
+            dl_start     = time.time()
+
+            def dl_progress(done, total):
+                now = time.time()
+                if now - last_dl_edit[0] < 3: return
+                last_dl_edit[0] = now
+                pct   = int(done/total*100)
+                bar   = "█"*(pct//10) + "░"*(10-pct//10)
+                speed = done/1024/1024/(now-dl_start) if now > dl_start else 0
+                asyncio.run_coroutine_threadsafe(
+                    edit(info_text + f"📥 *Downloading...*\n`[{bar}] {pct}%`\n⚡ `{speed:.1f} MB/s`"),
+                    asyncio.get_event_loop()
+                )
+
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, lambda: download_file(
+                resolve_url(input_source), dl_dest, dl_progress
+            ))
+            actual_source = dl_dest
+            await edit(info_text + "✅ *Download ho gayi!*\n⚙️ *Convert shuru...*\n`[░░░░░░░░░░] 0%`")
+        else:
+            await edit(info_text + "⚙️ *Convert ho rahi hai...*\n`[░░░░░░░░░░] 0%`")
 
         async def on_progress(pct, cur, dur, segs):
             bar     = "█"*(pct//10) + "░"*(10 - pct//10)
@@ -329,14 +393,14 @@ async def process_convert(update: Update, input_source: str, display_name: str =
             eta     = ((dur - cur) / speed) if speed > 0 else 0
             await edit(
                 info_text +
-                f"⚙️ *Converting...*\n"
+                f"⚙️ *Converting... (ultrafast mode)*\n"
                 f"`[{bar}] {pct}%`\n"
                 f"⏱ `{fmt_time(cur)} / {fmt_time(dur)}`\n"
-                f"📦 Segments ready: `{segs}`\n"
+                f"📦 Segments: `{segs}`\n"
                 f"⚡ Speed: `{speed:.1f}x` | ETA: `{fmt_time(eta)}`"
             )
 
-        await convert_to_hls(input_source, job_id, on_progress)
+        await convert_to_hls(actual_source, job_id, on_progress)
 
         play_url = f"{BASE_URL}/hls/{job_id}/index.m3u8"
         segs     = JOBS[job_id]["segments"]
@@ -361,8 +425,13 @@ async def process_convert(update: Update, input_source: str, display_name: str =
             "Check karo:\n• URL accessible hai?\n• Format supported hai?"
         )
     finally:
+        # Cleanup downloaded file
         if not is_url and Path(input_source).exists():
             try: os.remove(input_source)
+            except: pass
+        # Cleanup download dir for URLs
+        if dl_dir and Path(str(dl_dir)).exists():
+            try: shutil.rmtree(str(dl_dir), ignore_errors=True)
             except: pass
 
 # ══════════════════════════════════════════════════════════════
