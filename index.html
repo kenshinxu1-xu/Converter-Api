@@ -1,0 +1,2907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<meta name="theme-color" content="#030810">
+<meta name="description" content="Kenshin Anime Network — Watch & Download Hindi Dubbed Anime">
+<title>Kenshin Anime Network</title>
+
+<!-- DNS Prefetch + Preconnect for ZERO latency on first request -->
+<link rel="dns-prefetch" href="https://web-production-72935.up.railway.app">
+<link rel="preconnect" href="https://web-production-72935.up.railway.app" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Fonts — display=swap so text renders instantly without waiting -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- HLS.js — defer so it doesn't block page render -->
+
+<style>
+/* ── PERFORMANCE: GPU layers on animated elements ── */
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;text-size-adjust:100%;-webkit-text-size-adjust:100%;}
+img{content-visibility:auto;}
+.lc,.gc,.mwc,.rec-card{
+  will-change:transform;
+  contain:layout style;
+  transform:translateZ(0); /* GPU layer */
+}
+.lc:hover{transform:translateY(-3px) translateZ(0);}
+.gc:hover{transform:translateY(-2px) translateZ(0);}
+/* Smooth scroll rows without jank */
+.h-row,.rec-row{
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x mandatory;
+  overscroll-behavior-x:contain;
+}
+.lc{scroll-snap-align:start;}
+:root{
+  --nb:#00d4ff;--nb2:#0088aa;--nb3:rgba(0,212,255,0.08);--nb4:rgba(0,212,255,0.15);
+  --w:#fff;--w2:#e2e8f0;--w3:#94a3b8;--w4:#475569;
+  --d:#030810;--d2:#060d1a;--d3:#090f1e;--card:#0a1628;
+  --nav:62px;--bot:64px;
+  --glow:0 0 20px rgba(0,212,255,0.3);
+  --red:#ff4444;--green:#4ade80;--gold:#ffd700;--purple:#a855f7;--orange:#f97316;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--d);color:var(--w);font-family:'Outfit',sans-serif;overflow-x:hidden;overflow-y:auto;min-height:100vh;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y;}
+::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--nb);border-radius:2px}
+img{display:block;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:'Outfit',sans-serif;}
+
+/* ═══════════════ NAV ═══════════════ */
+.nav{position:fixed;top:0;width:100%;z-index:400;height:var(--nav);
+  display:flex;align-items:center;gap:12px;padding:0 16px;
+  background:rgba(3,8,16,0.95);backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid rgba(0,212,255,0.1);}
+.nav::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--nb),transparent);opacity:0.4;}
+.nav-logo{display:flex;align-items:center;gap:9px;flex-shrink:0;cursor:pointer;user-select:none;}
+.nav-logo-img{width:38px;height:38px;border-radius:9px;border:1.5px solid var(--nb);
+  box-shadow:var(--glow);object-fit:cover;display:none;}
+.nav-logo-fb{width:38px;height:38px;border-radius:9px;border:1.5px solid var(--nb);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  background:rgba(0,212,255,0.07);box-shadow:var(--glow);}
+.nav-brand{font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:3px;line-height:1.05;
+  background:linear-gradient(135deg,#fff 0%,var(--nb) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-desktop-links{display:none;gap:4px;flex:1;margin-left:12px;}
+.ndl{padding:6px 13px;border-radius:20px;font-size:0.76rem;font-weight:600;cursor:pointer;
+  color:var(--w3);transition:all 0.2s;border:none;background:none;}
+.ndl:hover,.ndl.on{background:rgba(0,212,255,0.1);color:var(--nb);}
+.sw{flex:1;position:relative;max-width:340px;}
+.si{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(0,212,255,0.18);
+  border-radius:22px;padding:8px 16px 8px 36px;color:var(--w);font-size:0.82rem;
+  font-family:'Outfit';outline:none;transition:all 0.2s;}
+.si::placeholder{color:var(--w3);}.si:focus{border-color:var(--nb);background:rgba(0,212,255,0.05);}
+.si-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:0.85rem;pointer-events:none;}
+#sr{position:absolute;top:calc(100% + 8px);left:0;right:0;
+  background:var(--d3);border:1px solid rgba(0,212,255,0.2);border-radius:14px;
+  max-height:300px;overflow-y:auto;z-index:500;display:none;
+  box-shadow:0 20px 60px rgba(0,0,0,0.8);backdrop-filter:blur(20px);}
+#sr.show{display:block;}
+.sr-item{display:flex;align-items:center;gap:10px;padding:10px 13px;cursor:pointer;
+  transition:background 0.15s;border-bottom:1px solid rgba(255,255,255,0.04);}
+.sr-item:hover{background:var(--nb3);}
+.sr-item:last-child{border-bottom:none;}
+.sr-img{width:60px;height:38px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+.sr-t{font-size:0.82rem;font-weight:700;}.sr-g{font-size:0.64rem;color:var(--nb);}
+.sr-tag{font-size:0.56rem;padding:1px 6px;border-radius:4px;font-weight:700;margin-top:2px;display:inline-block;}
+.nav-tg{display:flex;align-items:center;gap:5px;background:var(--nb);color:var(--d);
+  padding:7px 14px;border-radius:20px;font-weight:800;font-size:0.76rem;
+  flex-shrink:0;transition:all 0.2s;letter-spacing:0.5px;}
+.nav-tg:hover{box-shadow:var(--glow);transform:translateY(-1px);}
+
+/* ═══════════════ NOTIFICATION BANNER ═══════════════ */
+.notif-banner{display:none;position:relative;
+  background:linear-gradient(90deg,rgba(0,212,255,0.06),rgba(168,85,247,0.06));
+  border-bottom:1px solid rgba(0,212,255,0.15);padding:10px 40px 10px 16px;
+  margin-top:var(--nav);}
+.notif-banner.show{display:block;}
+.nb-inner{display:flex;align-items:center;gap:10px;max-width:700px;margin:0 auto;}
+.nb-icon{font-size:1.2rem;flex-shrink:0;}
+.nb-msg{font-size:0.78rem;color:var(--w2);line-height:1.5;}
+.nb-anime{font-weight:700;color:var(--nb);}
+.nb-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--w4);font-size:1rem;line-height:1;
+  padding:4px;cursor:pointer;}
+.nb-close:hover{color:var(--w);}
+
+/* ═══════════════ PAGES ═══════════════ */
+#main-app{padding-top:var(--nav);-webkit-overflow-scrolling:touch;}
+#detail-app{display:none;padding-top:var(--nav);-webkit-overflow-scrolling:touch;}
+#detail-app.open{display:block;}
+.pg{display:none;animation:pgIn 0.3s ease;}
+.pg.active{display:block;}
+@keyframes pgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════ HERO ═══════════════ */
+.hero{position:relative;width:100%;aspect-ratio:16/9;max-height:600px;min-height:200px;overflow:hidden;display:flex;align-items:flex-end;}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.55;}
+.hero-img{position:absolute;inset:0;background-size:cover;background-position:center top;
+  transition:opacity 1s ease;filter:brightness(0.5) saturate(0.8);}
+.hero-particles{position:absolute;inset:0;pointer-events:none;}
+.hero-gr{position:absolute;inset:0;
+  background:linear-gradient(0deg,var(--d) 0%,rgba(3,8,16,0.5) 45%,rgba(3,8,16,0.1) 75%,transparent 100%);}
+.hero-gr2{position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(3,8,16,0.6) 0%,transparent 60%);}
+.hero-content{position:relative;z-index:3;padding:20px 18px 24px;width:100%;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;
+  border-radius:20px;border:1px solid rgba(0,212,255,0.3);background:rgba(0,212,255,0.06);
+  font-size:0.6rem;font-weight:700;letter-spacing:3px;color:var(--nb);margin-bottom:14px;}
+.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--nb);
+  animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+.hero-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.hero-logo{width:64px;height:64px;border-radius:14px;border:2px solid var(--nb);
+  box-shadow:var(--glow);object-fit:cover;flex-shrink:0;display:none;}
+.hero-title{font-family:'Bebas Neue';font-size:clamp(2.4rem,10vw,4.8rem);
+  letter-spacing:6px;line-height:0.88;}
+.hero-title .c-nb{color:var(--nb);text-shadow:0 0 30px rgba(0,212,255,0.5);}
+.hero-subtitle{font-size:0.72rem;color:var(--w3);letter-spacing:3px;margin-top:6px;}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.hbtn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:22px;
+  font-weight:800;font-size:0.8rem;letter-spacing:1px;text-transform:uppercase;
+  transition:all 0.2s;cursor:pointer;border:none;font-family:'Outfit';}
+.hbtn-nb{background:linear-gradient(135deg,var(--nb),var(--nb2));color:var(--d);
+  box-shadow:0 4px 20px rgba(0,212,255,0.3);}
+.hbtn-nb:hover{box-shadow:0 6px 30px rgba(0,212,255,0.5);transform:translateY(-2px);}
+.hbtn-out{border:1.5px solid rgba(0,212,255,0.35);color:var(--nb);background:rgba(0,212,255,0.04);}
+.hbtn-out:hover{background:rgba(0,212,255,0.1);}
+
+/* ═══════════════ STATS ═══════════════ */
+.stats-bar{display:flex;background:var(--d2);border-bottom:1px solid rgba(0,212,255,0.07);}
+.stat{flex:1;text-align:center;padding:12px 0;border-right:1px solid rgba(255,255,255,0.04);}
+.stat:last-child{border-right:none;}
+.stat-n{font-family:'Bebas Neue';font-size:1.3rem;color:var(--nb);}
+.stat-l{font-size:0.56rem;color:var(--w3);letter-spacing:2px;text-transform:uppercase;margin-top:1px;}
+
+/* ═══════════════ MARQUEE ═══════════════ */
+.mq-wrap{background:linear-gradient(90deg,var(--nb2),var(--nb),var(--nb2));
+  padding:8px 0;overflow:hidden;position:relative;}
+.mq-tr{display:flex;animation:mqAnim 35s linear infinite;white-space:nowrap;}
+@keyframes mqAnim{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mq-item{font-family:'Bebas Neue';font-size:0.78rem;letter-spacing:3px;
+  color:rgba(3,8,16,0.85);padding:0 14px;display:flex;align-items:center;gap:12px;}
+.mq-dot{width:3px;height:3px;border-radius:50%;background:rgba(3,8,16,0.3);}
+
+/* ═══════════════ SECTION ═══════════════ */
+.sec{padding:20px 16px;}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;}
+.sec-tag-label{font-size:0.58rem;letter-spacing:4px;font-weight:700;color:var(--nb);
+  text-transform:uppercase;margin-bottom:3px;}
+.sec-title{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:3px;line-height:1;}
+.sec-more{font-size:0.72rem;color:var(--nb);padding:5px 12px;
+  border:1px solid rgba(0,212,255,0.25);border-radius:12px;cursor:pointer;
+  transition:all 0.2s;white-space:nowrap;}
+.sec-more:hover{background:var(--nb3);}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.15),transparent);margin:0 16px;}
+
+/* ═══════════════ LANDSCAPE CARD ═══════════════ */
+.h-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch;}
+.h-row::-webkit-scrollbar{height:2px;}
+.lc{flex:0 0 230px;border-radius:12px;overflow:hidden;cursor:pointer;position:relative;
+  transition:transform 0.3s,box-shadow 0.3s;border:1px solid rgba(255,255,255,0.06);
+  background:var(--card);}
+.lc:hover{transform:translateY(-4px) scale(1.02);
+  box-shadow:0 12px 32px rgba(0,0,0,0.7),0 0 0 1px rgba(0,212,255,0.3);}
+.lc-img{width:100%;height:130px;object-fit:cover;transition:transform 0.4s;}
+.lc:hover .lc-img{transform:scale(1.06);}
+.lc-ov{position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(3,8,16,0.97) 0%,rgba(3,8,16,0.15) 55%,transparent 100%);}
+.lc-info{position:absolute;bottom:0;left:0;right:0;padding:10px 11px;}
+.lc-title{font-weight:800;font-size:0.86rem;line-height:1.2;
+  text-shadow:0 1px 4px rgba(0,0,0,0.8);}
+.lc-genre{font-size:0.63rem;color:var(--nb);margin-top:3px;font-weight:500;}
+.lc-eps{font-size:0.58rem;color:var(--w3);margin-top:2px;}
+.lc-trailer-badge{position:absolute;bottom:10px;right:10px;background:rgba(255,68,68,0.9);
+  color:#fff;font-size:0.55rem;font-weight:800;padding:2px 7px;border-radius:5px;
+  letter-spacing:0.5px;}
+.tag-badge{position:absolute;top:8px;right:8px;font-size:0.52rem;font-weight:800;
+  padding:3px 8px;border-radius:7px;letter-spacing:0.5px;}
+.tag-HOT{background:#ff4444;color:#fff;}
+.tag-NEW{background:var(--nb);color:var(--d);}
+.tag-MUST{background:var(--gold);color:var(--d);}
+.tag-TOP{background:var(--purple);color:#fff;}
+.tag-CLASSIC{background:var(--orange);color:#fff;}
+.tag-ONGOING{background:var(--green);color:var(--d);}
+
+/* ═══════════════ ANIME GRID ═══════════════ */
+.filter-row{display:flex;gap:7px;overflow-x:auto;padding:0 16px 12px;
+  -webkit-overflow-scrolling:touch;}
+.filter-row::-webkit-scrollbar{display:none;}
+.fp{flex:0 0 auto;padding:6px 16px;border-radius:16px;font-size:0.74rem;font-weight:700;
+  cursor:pointer;transition:all 0.2s;border:1px solid rgba(255,255,255,0.08);
+  color:var(--w3);background:rgba(255,255,255,0.04);font-family:'Outfit';}
+.fp.on,.fp:hover{background:rgba(0,212,255,0.1);color:var(--nb);
+  border-color:rgba(0,212,255,0.3);}
+#anime-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:0 16px 20px;}
+.gc{background:var(--card);border-radius:11px;overflow:hidden;cursor:pointer;
+  border:1px solid rgba(255,255,255,0.05);transition:all 0.25s;position:relative;}
+.gc:hover{border-color:rgba(0,212,255,0.3);transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.6);}
+.gc-img{width:100%;aspect-ratio:16/9;object-fit:cover;transition:transform 0.4s;}
+.gc:hover .gc-img{transform:scale(1.05);}
+.gc-body{padding:9px;}
+.gc-title{font-weight:800;font-size:0.84rem;line-height:1.25;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.gc-meta{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.gc-genre{font-size:0.62rem;color:var(--nb);}
+.gc-year{font-size:0.58rem;color:var(--w4);}
+.gc-trailer-badge{position:absolute;top:7px;left:7px;background:rgba(255,68,68,0.85);
+  backdrop-filter:blur(4px);color:#fff;font-size:0.52rem;font-weight:800;
+  padding:2px 6px;border-radius:5px;}
+
+/* ═══════════════ MANWHA GRID ═══════════════ */
+.mw-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px 20px;}
+.mwc{background:var(--card);border-radius:10px;overflow:hidden;cursor:pointer;
+  border:1px solid rgba(255,255,255,0.05);transition:all 0.2s;}
+.mwc:hover{border-color:rgba(168,85,247,0.3);transform:translateY(-3px);}
+.mwc-img{width:100%;aspect-ratio:16/9;object-fit:cover;}
+.mwc-body{padding:9px;}
+.mwc-title{font-weight:700;font-size:0.82rem;line-height:1.2;}
+.mwc-genre{font-size:0.62rem;color:#a855f7;margin-top:3px;}
+
+/* ═══════════════ CHANNELS ═══════════════ */
+.ch-card{display:flex;align-items:center;gap:13px;background:var(--d3);border-radius:13px;
+  padding:14px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.05);
+  cursor:pointer;transition:all 0.2s;}
+.ch-card:hover{border-color:rgba(0,212,255,0.3);transform:translateX(3px);}
+.ch-av{width:52px;height:52px;border-radius:11px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+  border:2px solid var(--nb);background:rgba(0,212,255,0.07);}
+.ch-name{font-family:'Bebas Neue';font-size:1.05rem;letter-spacing:2px;}
+.ch-desc{font-size:0.73rem;color:var(--w3);margin-top:3px;line-height:1.5;}
+.ch-pill{display:inline-block;margin-top:5px;font-size:0.58rem;font-weight:700;
+  letter-spacing:1.5px;padding:2px 9px;border-radius:6px;background:var(--nb3);color:var(--nb);}
+
+/* ═══════════════ DEMAND ═══════════════ */
+.demand-form-card{background:var(--d3);border-radius:14px;padding:18px;
+  border:1px solid rgba(0,212,255,0.1);margin:14px;}
+.dfc-title{font-family:'Bebas Neue';font-size:1.15rem;letter-spacing:4px;margin-bottom:4px;}
+.dfc-sub{font-size:0.72rem;color:var(--w3);margin-bottom:16px;line-height:1.6;}
+.d-field{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(0,212,255,0.14);
+  border-radius:9px;padding:10px 13px;color:var(--w);font-size:0.82rem;font-family:'Outfit';
+  outline:none;margin-bottom:10px;transition:border 0.2s;}
+.d-field:focus{border-color:var(--nb);}
+.d-field option{background:var(--d2);}
+.d-submit-btn{width:100%;padding:13px;border-radius:11px;
+  background:linear-gradient(135deg,var(--nb),var(--nb2));color:var(--d);
+  font-weight:900;font-size:0.88rem;border:none;cursor:pointer;font-family:'Outfit';
+  letter-spacing:1px;transition:all 0.2s;}
+.d-submit-btn:hover{box-shadow:0 4px 20px rgba(0,212,255,0.4);transform:translateY(-1px);}
+.d-success{margin-top:10px;padding:11px;background:rgba(74,222,128,0.08);
+  border:1px solid rgba(74,222,128,0.25);border-radius:9px;font-size:0.78rem;
+  color:var(--green);text-align:center;display:none;}
+.demand-list-section{padding:0 14px 20px;}
+.demand-list-title{font-size:0.62rem;letter-spacing:3px;font-weight:700;
+  color:var(--w3);text-transform:uppercase;margin-bottom:10px;}
+.demand-card{background:var(--card);border-radius:10px;padding:12px;
+  margin-bottom:8px;border:1px solid rgba(255,255,255,0.05);
+  display:flex;align-items:center;gap:10px;}
+.dc-rank{font-family:'Bebas Neue';font-size:1.4rem;color:var(--nb3);min-width:28px;}
+.dc-body{flex:1;min-width:0;}
+.dc-title{font-weight:700;font-size:0.84rem;}
+.dc-meta{font-size:0.63rem;color:var(--w3);margin-top:2px;}
+.dc-votes{text-align:center;flex-shrink:0;}
+.dc-vn{font-family:'Bebas Neue';font-size:1.2rem;color:var(--nb);}
+.dc-vl{font-size:0.52rem;color:var(--w3);}
+.dc-vote-btn{background:var(--nb3);border:1px solid rgba(0,212,255,0.2);
+  color:var(--nb);border-radius:6px;padding:3px 9px;font-size:0.65rem;
+  cursor:pointer;margin-top:4px;transition:all 0.15s;font-family:'Outfit';}
+.dc-vote-btn:hover{background:rgba(0,212,255,0.15);}
+.dc-status{font-size:0.56rem;padding:2px 7px;border-radius:4px;font-weight:800;}
+.ds-pending{background:rgba(255,215,0,0.1);color:var(--gold);}
+.ds-added{background:rgba(74,222,128,0.1);color:var(--green);}
+
+/* ═══════════════ ABOUT ═══════════════ */
+.about-hero{padding:28px 16px;background:linear-gradient(135deg,var(--d2),var(--d3));
+  border-bottom:1px solid rgba(0,212,255,0.1);}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px;}
+.feat-card{background:var(--d3);border-radius:11px;padding:14px;
+  border:1px solid rgba(0,212,255,0.07);transition:border 0.2s;}
+.feat-card:hover{border-color:rgba(0,212,255,0.2);}
+.feat-icon{font-size:1.6rem;margin-bottom:6px;}
+.feat-name{font-weight:700;font-size:0.84rem;margin-bottom:4px;}
+.feat-desc{font-size:0.7rem;color:var(--w3);line-height:1.55;}
+.cmp-table{margin:0 16px 16px;background:var(--d3);border-radius:13px;
+  overflow:hidden;border:1px solid rgba(0,212,255,0.08);}
+.cmp-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+  border-bottom:1px solid rgba(255,255,255,0.04);}
+.cmp-row:last-child{border-bottom:none;}
+.cmp-cell{padding:11px 9px;font-size:0.72rem;text-align:center;}
+.cmp-cell:first-child{text-align:left;font-weight:600;color:var(--w3);}
+.cmp-head{background:rgba(0,212,255,0.04);}
+.cmp-head .cmp-cell{font-family:'Bebas Neue';font-size:0.8rem;letter-spacing:2px;color:var(--nb);}
+.cmp-head .cmp-cell:first-child{color:var(--w3);}
+.c-yes{color:var(--green);}.c-no{color:var(--red);}.c-part{color:var(--gold);font-size:0.68rem;}
+
+/* ═══════════════ BOTTOM NAV ═══════════════ */
+.bnav{position:fixed;bottom:0;width:100%;height:var(--bot);z-index:400;
+  background:rgba(3,8,16,0.97);backdrop-filter:blur(24px);
+  border-top:1px solid rgba(0,212,255,0.1);display:flex;}
+.bnav::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--nb),transparent);opacity:0.3;}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;border:none;background:none;color:var(--w3);
+  font-family:'Outfit';font-size:0.54rem;font-weight:700;letter-spacing:0.5px;
+  transition:all 0.2s;}
+.bn.on{color:var(--nb);}
+.bn-icon{font-size:1.05rem;line-height:1;transition:transform 0.2s;}
+.bn.on .bn-icon{transform:scale(1.15);}
+.bn-dot{width:3px;height:3px;border-radius:50%;background:var(--nb);margin:0 auto;
+  transform:scale(0);transition:transform 0.2s;}
+.bn.on .bn-dot{transform:scale(1);}
+
+/* ═══════════════ MUSIC BAR ═══════════════ */
+#music-bar{position:fixed;bottom:var(--bot);width:100%;z-index:399;
+  background:rgba(3,8,16,0.97);border-top:1px solid rgba(0,212,255,0.12);
+  padding:7px 14px;display:none;align-items:center;gap:10px;backdrop-filter:blur(20px);}
+#music-bar.show{display:flex;}
+.mb-spin{font-size:1rem;flex-shrink:0;transition:animation 0.3s;}
+#music-bar.playing .mb-spin{animation:mbR 2.5s linear infinite;}
+@keyframes mbR{to{transform:rotate(360deg)}}
+.mb-info{flex:1;min-width:0;}
+.mb-title{font-size:0.7rem;font-weight:700;color:var(--nb);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mb-sub{font-size:0.58rem;color:var(--w3);}
+.mb-ctrl{background:none;border:none;color:var(--nb);font-size:1rem;cursor:pointer;padding:4px;}
+.mb-vol{width:55px;accent-color:var(--nb);cursor:pointer;height:3px;}
+.mb-prog{position:absolute;bottom:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--nb),var(--nb2));pointer-events:none;}
+
+/* ═══════════════ DETAIL PAGE ═══════════════ */
+.detail-wrap{min-height:calc(100vh - var(--nav));padding-bottom:var(--bot);}
+.detail-hero{position:relative;width:100%;aspect-ratio:16/9;max-height:60vw;min-height:200px;overflow:hidden;background:#000;}
+.dh-img{position:absolute;inset:0;background-size:cover;background-position:center;width:100%;height:100%;}
+.dh-grad{position:absolute;inset:0;
+  background:linear-gradient(0deg,var(--d) 0%,rgba(3,8,16,0.4) 60%,transparent 100%);}
+.dh-back{position:absolute;top:12px;left:12px;z-index:20;
+  background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.15);
+  border-radius:20px;padding:7px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;gap:5px;transition:all 0.2s;backdrop-filter:blur(10px);}
+.dh-back:hover{background:rgba(0,212,255,0.15);border-color:var(--nb);color:var(--nb);}
+.dh-trailer-btn{position:absolute;top:12px;right:12px;z-index:20;
+  background:linear-gradient(135deg,rgba(255,40,40,0.85),rgba(180,0,0,0.85));
+  border:none;border-radius:22px;padding:9px 18px;font-size:0.78rem;
+  font-weight:800;color:#fff;cursor:pointer;display:none;align-items:center;gap:6px;
+  transition:all 0.2s;backdrop-filter:blur(10px);letter-spacing:0.5px;
+  box-shadow:0 4px 16px rgba(255,40,40,0.4);}
+.dh-trailer-btn:hover{box-shadow:0 6px 24px rgba(255,40,40,0.7);transform:translateY(-1px);}
+.dh-switch-btn{display:none;}
+
+/* detail-info-row responsive */
+.detail-info-row{display:flex;gap:14px;padding:14px 16px 0;position:relative;z-index:2;margin-top:-4px;}
+.detail-poster{width:100px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0;
+  border:2px solid var(--nb);box-shadow:var(--glow);}
+.detail-head{flex:1;padding-top:4px;}
+.detail-title{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:3px;line-height:1.1;}
+.detail-genre{font-size:0.72rem;color:var(--nb);margin-top:4px;letter-spacing:1px;}
+.detail-chips{display:flex;gap:8px;padding:12px 16px 0;flex-wrap:wrap;}
+.chip{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);padding:6px 12px;border-radius:18px;
+  font-size:0.72rem;}
+.detail-syn-wrap{padding:14px 16px;}
+.syn-label{font-size:0.62rem;letter-spacing:3px;font-weight:700;color:var(--w3);
+  text-transform:uppercase;margin-bottom:8px;}
+.syn-body{font-size:0.84rem;line-height:1.8;color:var(--w2);
+  background:rgba(255,255,255,0.025);border-left:2px solid var(--nb);
+  border-radius:0 10px 10px 0;padding:13px 15px;}
+.dl-buttons{padding:0 16px 14px;display:flex;flex-direction:column;gap:10px;}
+.dl-btn1{display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,var(--nb),var(--nb2));color:var(--d);
+  padding:15px;border-radius:13px;font-weight:900;font-size:0.95rem;
+  letter-spacing:2px;border:none;cursor:pointer;font-family:'Outfit';
+  box-shadow:0 4px 20px rgba(0,212,255,0.3);transition:all 0.2s;width:100%;}
+.dl-btn1:hover{box-shadow:0 6px 30px rgba(0,212,255,0.5);transform:translateY(-2px);}
+.dl-btn2{display:flex;align-items:center;justify-content:center;gap:10px;
+  background:transparent;color:var(--nb);padding:13px;border-radius:13px;
+  font-weight:700;font-size:0.88rem;letter-spacing:1px;
+  border:1.5px solid rgba(0,212,255,0.35);cursor:pointer;font-family:'Outfit';
+  transition:all 0.2s;width:100%;}
+.dl-btn2:hover{background:rgba(0,212,255,0.08);border-color:var(--nb);}
+.rec-sec{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.05);}
+.rec-label{font-size:0.62rem;letter-spacing:3px;font-weight:700;color:var(--w3);
+  text-transform:uppercase;margin-bottom:11px;}
+.rec-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
+.rec-row::-webkit-scrollbar{height:2px;}
+.rec-card{flex:0 0 150px;cursor:pointer;border-radius:9px;overflow:hidden;
+  border:1px solid rgba(255,255,255,0.06);transition:all 0.2s;background:var(--card);}
+.rec-card:hover{border-color:rgba(0,212,255,0.3);transform:translateY(-2px);}
+.rec-img{width:150px;height:90px;object-fit:cover;}
+.rec-name{font-size:0.7rem;font-weight:700;padding:7px 8px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;}
+.cmt-sec{padding:14px 16px 30px;border-top:1px solid rgba(255,255,255,0.05);}
+.cmt-form{background:rgba(255,255,255,0.03);border:1px solid rgba(0,212,255,0.1);
+  border-radius:11px;padding:14px;margin-bottom:14px;}
+.cmt-inp{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(0,212,255,0.14);
+  border-radius:8px;padding:9px 12px;color:var(--w);font-size:0.8rem;
+  font-family:'Outfit';outline:none;margin-bottom:8px;transition:border 0.2s;}
+.cmt-inp:focus{border-color:var(--nb);}
+.cmt-ta{min-height:68px;resize:none;}
+.cmt-btn{padding:9px 20px;background:linear-gradient(135deg,var(--nb),var(--nb2));
+  color:var(--d);border:none;border-radius:8px;font-weight:800;font-size:0.78rem;
+  cursor:pointer;font-family:'Outfit';}
+.cmt-item{background:rgba(255,255,255,0.025);border-radius:9px;padding:12px;
+  margin-bottom:8px;border:1px solid rgba(255,255,255,0.05);}
+.cmt-user{font-size:0.7rem;font-weight:700;color:var(--nb);}
+.cmt-body{font-size:0.78rem;color:var(--w2);margin-top:4px;line-height:1.6;}
+.cmt-time{font-size:0.6rem;color:var(--w4);margin-top:3px;}
+
+/* ═══════════════ TOAST ═══════════════ */
+#toast{position:fixed;bottom:calc(var(--bot) + 20px);left:50%;transform:translateX(-50%);
+  z-index:9999;display:flex;flex-direction:column;align-items:center;gap:7px;pointer-events:none;}
+.t-item{padding:10px 18px;border-radius:22px;font-size:0.78rem;font-weight:700;
+  animation:tIn 0.3s ease;white-space:nowrap;
+  background:rgba(3,8,16,0.95);border:1px solid rgba(0,212,255,0.25);color:var(--nb);
+  box-shadow:0 6px 20px rgba(0,0,0,0.5);}
+.t-item.err{border-color:rgba(255,68,68,0.35);color:var(--red);}
+.t-item.ok{border-color:rgba(74,222,128,0.35);color:var(--green);}
+@keyframes tIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.empty-msg{text-align:center;padding:40px;color:var(--w3);font-size:0.84rem;}
+.cta-box{margin:16px;padding:24px;border-radius:15px;
+  background:linear-gradient(135deg,rgba(0,212,255,0.04),rgba(168,85,247,0.04));
+  border:1px solid rgba(0,212,255,0.1);text-align:center;}
+.cta-t{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:5px;margin-bottom:6px;}
+.cta-s{color:var(--w3);font-size:0.82rem;margin-bottom:16px;line-height:1.6;}
+.cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,var(--nb),var(--nb2));color:var(--d);
+  padding:13px 28px;border-radius:22px;font-weight:900;font-size:0.88rem;
+  letter-spacing:1px;text-transform:uppercase;transition:all 0.2s;border:none;
+  cursor:pointer;font-family:'Outfit';width:100%;}
+.cta-btn:hover{box-shadow:0 0 25px rgba(0,212,255,0.5);transform:translateY(-2px);}
+
+/* ═══════════════ DESKTOP RESPONSIVE ═══════════════ */
+@media(min-width:600px){
+  #anime-grid{grid-template-columns:repeat(3,1fr);}
+  .mw-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media(min-width:900px){
+  :root{--bot:0px;}
+  .bnav{display:none;}
+  .nav{padding:0 32px;height:66px;}
+  .nav-brand{font-size:1.35rem;}
+  .nav-desktop-links{display:flex;}
+  .sw{max-width:380px;}
+  #music-bar{bottom:0;}
+  .hero{max-height:680px;min-height:400px;}
+  .hero-content{padding:28px 40px 32px;}
+  .hero-title{font-size:clamp(3.5rem,8vw,6rem);}
+  .sec{padding:24px 32px;}
+  .divider{margin:0 32px;}
+  .filter-row{padding:0 32px 12px;}
+  #anime-grid{grid-template-columns:repeat(4,1fr);padding:0 32px 24px;}
+  .mw-grid{grid-template-columns:repeat(5,1fr);padding:0 32px 24px;}
+  .lc{flex:0 0 280px;}
+  .lc-img{height:158px;}
+  .feat-grid{padding:16px 32px;}
+  .cmp-table{margin:0 32px 20px;}
+  .demand-form-card{margin:16px 32px;}
+  .demand-list-section{padding:0 32px 24px;}
+  .detail-wrap{display:grid;grid-template-columns:1fr 380px;grid-template-rows:auto 1fr;}
+  .detail-hero{grid-column:1/2;grid-row:1/2;max-height:none;aspect-ratio:16/9;}
+  .detail-main-col{grid-column:1/2;grid-row:2/3;}
+  .detail-side-col{grid-column:2/3;grid-row:1/3;border-left:1px solid rgba(255,255,255,0.05);overflow-y:auto;}
+  .detail-info-row{padding:16px 24px 0;}
+  .detail-chips{padding:14px 24px 0;}
+  .detail-syn-wrap{padding:16px 24px;}
+  .dl-buttons{padding:0 24px 16px;}
+  .rec-sec{padding:16px 24px;}
+  .cmt-sec{padding:16px 24px 32px;}
+}
+@media(min-width:1200px){
+  #anime-grid{grid-template-columns:repeat(5,1fr);}
+  .mw-grid{grid-template-columns:repeat(6,1fr);}
+  .lc{flex:0 0 300px;}
+}
+@media(max-width:380px){
+  .sw{max-width:130px;}
+  .si{font-size:0.74rem;padding:7px 10px 7px 32px;}
+  .nav-tg{padding:6px 10px;font-size:0.7rem;}
+  .lc{flex:0 0 190px;}
+  #anime-grid{gap:8px;padding:0 12px 16px;}
+  .gc-title{font-size:0.78rem;}
+}
+
+/* ═══ DETAIL PAGE REDESIGN ═══ */
+.dh-img{position:absolute;inset:0;background-size:cover;background-position:center top;width:100%;height:100%;}
+.detail-info-row{display:flex;gap:12px;padding:12px 16px 0;align-items:flex-start;}
+.detail-poster{width:90px;height:58px;border-radius:9px;object-fit:cover;flex-shrink:0;border:2px solid rgba(0,212,255,.3);}
+.detail-head{flex:1;min-width:0;padding-top:2px;}
+.detail-title{font-family:'Bebas Neue';font-size:1.45rem;letter-spacing:3px;line-height:1.1;}
+.detail-genre{font-size:.72rem;color:var(--nb);margin-top:3px;letter-spacing:1px;}
+.detail-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.chip{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:4px 10px;border-radius:16px;font-size:.68rem;color:var(--w2);}
+/* Buttons */
+.dl-buttons{padding:12px 16px 8px;display:flex;flex-direction:column;gap:8px;}
+.dl-btn-watch{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#e50914,#b00000);color:#fff;border:none;cursor:pointer;font-family:'Outfit';font-weight:900;font-size:.95rem;letter-spacing:2px;box-shadow:0 4px 20px rgba(229,9,20,.4);transition:all .2s;}
+.dl-btn-watch:hover{box-shadow:0 6px 28px rgba(229,9,20,.6);transform:translateY(-2px);}
+.dl-btn1{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:11px;background:linear-gradient(135deg,var(--nb),var(--nb2));color:var(--d);border:none;cursor:pointer;font-family:'Outfit';font-weight:800;font-size:.82rem;letter-spacing:1px;width:100%;transition:all .2s;}
+.dl-btn1:hover{box-shadow:0 4px 16px rgba(0,212,255,.4);transform:translateY(-1px);}
+.dl-btn2{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:11px;background:transparent;color:var(--nb);border:1.5px solid rgba(0,212,255,.35);cursor:pointer;font-family:'Outfit';font-weight:700;font-size:.82rem;width:100%;transition:all .2s;}
+.dl-btn2:hover{background:rgba(0,212,255,.08);}
+/* Episode browser */
+.ep-browser{margin:0 16px 16px;background:var(--d2);border-radius:13px;border:1px solid rgba(0,212,255,.12);overflow:hidden;}
+.epb-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 10px;border-bottom:1px solid rgba(0,212,255,.08);}
+.epb-title{font-family:'Bebas Neue';font-size:.95rem;letter-spacing:4px;color:var(--nb);}
+.epb-count{font-size:.6rem;color:var(--w3);letter-spacing:1px;}
+.epb-seasons{display:flex;gap:6px;padding:8px 14px;overflow-x:auto;border-bottom:1px solid rgba(0,212,255,.06);}
+.epb-seasons::-webkit-scrollbar{display:none;}
+.epb-sea-btn{flex-shrink:0;padding:5px 14px;border-radius:12px;font-size:.72rem;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.1);color:var(--w3);background:rgba(255,255,255,.04);transition:all .2s;font-family:'Outfit';}
+.epb-sea-btn.on{background:rgba(0,212,255,.1);color:var(--nb);border-color:rgba(0,212,255,.3);}
+/* Episode number buttons row - like Crunchyroll 01 02 03 */
+.epb-nums{display:flex;gap:5px;padding:8px 14px;overflow-x:auto;flex-wrap:nowrap;border-bottom:1px solid rgba(0,212,255,.06);}
+.epb-nums::-webkit-scrollbar{height:2px;}.epb-nums::-webkit-scrollbar-thumb{background:#0088aa;}
+.epb-num-btn{flex-shrink:0;min-width:42px;padding:7px 8px;border-radius:8px;font-size:.76rem;font-weight:800;cursor:pointer;border:1px solid rgba(255,255,255,.1);color:var(--w3);background:rgba(255,255,255,.05);transition:all .2s;font-family:'Outfit';text-align:center;}
+.epb-num-btn:hover{background:rgba(0,212,255,.12);color:var(--nb);border-color:rgba(0,212,255,.3);}
+.epb-num-btn.on{background:rgba(0,212,255,.2);color:#fff;border-color:var(--nb);box-shadow:0 2px 10px rgba(0,212,255,.3);}
+/* Episode cards */
+.epb-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px 14px 14px;}
+@media(min-width:420px){.epb-grid{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:600px){.epb-grid{grid-template-columns:repeat(4,1fr);}}
+.epb-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:9px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative;}
+.epb-card:hover{border-color:rgba(0,212,255,.35);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.5);}
+.epb-card.on{border-color:#00d4ff;background:rgba(0,212,255,.07);}
+.epb-now{position:absolute;top:4px;left:4px;font-size:.44rem;font-weight:900;background:#e50914;color:#fff;padding:2px 5px;border-radius:3px;z-index:2;}
+.epb-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--d3);display:block;}
+.epb-thumb-ph{width:100%;aspect-ratio:16/9;background:var(--d3);display:flex;align-items:center;justify-content:center;color:rgba(0,212,255,.4);font-size:1.4rem;}
+.epb-body{padding:7px 8px;}
+.epb-num{font-size:.55rem;color:var(--nb);font-weight:700;letter-spacing:1px;}
+.epb-name{font-size:.73rem;font-weight:700;line-height:1.3;margin-top:2px;color:var(--w2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.epb-dur{font-size:.57rem;color:var(--w4);margin-top:2px;}
+.epb-new-tag{display:inline-block;font-size:.47rem;font-weight:900;background:var(--nb);color:var(--d);padding:1px 5px;border-radius:3px;margin-top:2px;}
+.epb-empty{padding:24px;text-align:center;color:var(--w4);font-size:.8rem;grid-column:1/-1;}
+/* Synopsis */
+.detail-syn-wrap{padding:14px 16px;}
+.syn-label{font-size:.6rem;letter-spacing:3px;font-weight:700;color:var(--w3);text-transform:uppercase;margin-bottom:8px;}
+.syn-body{font-size:.83rem;line-height:1.8;color:var(--w2);background:rgba(255,255,255,.025);border-left:2px solid var(--nb);border-radius:0 10px 10px 0;padding:12px 14px;}
+/* Recommendations - grid with images */
+.rec-sec{padding:14px 16px;border-top:1px solid rgba(255,255,255,.05);}
+.rec-label{font-size:.6rem;letter-spacing:3px;font-weight:700;color:var(--w3);text-transform:uppercase;margin-bottom:11px;}
+.rec-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+@media(min-width:480px){.rec-row{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:900px){.rec-row{grid-template-columns:repeat(2,1fr);}}
+.rec-card{cursor:pointer;border-radius:9px;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:all .2s;background:var(--card);position:relative;}
+.rec-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-2px);}
+.rec-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;}
+.rec-name{font-size:.72rem;font-weight:700;padding:6px 8px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.rec-lang{position:absolute;top:5px;left:5px;font-size:.5rem;font-weight:800;background:rgba(0,0,0,.75);color:#fff;padding:2px 6px;border-radius:4px;}
+
+/* ═══ SETTINGS PAGE ═══ */
+.settings-section{background:var(--d2);border-radius:13px;margin:0 16px 14px;padding:16px;border:1px solid rgba(0,212,255,.1);}
+.settings-sec-title{font-family:'Bebas Neue';font-size:.95rem;letter-spacing:3px;color:var(--nb);margin-bottom:12px;}
+.settings-empty{color:var(--w4);font-size:.8rem;padding:12px 0;}
+.settings-clear-btn{margin-top:10px;padding:8px 16px;border-radius:8px;background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.25);color:var(--red);font-size:.75rem;font-weight:700;cursor:pointer;font-family:'Outfit';}
+.settings-row{display:flex;gap:8px;flex-wrap:wrap;}
+.lang-btn{padding:7px 16px;border-radius:10px;font-size:.76rem;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.1);color:var(--w3);background:rgba(255,255,255,.04);transition:all .2s;font-family:'Outfit';}
+.lang-btn.on{background:rgba(0,212,255,.12);color:var(--nb);border-color:rgba(0,212,255,.35);}
+/* Watch history items */
+.wh-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;}
+.wh-item:last-child{border-bottom:none;}
+.wh-thumb{width:64px;height:40px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--d3);}
+.wh-info{flex:1;min-width:0;}
+.wh-title{font-size:.82rem;font-weight:700;color:var(--w2);}
+.wh-ep{font-size:.65rem;color:var(--nb);margin-top:2px;}
+.wh-prog{height:2px;background:rgba(0,212,255,.2);border-radius:2px;margin-top:5px;}
+.wh-prog-fill{height:100%;background:var(--nb);border-radius:2px;}
+/* Favorites grid */
+.fav-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+@media(min-width:420px){.fav-grid{grid-template-columns:repeat(3,1fr);}}
+.fav-card{border-radius:9px;overflow:hidden;cursor:pointer;background:var(--card);border:1px solid rgba(255,255,255,.07);transition:all .2s;position:relative;}
+.fav-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-2px);}
+.fav-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;}
+.fav-name{font-size:.72rem;font-weight:700;padding:6px 8px;color:var(--w2);}
+.fav-remove{position:absolute;top:5px;right:5px;background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* ═══ DETAIL PAGE UPDATES ═══ */
+/* Favorites + details button row */
+.d-btn-row2{display:flex;gap:8px;margin-top:8px;}
+.d-btn-fav{flex-shrink:0;padding:8px 16px;border-radius:20px;background:rgba(255,68,68,.08);border:1.5px solid rgba(255,68,68,.25);color:var(--red);cursor:pointer;font-family:'Outfit';font-weight:700;font-size:.75rem;transition:all .2s;white-space:nowrap;}
+.d-btn-fav.on{background:rgba(255,68,68,.2);border-color:var(--red);color:#fff;}
+.d-btn-fav.on::before{content:'♥ ';}
+
+/* Details collapsible button */
+.d-details-wrap{margin:0 16px 8px;}
+.d-details-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;cursor:pointer;font-family:'Outfit';font-size:.76rem;font-weight:600;color:var(--w3);transition:all .2s;}
+.d-details-btn:hover{background:rgba(0,212,255,.06);border-color:rgba(0,212,255,.2);}
+.d-details-arrow{font-size:1rem;transition:transform .25s;color:var(--nb);}
+.d-details-arrow.open{transform:rotate(90deg);}
+.d-details-body{padding:12px 14px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-top:none;border-radius:0 0 10px 10px;margin-top:-2px;}
+.syn-body{font-size:.83rem;line-height:1.8;color:var(--w2);}
+
+/* Recommendations in detail page (not side col) */
+.rec-sec{padding:0 16px 8px;}
+.rec-label{font-size:.6rem;letter-spacing:3px;font-weight:700;color:var(--w3);text-transform:uppercase;margin-bottom:11px;margin-top:14px;}
+.rec-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.rec-card{cursor:pointer;border-radius:9px;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:all .2s;background:var(--card);position:relative;}
+.rec-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-2px);}
+.rec-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;}
+.rec-name{font-size:.65rem;font-weight:700;padding:5px 6px;color:var(--w2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;}
+.rec-lang{position:absolute;top:4px;left:4px;font-size:.46rem;font-weight:900;background:rgba(0,0,0,.75);color:#fff;padding:2px 5px;border-radius:3px;}
+
+/* ─── Action mini row (Fav + Details above episodes) ─── */
+.d-action-mini{display:flex;gap:8px;padding:8px 16px 4px;flex-wrap:wrap;}
+.d-action-mini .d-btn-fav{padding:6px 14px;border-radius:20px;font-size:.72rem;font-weight:700;background:rgba(255,68,68,.08);border:1.5px solid rgba(255,68,68,.25);color:var(--red);cursor:pointer;font-family:'Outfit';transition:all .2s;white-space:nowrap;}
+.d-action-mini .d-btn-fav.on{background:rgba(255,68,68,.2);border-color:var(--red);color:#fff;}
+.d-action-mini .d-details-btn{flex:1;display:flex;align-items:center;justify-content:space-between;padding:6px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;cursor:pointer;font-family:'Outfit';font-size:.72rem;font-weight:600;color:var(--w3);transition:all .2s;min-width:0;}
+.d-details-body{margin:0 16px 8px;padding:12px 14px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:10px;}
+</style>
+  <!-- Firebase Auth -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.14/hls.min.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo" onclick="goHome()">
+    <img loading="lazy" id="nav-logo-img" class="nav-logo-img" src="" alt="">
+    <div id="nav-logo-fb" class="nav-logo-fb">🎌</div>
+    <div class="nav-brand">KENSHIN<br>ANIME</div>
+  </div>
+  <div class="nav-desktop-links" id="ndl-wrap">
+    <button class="ndl on" id="ndl-home" onclick="switchTab('home')">🏠 Home</button>
+    <button class="ndl" id="ndl-animes" onclick="switchTab('animes')">🎌 Anime</button>
+    <button class="ndl" id="ndl-movies" onclick="switchTab('movies')">🎬 Movies</button>
+    <button class="ndl" id="ndl-manwha" onclick="switchTab('manwha')">📖 Manwha</button>
+    <button class="ndl" id="ndl-demand" onclick="switchTab('demand')">📋 Demand</button>
+    <button class="ndl" id="ndl-settings" onclick="switchTab('settings')">⚙️ Settings</button>
+    
+  </div>
+  <div class="sw">
+    <span class="si-icon">🔍</span>
+    <input class="si" id="search-inp" type="text" placeholder="Search anime..." oninput="doSearch(this.value)" autocomplete="off">
+    <div id="sr"></div>
+  </div>
+  <a href="https://t.me/kenshin_anime" target="_blank" class="nav-tg" style="background:linear-gradient(135deg,#00d4ff,#0077ff);color:#030810;border:none;border-radius:20px;padding:8px 16px;font-size:.75rem;font-weight:800;cursor:pointer;font-family:Outfit;letter-spacing:.5px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">✈️ Join</a>
+</nav>
+
+<!-- NOTIFICATION -->
+<div class="notif-banner" id="notif-banner">
+  <div class="nb-inner">
+    <div class="nb-icon">🔔</div>
+    <div class="nb-msg" id="nb-msg-text"></div>
+  </div>
+  <button class="nb-close" onclick="closeNotif()">✕</button>
+</div>
+
+<!-- DETAIL PAGE -->
+<div id="detail-app">
+  <div class="detail-wrap" id="detail-wrap">
+    <div class="detail-hero" id="detail-hero">
+      <!-- Poster image (shown by default) -->
+      <div class="dh-grad" id="dh-grad"></div>
+      <button class="dh-back" onclick="goBack()">← Back</button>
+      <button class="dh-trailer-btn" id="dh-trailer-btn" onclick="kpPlayTrailer()" style="display:none">
+        ▶ Watch Trailer
+      </button>
+      <!-- KenshinPlayer injects itself here via JS -->
+    </div>
+    <div class="detail-main-col" id="detail-main-col">
+
+      <!-- INFO ROW: poster + title + chips -->
+      <div class="detail-info-row">
+        <img loading="lazy" id="d-poster" class="detail-poster" src="" alt="">
+        <div class="detail-head">
+          <div class="detail-title" id="d-title-text"></div>
+          <div class="detail-genre" id="d-genre-text"></div>
+          <div class="detail-chips" id="d-chips"></div>
+        </div>
+      </div>
+
+      <!-- FAV + DETAILS - ABOVE EPISODES -->
+      <div class="d-action-mini">
+        <button class="d-btn-fav" id="d-fav-btn" onclick="toggleFavorite()">♡ Favorite</button>
+        <button class="d-details-btn" onclick="toggleSynopsis()" id="d-details-btn">
+          <span>📋 Details</span><span class="d-details-arrow" id="d-details-arrow">›</span>
+        </button>
+      </div>
+      <div class="d-details-body" id="d-details-body" style="display:none">
+        <div class="syn-body" id="d-syn-text"></div>
+      </div>
+
+      <!-- EPISODES -->
+      <div class="ep-browser" id="ep-browser" style="display:none">
+        <div class="epb-head">
+          <div class="epb-title">📺 EPISODES</div>
+          <span class="epb-count" id="epb-count"></span>
+        </div>
+        <div class="epb-seasons" id="epb-seasons" style="display:none"></div>
+        <div class="epb-nums" id="epb-nums" style="display:none"></div>
+        <div class="epb-grid" id="epb-grid"></div>
+      </div>
+
+      <!-- RECOMMENDATIONS -->
+      <div class="rec-sec" id="rec-sec" style="display:none">
+        <div class="rec-label">YOU MIGHT ALSO LIKE</div>
+        <div class="rec-row" id="rec-row"></div>
+      </div>
+
+
+
+      <!-- ACTION BUTTONS (bottom) -->
+      <div class="dl-buttons">
+        <button class="dl-btn-watch" id="d-watch-btn" onclick="kpWatchNow()">▶ WATCH NOW</button>
+        <button class="dl-btn1" id="d-dl1-btn"></button>
+        <button class="dl-btn2" id="d-dl2-btn" style="display:none"></button>
+      </div>
+
+    </div>
+    <div class="detail-side-col" id="detail-side-col">
+
+      <div class="cmt-sec">
+        <div class="rec-label" style="margin-bottom:12px;">💬 Comments</div>
+        <div class="cmt-form">
+          <input class="cmt-inp" id="cmt-name-inp" placeholder="Your name">
+          <textarea class="cmt-inp cmt-ta" id="cmt-body-inp" placeholder="Write a comment..."></textarea>
+          <button class="cmt-btn" onclick="submitComment()">Post</button>
+        </div>
+        <div id="cmt-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-app">
+
+<!-- HOME -->
+<div id="pg-home" class="pg active">
+  <div class="hero" id="hero">
+    <video id="hero-vid" class="hero-video" autoplay muted loop playsinline style="display:none"></video>
+    <div class="hero-img" id="hero-img"></div>
+    <div class="hero-gr"></div>
+    <div class="hero-gr2"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><span class="hero-badge-dot"></span><span>OFFICIAL TELEGRAM NETWORK</span></div>
+      <div class="hero-logo-row">
+        <img loading="lazy" id="hero-logo" class="hero-logo" src="" alt="">
+        <div>
+          <div class="hero-title"><span class="c-nb">KENSHIN</span><br>ANIME</div>
+          <div class="hero-subtitle">🗡️ JAPAN'S FINEST — FREE FOREVER</div>
+        </div>
+      </div>
+      <div class="hero-btns">
+        <a href="https://t.me/kenshin_anime" target="_blank" class="hbtn hbtn-nb">✈ Join Channel</a>
+        <button class="hbtn hbtn-out" onclick="switchTab('animes')">▶ Browse Anime</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-n" id="stat-total">...</div><div class="stat-l">Titles</div></div>
+    <div class="stat"><div class="stat-n">50K+</div><div class="stat-l">Members</div></div>
+    <div class="stat"><div class="stat-n">Daily</div><div class="stat-l">Updates</div></div>
+    <div class="stat"><div class="stat-n">Free</div><div class="stat-l">Forever</div></div>
+  </div>
+
+  <div class="mq-wrap"><div class="mq-tr" id="mq-track"></div></div>
+
+  <div class="sec" id="sec-featured">
+    <div class="sec-head">
+      <div><div class="sec-tag-label" id="home-s1-tag">🔥 Trending</div>
+        <div class="sec-title" id="home-s1-title">FEATURED</div></div>
+      <span class="sec-more" onclick="switchTab('animes')">All →</span>
+    </div>
+    <div class="h-row" id="feat-row"><div class="empty-msg" style="padding:20px">Loading...</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <div><div class="sec-tag-label" id="home-s2-tag">❄️ Latest</div>
+        <div class="sec-title" id="home-s2-title">NEW RELEASES</div></div>
+    </div>
+    <div class="h-row" id="new-row"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <div><div class="sec-tag-label" id="home-s3-tag">👑 All Time Greats</div>
+        <div class="sec-title" id="home-s3-title">CLASSICS</div></div>
+    </div>
+    <div class="h-row" id="classic-row"></div>
+  </div>
+
+  <div class="cta-box">
+    <div class="cta-t">JOIN THE NETWORK</div>
+    <div class="cta-s">50,000+ fans · Daily episode drops · 100% Free · No subscription ever!</div>
+    <a href="https://t.me/kenshin_anime" target="_blank" class="cta-btn">✈ @KENSHIN_ANIME</a>
+  </div>
+</div>
+
+<!-- ANIME -->
+<div id="pg-animes" class="pg">
+  <div style="padding:18px 16px 0;">
+    <div class="sec-tag-label">📚 Library</div>
+    <div style="font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:4px;margin-bottom:12px;">
+      ANIME (<span id="anime-count">0</span>)
+    </div>
+  </div>
+  <div class="filter-row">
+    <button class="fp on" onclick="filterAnime('all',this)">All</button>
+    <button class="fp" onclick="filterAnime('action',this)">⚔️ Action</button>
+    <button class="fp" onclick="filterAnime('romance',this)">💕 Romance</button>
+    <button class="fp" onclick="filterAnime('horror',this)">👻 Horror</button>
+    <button class="fp" onclick="filterAnime('isekai',this)">🌍 Isekai</button>
+    <button class="fp" onclick="filterAnime('sports',this)">⚽ Sports</button>
+    <button class="fp" onclick="filterAnime('classic',this)">👑 Classic</button>
+    <button class="fp" onclick="filterAnime('new',this)">🆕 New</button>
+    <button class="fp" onclick="filterAnime('trailer',this)">🎬 Has Trailer</button>
+  </div>
+  <div id="anime-empty" class="empty-msg" style="display:none;">No results 🥲</div>
+  <div id="anime-grid"></div>
+</div>
+
+<!-- MOVIES -->
+<div id="pg-movies" class="pg">
+  <div style="padding:20px 16px 14px;">
+    <div class="sec-tag-label">🎬 Watch</div>
+    <div style="font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:4px;margin-bottom:14px;">MOVIES</div>
+    <a href="https://t.me/kenshin_anime" target="_blank" class="cta-btn" style="display:flex;max-width:400px;">✈ Get Notified</a>
+  </div>
+  <div class="h-row" id="movie-row" style="padding:0 16px 20px;"></div>
+</div>
+
+<!-- MANWHA -->
+<div id="pg-manwha" class="pg">
+  <div style="padding:20px 16px 14px;">
+    <div class="sec-tag-label">📖 Chapters</div>
+    <div style="font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:4px;margin-bottom:4px;">MANWHA VERSE</div>
+    <div style="font-size:0.74rem;color:#a855f7;letter-spacing:2px;margin-bottom:14px;">@Manwha_verse · Daily Updates</div>
+    <a href="https://t.me/Manwha_verse" target="_blank" class="cta-btn" style="display:flex;max-width:400px;background:linear-gradient(135deg,#a855f7,#7c3aed);">✈ Join @Manwha_verse</a>
+  </div>
+  <div class="mw-grid" id="mw-grid"></div>
+</div>
+
+<!-- DEMAND -->
+<div id="pg-demand" class="pg">
+  <div class="demand-form-card">
+    <div class="dfc-title">📋 DEMAND ANIME / MOVIE</div>
+    <div class="dfc-sub">Jo anime ya movie chahiye yahan request karo. Highest votes wale pehle add honge!</div>
+    <input class="d-field" id="dem-req-title" placeholder="Anime / Movie ka naam *" maxlength="100">
+    <select class="d-field" id="dem-req-type">
+      <option value="anime">🎌 Anime</option>
+      <option value="movie">🎬 Movie</option>
+      <option value="manwha">📖 Manwha</option>
+      <option value="season">📺 New Season</option>
+      <option value="episode">🎬 New Episode</option>
+    </select>
+    <input class="d-field" id="dem-req-user" placeholder="Aapka naam (optional)" maxlength="30">
+    <textarea class="d-field" id="dem-req-reason" placeholder="Extra info? (optional)" style="min-height:60px;resize:none;" maxlength="300"></textarea>
+    <button class="d-submit-btn" onclick="submitDemand()">📤 Send Request</button>
+    <div class="d-success" id="d-success-msg">✅ Demand bhej di! Jald hi add karenge.</div>
+  </div>
+  <div class="demand-list-section">
+    <div class="demand-list-title">🏆 Most Requested</div>
+    <div id="demand-list"><div class="empty-msg" style="padding:20px">Loading...</div></div>
+  </div>
+</div>
+
+<!-- SETTINGS PAGE -->
+<div id="pg-settings" class="pg">
+  <div style="padding:20px 16px 14px;">
+    <div class="sec-tag-label">⚙️ Settings</div>
+    <div style="font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:4px;margin-bottom:16px;">MY SETTINGS</div>
+  </div>
+
+  <!-- AUTH CARD -->
+  <div id="auth-section" style="margin:0 16px 14px;">
+
+    <!-- ══ LOGGED OUT ══ -->
+    <div id="auth-logged-out">
+
+      <!-- HERO BANNER -->
+      <div style="background:linear-gradient(135deg,#0a1628,#0d1f3c);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:28px 20px 22px;text-align:center;margin-bottom:12px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(0,212,255,.12),transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(0,119,255,.1),transparent 70%);pointer-events:none;"></div>
+        <div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(0,119,255,.15));border:2px solid rgba(0,212,255,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 0 30px rgba(0,212,255,.2);font-size:2rem;">🎌</div>
+        <div style="font-family:'Bebas Neue';font-size:1.6rem;letter-spacing:5px;background:linear-gradient(90deg,#00d4ff,#0077ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">KENSHIN ANIME</div>
+        <div style="font-size:.76rem;color:#64748b;line-height:1.7;max-width:260px;margin:0 auto;">Sign in to sync your watch history &amp; favorites across all devices — never lost! ✨</div>
+      </div>
+
+      <!-- GOOGLE BUTTON -->
+      <button onclick="signInWithGoogle()" style="display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:14px;border-radius:14px;background:#ffffff;color:#1a1a2e;border:none;cursor:pointer;font-family:'Outfit';font-weight:700;font-size:.9rem;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .25s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(0,0,0,.4)';" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(0,0,0,.3)';">
+        <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+
+      <!-- Apple Sign In -->
+      <button onclick="signInWithApple()" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;border-radius:14px;background:#000000;color:#ffffff;border:1px solid rgba(255,255,255,.2);cursor:pointer;font-family:'Outfit';font-weight:700;font-size:.88rem;margin-bottom:10px;box-shadow:0 4px 16px rgba(0,0,0,.5);transition:all .25s;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='';">
+        <svg width="20" height="20" viewBox="0 0 814 1000" fill="white"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.6-155.5-127.4C46 790.7 0 663 0 541.8c0-207.8 121.9-317.5 240.8-317.5 75.2 0 137.8 50.2 185.4 50.2 45.3 0 116.2-53.4 200.4-53.4zM373.1 225.4c15.4-15 157.5-140.4 157.5-288.4 0-18.9-1.6-37.9-4.3-55.5C409 26.7 318.6 100.6 280 184.3c-24.4 54.5-34.9 110.4-34.9 164.1 0 16.5 1.5 32.9 2.3 38.4a22.9 22.9 0 0 0 3.4.2c53.5 0 142.2-65.4 122.3-161.6z"/></svg>
+        Continue with Apple
+      </button>
+
+      <!-- OR -->
+      <div style="display:flex;align-items:center;gap:10px;margin:4px 0 12px;color:#334155;font-size:.72rem;">
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.06);"></div>
+        <span>or</span>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.06);"></div>
+      </div>
+
+      <!-- TAB BAR -->
+      <div style="display:flex;background:rgba(255,255,255,.05);border-radius:14px;padding:4px;gap:4px;margin-bottom:16px;">
+        <button id="tab-login" onclick="switchAuthTab('login')" style="flex:1;padding:10px;border:none;border-radius:11px;font-family:'Outfit';font-size:.82rem;font-weight:700;cursor:pointer;background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(0,119,255,.15));color:#00d4ff;transition:all .2s;">Sign In</button>
+        <button id="tab-register" onclick="switchAuthTab('register')" style="flex:1;padding:10px;border:none;border-radius:11px;font-family:'Outfit';font-size:.82rem;font-weight:700;cursor:pointer;background:transparent;color:#475569;transition:all .2s;">Sign Up</button>
+      </div>
+
+      <!-- SIGN IN FORM -->
+      <div id="auth-login-form">
+        <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;padding:0 14px;margin-bottom:10px;transition:border .2s;" onfocusin="this.style.borderColor='rgba(0,212,255,.5)';this.style.background='rgba(0,212,255,.04)';" onfocusout="this.style.borderColor='rgba(255,255,255,.08)';this.style.background='rgba(255,255,255,.05)';">
+          <span style="font-size:.95rem;flex-shrink:0;">✉️</span>
+          <input id="auth-email-inp" type="email" placeholder="Email address" style="flex:1;padding:13px 0;background:none;border:none;color:#e2e8f0;font-family:'Outfit';font-size:.85rem;outline:none;" onkeydown="if(event.key==='Enter')document.getElementById('auth-pass-inp').focus()">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;padding:0 14px;margin-bottom:14px;" onfocusin="this.style.borderColor='rgba(0,212,255,.5)';this.style.background='rgba(0,212,255,.04)';" onfocusout="this.style.borderColor='rgba(255,255,255,.08)';this.style.background='rgba(255,255,255,.05)';">
+          <span style="font-size:.95rem;flex-shrink:0;">🔒</span>
+          <input id="auth-pass-inp" type="password" placeholder="Password" style="flex:1;padding:13px 0;background:none;border:none;color:#e2e8f0;font-family:'Outfit';font-size:.85rem;outline:none;" onkeydown="if(event.key==='Enter')signInWithEmail()">
+          <button onclick="togglePassVis('auth-pass-inp',this)" style="background:none;border:none;cursor:pointer;font-size:.85rem;color:#475569;padding:4px;">👁</button>
+        </div>
+        <button onclick="signInWithEmail()" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,#00d4ff,#0077ff);color:#030810;border:none;font-family:'Outfit';font-weight:900;font-size:.92rem;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,255,.25);transition:all .25s;letter-spacing:.5px;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(0,212,255,.4)';" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(0,212,255,.25)';">
+          Sign In <span>→</span>
+        </button>
+        <button onclick="forgotPassword()" style="width:100%;padding:10px;background:none;border:none;color:#475569;font-size:.73rem;cursor:pointer;font-family:'Outfit';margin-top:6px;transition:color .2s;" onmouseover="this.style.color='#00d4ff'" onmouseout="this.style.color='#475569'">Forgot password?</button>
+      </div>
+
+      <!-- SIGN UP FORM -->
+      <div id="auth-register-form" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;padding:0 14px;margin-bottom:10px;" onfocusin="this.style.borderColor='rgba(0,212,255,.5)';" onfocusout="this.style.borderColor='rgba(255,255,255,.08)';">
+          <span style="font-size:.95rem;flex-shrink:0;">👤</span>
+          <input id="auth-reg-name" type="text" placeholder="Your name" style="flex:1;padding:13px 0;background:none;border:none;color:#e2e8f0;font-family:'Outfit';font-size:.85rem;outline:none;">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;padding:0 14px;margin-bottom:10px;" onfocusin="this.style.borderColor='rgba(0,212,255,.5)';" onfocusout="this.style.borderColor='rgba(255,255,255,.08)';">
+          <span style="font-size:.95rem;flex-shrink:0;">✉️</span>
+          <input id="auth-reg-email" type="email" placeholder="Email address" style="flex:1;padding:13px 0;background:none;border:none;color:#e2e8f0;font-family:'Outfit';font-size:.85rem;outline:none;">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;padding:0 14px;margin-bottom:10px;" onfocusin="this.style.borderColor='rgba(0,212,255,.5)';" onfocusout="this.style.borderColor='rgba(255,255,255,.08)';">
+          <span style="font-size:.95rem;flex-shrink:0;">🔒</span>
+          <input id="auth-reg-pass" type="password" placeholder="Password (min 6 chars)" style="flex:1;padding:13px 0;background:none;border:none;color:#e2e8f0;font-family:'Outfit';font-size:.85rem;outline:none;">
+          <button onclick="togglePassVis('auth-reg-pass',this)" style="background:none;border:none;cursor:pointer;font-size:.85rem;color:#475569;padding:4px;">👁</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;padding:0 14px;margin-bottom:14px;" onfocusin="this.style.borderColor='rgba(0,212,255,.5)';" onfocusout="this.style.borderColor='rgba(255,255,255,.08)';">
+          <span style="font-size:.95rem;flex-shrink:0;">✅</span>
+          <input id="auth-reg-pass2" type="password" placeholder="Confirm password" style="flex:1;padding:13px 0;background:none;border:none;color:#e2e8f0;font-family:'Outfit';font-size:.85rem;outline:none;">
+        </div>
+        <button onclick="registerWithEmail()" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,#00d4ff,#0077ff);color:#030810;border:none;font-family:'Outfit';font-weight:900;font-size:.92rem;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,255,.25);transition:all .25s;letter-spacing:.5px;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='';">
+          Create Account 🎉
+        </button>
+      </div>
+
+      <!-- ERROR BOX -->
+      <div id="auth-error" style="display:none;background:rgba(255,68,68,.08);border:1px solid rgba(255,68,68,.2);border-radius:12px;padding:11px 14px;color:#ff8080;font-size:.78rem;margin-top:10px;line-height:1.6;align-items:center;gap:8px;">⚠️ <span id="auth-error-text"></span></div>
+
+    </div>
+
+    <!-- ══ LOGGED IN ══ -->
+    <div id="auth-logged-in" style="display:none;">
+
+      <!-- PROFILE SECTION -->
+      <div style="background:linear-gradient(135deg,#0a1628,#0d1f3c);border:1px solid rgba(0,212,255,.15);border-radius:20px;padding:24px 20px;text-align:center;margin-bottom:12px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:80px;background:linear-gradient(180deg,rgba(0,212,255,.08),transparent);pointer-events:none;"></div>
+        <!-- Avatar circle -->
+        <div style="position:relative;display:inline-block;margin-bottom:14px;">
+          <img loading="lazy" id="auth-avatar" style="width:80px;height:80px;border-radius:50%;border:3px solid #00d4ff;object-fit:cover;box-shadow:0 0 24px rgba(0,212,255,.3);display:none;" src="" alt="">
+          <div id="auth-initials-circle" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#0077ff);border:3px solid rgba(0,212,255,.5);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:2rem;color:#030810;box-shadow:0 0 24px rgba(0,212,255,.3);margin:0 auto;"></div>
+          <div style="position:absolute;bottom:3px;right:3px;width:16px;height:16px;background:#4ade80;border-radius:50%;border:2px solid #0a1628;box-shadow:0 0 8px rgba(74,222,128,.5);"></div>
+        </div>
+        <!-- Name (editable) -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px;">
+          <div id="auth-name" style="font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:3px;color:#fff;"></div>
+          <button onclick="showEditName()" style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:8px;padding:3px 8px;font-size:.6rem;color:#00d4ff;cursor:pointer;font-family:'Outfit';">✏️ Edit</button>
+        </div>
+        <!-- Edit name input (hidden) -->
+        <div id="edit-name-wrap" style="display:none;margin-bottom:8px;">
+          <div style="display:flex;gap:6px;max-width:280px;margin:0 auto;">
+            <input id="edit-name-inp" type="text" placeholder="New name..." style="flex:1;padding:8px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(0,212,255,.3);border-radius:10px;color:#fff;font-family:'Outfit';font-size:.82rem;outline:none;">
+            <button onclick="saveDisplayName()" style="padding:8px 14px;background:linear-gradient(135deg,#00d4ff,#0077ff);border:none;border-radius:10px;color:#030810;font-weight:700;font-size:.78rem;cursor:pointer;font-family:'Outfit';">Save</button>
+            <button onclick="document.getElementById('edit-name-wrap').style.display='none'" style="padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#8ab;font-size:.78rem;cursor:pointer;font-family:'Outfit';">✕</button>
+          </div>
+        </div>
+        <div id="auth-email" style="font-size:.74rem;color:#64748b;margin-bottom:8px;"></div>
+        <div id="auth-provider-badge" style="display:inline-flex;align-items:center;gap:5px;font-size:.65rem;color:#475569;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);padding:4px 12px;border-radius:10px;"></div>
+      </div>
+
+      <!-- SYNC ROW -->
+      <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.12);border-radius:14px;padding:12px 16px;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div id="auth-sync-badge" style="font-size:.72rem;font-weight:700;color:#4ade80;">✅ Synced</div>
+          <div style="font-size:.7rem;color:#475569;">Data saved to cloud</div>
+        </div>
+        <button onclick="signOut()" style="padding:8px 16px;border-radius:10px;background:rgba(255,68,68,.08);border:1px solid rgba(255,68,68,.2);color:#ef4444;font-size:.74rem;font-weight:700;cursor:pointer;font-family:'Outfit';transition:all .2s;" onmouseover="this.style.background='rgba(255,68,68,.2)'" onmouseout="this.style.background='rgba(255,68,68,.08)'">Sign Out</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Watch History -->
+  <div class="settings-section">
+    <div class="settings-sec-title">📺 Watch History</div>
+    <div id="watch-history-list"><div class="settings-empty">No watch history yet.</div></div>
+    <button class="settings-clear-btn" onclick="clearWatchHistory()">🗑 Clear History</button>
+  </div>
+  <!-- Favorites -->
+  <div class="settings-section">
+    <div class="settings-sec-title">❤️ My Favorites</div>
+    <div id="favorites-list" class="fav-grid"><div class="settings-empty">No favorites added yet.</div></div>
+  </div>
+  <!-- Language -->
+  <div class="settings-section">
+    <div class="settings-sec-title">🌐 Language</div>
+    <div class="settings-row">
+      <button class="lang-btn on" id="lang-all" onclick="setLang('all',this)">🌍 All</button>
+      <button class="lang-btn" id="lang-hindi" onclick="setLang('hindi',this)">🇮🇳 Hindi</button>
+      <button class="lang-btn" id="lang-english" onclick="setLang('english',this)">🇬🇧 English</button>
+      <button class="lang-btn" id="lang-japanese" onclick="setLang('japanese',this)">🇯🇵 Japanese</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHANNELS (hidden but kept for reference) -->
+<div id="pg-channels" class="pg" style="display:none">
+  <div style="padding:20px 16px 14px;">
+    <div class="sec-tag-label">📡 Networks</div>
+    <div style="font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:4px;margin-bottom:16px;">OUR CHANNELS</div>
+    <a href="https://t.me/kenshin_anime" target="_blank" class="ch-card">
+      <div class="ch-av">🎌</div>
+      <div style="flex:1;"><div class="ch-name">KENSHIN ANIME</div>
+        <div class="ch-desc">Main hub — anime, HD art, episodes daily. 50K+ members.</div>
+        <span class="ch-pill">MAIN CHANNEL</span></div>
+      <span style="color:var(--nb)">›</span>
+    </a>
+    <a href="https://t.me/Manwha_verse" target="_blank" class="ch-card">
+      <div class="ch-av" style="border-color:#a855f7;background:rgba(168,85,247,0.07);">📖</div>
+      <div style="flex:1;"><div class="ch-name">MANWHA VERSE</div>
+        <div class="ch-desc">Daily manwha chapters — fastest updates, best selection.</div>
+        <span class="ch-pill" style="background:rgba(168,85,247,0.1);color:#a855f7;">MANWHA</span></div>
+      <span style="color:#a855f7">›</span>
+    </a>
+    <a href="https://t.me/ANIME_IN_HINDI_011" target="_blank" class="ch-card">
+      <div class="ch-av" style="border-color:#4ade80;background:rgba(74,222,128,0.07);">🇮🇳</div>
+      <div style="flex:1;"><div class="ch-name">ANIME IN HINDI</div>
+        <div class="ch-desc">Ongoing anime in Hindi — fast episode drops every week.</div>
+        <span class="ch-pill" style="background:rgba(74,222,128,0.1);color:#4ade80;">HINDI DUB</span></div>
+      <span style="color:#4ade80">›</span>
+    </a>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="pg-about" class="pg">
+  <div class="about-hero">
+    <div class="sec-tag-label">🗡️ About Us</div>
+    <div style="font-family:'Bebas Neue';font-size:2rem;letter-spacing:5px;margin-bottom:4px;">KENSHIN ANIME NETWORK</div>
+    <div style="font-size:0.76rem;color:var(--nb);letter-spacing:2px;">Japan's Best Anime · Free · Fast · No Subscription</div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon">💸</div><div class="feat-name">100% Free</div><div class="feat-desc">Koi subscription nahi. Sab kuch bilkul free hamesha ke liye.</div></div>
+    <div class="feat-card"><div class="feat-icon">⚡</div><div class="feat-name">Same Day</div><div class="feat-desc">New episodes Japan broadcast ke saath available. Koi delay nahi!</div></div>
+    <div class="feat-card"><div class="feat-icon">🎬</div><div class="feat-name">Trailers</div><div class="feat-desc">Har anime ke saath trailer — pehle dekho phir download karo!</div></div>
+    <div class="feat-card"><div class="feat-icon">📱</div><div class="feat-name">Telegram</div><div class="feat-desc">Koi app download nahi. Sirf Telegram aur kaam ho jaata hai!</div></div>
+    <div class="feat-card"><div class="feat-icon">🇮🇳</div><div class="feat-name">Hindi</div><div class="feat-desc">Popular anime Hindi mein @ANIME_IN_HINDI_011 par milti hai.</div></div>
+    <div class="feat-card"><div class="feat-icon">📖</div><div class="feat-name">Manwha</div><div class="feat-desc">100+ manwha chapters @Manwha_verse par daily update.</div></div>
+  </div>
+  <div style="padding:0 16px 8px;"><div class="sec-tag-label">📊 Comparison</div></div>
+  <div class="cmp-table">
+    <div class="cmp-row cmp-head">
+      <div class="cmp-cell">Feature</div><div class="cmp-cell" style="color:var(--nb)">KENSHIN</div>
+      <div class="cmp-cell" style="color:#f97316">Crunchyroll</div><div class="cmp-cell" style="color:#e50914">Netflix</div>
+    </div>
+    <div class="cmp-row"><div class="cmp-cell">Free Content</div><div class="cmp-cell"><span class="c-yes">✔ Full</span></div><div class="cmp-cell"><span class="c-part">Limited</span></div><div class="cmp-cell"><span class="c-no">✘</span></div></div>
+    <div class="cmp-row"><div class="cmp-cell">Hindi Anime</div><div class="cmp-cell"><span class="c-yes">✔</span></div><div class="cmp-cell"><span class="c-no">✘</span></div><div class="cmp-cell"><span class="c-part">Very Few</span></div></div>
+    <div class="cmp-row"><div class="cmp-cell">Trailers</div><div class="cmp-cell"><span class="c-yes">✔</span></div><div class="cmp-cell"><span class="c-yes">✔</span></div><div class="cmp-cell"><span class="c-yes">✔</span></div></div>
+    <div class="cmp-row"><div class="cmp-cell">No App Needed</div><div class="cmp-cell"><span class="c-yes">✔</span></div><div class="cmp-cell"><span class="c-no">✘</span></div><div class="cmp-cell"><span class="c-no">✘</span></div></div>
+    <div class="cmp-row"><div class="cmp-cell">Monthly Cost</div><div class="cmp-cell"><span class="c-yes">₹0</span></div><div class="cmp-cell"><span class="c-no">₹999+</span></div><div class="cmp-cell"><span class="c-no">₹499+</span></div></div>
+    <div class="cmp-row"><div class="cmp-cell">Instant Download</div><div class="cmp-cell"><span class="c-yes">✔</span></div><div class="cmp-cell"><span class="c-no">✘</span></div><div class="cmp-cell"><span class="c-part">Limited</span></div></div>
+  </div>
+</div>
+
+</div><!-- /main-app -->
+
+<!-- MUSIC BAR -->
+<div id="music-bar">
+  <div class="mb-prog" id="mb-prog" style="width:0%;position:absolute;bottom:0;left:0;height:2px;background:linear-gradient(90deg,var(--nb),var(--nb2));"></div>
+  <div class="mb-spin">🎵</div>
+  <div class="mb-info"><div class="mb-title" id="mb-title">Kenshin BGM</div><div class="mb-sub">Background Music</div></div>
+  <button class="mb-ctrl" id="mb-play-btn" onclick="toggleMusic()">▶️</button>
+  <input type="range" class="mb-vol" id="mb-vol-inp" min="0" max="1" step="0.05" value="0.4" oninput="setMusicVol(this.value)">
+  <button class="mb-ctrl" onclick="closeMusic()" style="color:var(--w4);font-size:0.8rem;margin-left:2px;">✕</button>
+</div>
+<audio id="music-audio" loop></audio>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="bn on" id="bn-home" onclick="switchTab('home')"><span class="bn-icon">🏠</span><span>Home</span><div class="bn-dot"></div></button>
+  <button class="bn" id="bn-animes" onclick="switchTab('animes')"><span class="bn-icon">🎌</span><span>Anime</span><div class="bn-dot"></div></button>
+  <button class="bn" id="bn-movies" onclick="switchTab('movies')"><span class="bn-icon">🎬</span><span>Movies</span><div class="bn-dot"></div></button>
+  <button class="bn" id="bn-manwha" onclick="switchTab('manwha')"><span class="bn-icon">📖</span><span>Manwha</span><div class="bn-dot"></div></button>
+  <button class="bn" id="bn-demand" onclick="switchTab('demand')"><span class="bn-icon">📋</span><span>Demand</span><div class="bn-dot"></div></button>
+  <button class="bn" id="bn-settings" onclick="switchTab('settings')"><span class="bn-icon">⚙️</span><span>Settings</span><div class="bn-dot"></div></button>
+  
+</nav>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+const API = "https://web-production-72935.up.railway.app";
+
+// 🎌 KENSHIN CONVERTER — Railway URL (change this after deploy)
+const CONVERTER_API = 'https://YOUR-APP.up.railway.app';
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='169'%3E%3Crect fill='%230a1628'/%3E%3C/svg%3E";
+const CACHE_KEY = 'kna_v2';
+const CACHE_TTL = 90000;
+let ALL = [], SETTINGS = {}, CURRENT = null, _activeTab = 'home';
+
+function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),d}));}catch(e){}}
+function loadCache(){try{const r=JSON.parse(localStorage.getItem(CACHE_KEY));if(r&&Date.now()-r.t<CACHE_TTL)return r.d;}catch(e){}return null;}
+
+async function init() {
+  const cached = loadCache();
+  if (cached && cached.length) { ALL = cached; _renderAll(); handleRoute(); }
+  try {
+    const [ar,sr,nr] = await Promise.allSettled([
+      fetch(`${API}/anime`).then(r=>r.json()),
+      fetch(`${API}/settings`).then(r=>r.json()),
+      fetch(`${API}/notifications`).then(r=>r.json())
+    ]);
+    if (ar.status==='fulfilled' && Array.isArray(ar.value)) { ALL = ar.value; saveCache(ALL); }
+    if (sr.status==='fulfilled') { SETTINGS = sr.value; applySettings(SETTINGS); }
+    if (nr.status==='fulfilled' && Array.isArray(nr.value)) showNotif(nr.value);
+    _renderAll(); if(!cached) handleRoute();
+  } catch(e) {}
+}
+
+function _renderAll() {
+  requestAnimationFrame(() => {
+    document.getElementById('stat-total').textContent = ALL.length + '+';
+    document.getElementById('anime-count').textContent = ALL.filter(a=>!['manwha','movie'].includes(a.category)).length;
+    buildMarquee(); buildFeatured(); buildNew(); buildClassic();
+    buildAnimeGrid(); buildManwha(); buildMovies(); loadDemands();
+  });
+}
+
+function applySettings(s) {
+  if (!s) return;
+  if (s.site_name) {
+    document.querySelectorAll('.nav-brand').forEach(el => { el.innerHTML = s.site_name.replace(' ','<br>'); });
+    document.title = s.site_name + ' — Watch Anime';
+  }
+  if (s.logo_url) {
+    const ni = document.getElementById('nav-logo-img');
+    ni.src = s.logo_url; ni.style.display = 'block';
+    document.getElementById('nav-logo-fb').style.display = 'none';
+    const hl = document.getElementById('hero-logo');
+    if (hl) { hl.src = s.logo_url; hl.style.display = 'block'; }
+  }
+  const heroUrl = s.hero_url || s.banner_url || '';
+  if (heroUrl) {
+    const isVid = s.hero_type === 'video' || heroUrl.toLowerCase().includes('.mp4');
+    if (isVid) {
+      const v = document.getElementById('hero-vid');
+      v.src = heroUrl; v.style.display = 'block';
+      document.getElementById('hero-img').style.display = 'none';
+    } else {
+      document.getElementById('hero-img').style.backgroundImage = `url('${heroUrl}')`;
+    }
+  } else {
+    const f = ALL.find(a => a.category === 'featured' && a.image_url);
+    if (f) document.getElementById('hero-img').style.backgroundImage = `url('${f.image_url}')`;
+  }
+  if (s.home_s1_tag) document.getElementById('home-s1-tag').textContent = s.home_s1_tag;
+  if (s.home_s1_title) document.getElementById('home-s1-title').textContent = s.home_s1_title;
+  if (s.home_s2_tag) document.getElementById('home-s2-tag').textContent = s.home_s2_tag;
+  if (s.home_s2_title) document.getElementById('home-s2-title').textContent = s.home_s2_title;
+  if (s.home_s3_tag) document.getElementById('home-s3-tag').textContent = s.home_s3_tag;
+  if (s.home_s3_title) document.getElementById('home-s3-title').textContent = s.home_s3_title;
+  if (s.marquee_text) buildMarqueeCustom(s.marquee_text);
+  if (s.music_url) {
+    const a = document.getElementById('music-audio');
+    a.src = s.music_url; a.volume = 0.4;
+    document.getElementById('mb-title').textContent = s.music_title || 'Kenshin BGM';
+    document.getElementById('music-bar').classList.add('show');
+    a.addEventListener('timeupdate', updateMusicProg);
+  }
+}
+
+function showNotif(notifs) {
+  if (!notifs || !notifs.length) return;
+  const n = notifs[0];
+  const icons = {new_episode:'🎬',new_anime:'✨',alert:'🚨',info:'🔔'};
+  document.getElementById('nb-msg-text').innerHTML = `<span style="font-weight:700;color:var(--nb)">${icons[n.type]||'🔔'} ${n.anime_title?n.anime_title+' — ':''}${n.message}</span>`;
+  document.getElementById('notif-banner').classList.add('show');
+}
+function closeNotif() { document.getElementById('notif-banner').classList.remove('show'); }
+
+window.addEventListener('hashchange', handleRoute);
+function handleRoute() {
+  const h = location.hash;
+  if (h.startsWith('#anime/')) { openDetailPage(decodeURIComponent(h.slice(7))); }
+  else { showMain(); }
+}
+function showMain() {
+  document.getElementById('main-app').style.display = 'block';
+  document.getElementById('detail-app').classList.remove('open');
+  window.scrollTo(0,0);
+}
+function goHome() { location.hash = ''; showMain(); switchTab('home'); }
+function goBack() { if (document.referrer) history.back(); else { location.hash = ''; showMain(); } }
+
+function tagBadge(t) { return t ? `<span class="tag-badge tag-${t}">${t}</span>` : ''; }
+function trailerBadge() { return `<span class="lc-trailer-badge">▶ TRAILER</span>`; }
+function gridTrailerBadge() { return `<span class="gc-trailer-badge">▶ TRAILER</span>`; }
+function escTitle(t) { return (t||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+
+function mkLCard(a) {
+  return `<div class="lc" onclick="openAnime(this.dataset.title)" data-title="${escTitle(a.title)}">
+    <img loading="lazy" class="lc-img" src="${a.image_url||PH}" onerror="this.src=this.dataset.ph" data-ph="${PH}">
+    <div class="lc-ov"></div>
+    <div class="lc-info">
+      <div class="lc-title">${a.title}</div>
+      <div class="lc-genre">${a.genre||''}</div>
+      <div class="lc-eps">▶ ${a.episodes||'?'} eps · ${a.year||''}</div>
+    </div>
+    ${tagBadge(a.tag)}${a.trailer_url ? trailerBadge() : ''}
+  </div>`;
+}
+
+function mkGCard(a) {
+  return `<div class="gc" onclick="openAnime(this.dataset.title)" data-title="${escTitle(a.title)}"
+    data-genre="${(a.genre||'').toLowerCase()}" data-cat="${a.category||''}"
+    data-tag="${(a.tag||'').toLowerCase()}" data-trailer="${a.trailer_url?'1':'0'}">
+    <img loading="lazy" class="gc-img" src="${a.image_url||PH}" onerror="this.src=this.dataset.ph" data-ph="${PH}">
+    ${tagBadge(a.tag)}${a.trailer_url ? gridTrailerBadge() : ''}
+    <div class="gc-body">
+      <div class="gc-title">${a.title}</div>
+      <div class="gc-meta"><span class="gc-genre">${a.genre||''}</span><span class="gc-year">${a.year||''}</span></div>
+    </div>
+  </div>`;
+}
+
+function buildFeatured() { document.getElementById('feat-row').innerHTML = ALL.filter(a=>a.category==='featured').slice(0,14).map(mkLCard).join('') || '<div class="empty-msg">No featured anime</div>'; }
+function buildNew()      { document.getElementById('new-row').innerHTML = ALL.filter(a=>a.category==='new').slice(0,12).map(mkLCard).join(''); }
+function buildClassic()  { document.getElementById('classic-row').innerHTML = ALL.filter(a=>a.category==='classic').slice(0,12).map(mkLCard).join(''); }
+function buildAnimeGrid(){ const items=ALL.filter(a=>!['manwha','movie'].includes(a.category)); document.getElementById('anime-count').textContent=items.length; document.getElementById('anime-grid').innerHTML=items.map(mkGCard).join(''); }
+function buildManwha()   { document.getElementById('mw-grid').innerHTML=ALL.filter(a=>a.category==='manwha').map(a=>`<div class="mwc" onclick="openAnime(this.dataset.title)" data-title="${escTitle(a.title)}"><img loading="lazy" class="mwc-img" src="${a.image_url||PH}" onerror="this.src=this.dataset.ph" data-ph="${PH}"><div class="mwc-body"><div class="mwc-title">${a.title}</div><div class="mwc-genre">${a.genre||''}</div></div></div>`).join('') || '<div class="empty-msg" style="grid-column:1/-1">No manwha yet</div>'; }
+function buildMovies()   { document.getElementById('movie-row').innerHTML=ALL.filter(a=>a.category==='movie').map(mkLCard).join(''); }
+function buildMarquee()  { const t=ALL.slice(0,24).map(a=>a.title.toUpperCase()); const d=[...t,...t]; document.getElementById('mq-track').innerHTML=d.map(x=>`<span class="mq-item">${x}<span class="mq-dot"></span></span>`).join(''); }
+function buildMarqueeCustom(text) { const p=text.split('|').map(s=>s.trim()).filter(Boolean); if(!p.length)return; const d=[...p,...p]; document.getElementById('mq-track').innerHTML=d.map(x=>`<span class="mq-item">${x}<span class="mq-dot"></span></span>`).join(''); }
+
+var _searchTimer=null;
+function doSearch(q) {
+  clearTimeout(_searchTimer);
+  if(!q.trim()){ document.getElementById('sr').classList.remove('show'); return; }
+  _searchTimer=setTimeout(function(){ _doSearchNow(q); }, 200);
+}
+function _doSearchNow(q) {
+  const box = document.getElementById('sr');
+  if (!q.trim()) { box.classList.remove('show'); return; }
+  const res = ALL.filter(a=>(a.title||'').toLowerCase().includes(q.toLowerCase())||(a.genre||'').toLowerCase().includes(q.toLowerCase())).slice(0,9);
+  box.innerHTML = res.length ? res.map(a=>`<div class="sr-item" data-title="${escTitle(a.title)}" onclick='document.getElementById("sr").classList.remove("show");document.getElementById("search-inp").value="";openAnime(this.dataset.title)'>
+    <img loading="lazy" class="sr-img" src="${a.image_url||PH}" onerror="this.src=this.dataset.ph" data-ph="${PH}">
+    <div><div class="sr-t">${a.title}</div><div class="sr-g">${a.genre||''}</div></div>
+  </div>`).join('') : `<div style="padding:14px;text-align:center;color:var(--w3);font-size:.8rem">No results for "${q}"</div>`;
+  box.classList.add('show');
+}
+document.addEventListener('click', e => { if (!e.target.closest('.sw')) document.getElementById('sr').classList.remove('show'); });
+
+function filterAnime(type, btn) {
+  document.querySelectorAll('.filter-row .fp').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  let count = 0;
+  document.querySelectorAll('#anime-grid .gc').forEach(c => {
+    const g=c.dataset.genre, cat=c.dataset.cat, tag=c.dataset.tag, tr=c.dataset.trailer;
+    let show = type==='all' || (type==='action'&&(g.includes('action')||g.includes('dark')||g.includes('sci-fi')||g.includes('supernatural'))) || (type==='romance'&&(g.includes('romance')||g.includes('drama')||g.includes('slice'))) || (type==='horror'&&(g.includes('horror')||g.includes('psychological'))) || (type==='isekai'&&g.includes('isekai')) || (type==='sports'&&g.includes('sports')) || (type==='classic'&&(cat==='classic'||tag==='classic')) || (type==='new'&&(cat==='new'||tag==='new')) || (type==='trailer'&&tr==='1');
+    c.style.display = show ? '' : 'none';
+    if (show) count++;
+  });
+  document.getElementById('anime-empty').style.display = count===0 ? 'block' : 'none';
+}
+
+function openAnime(a) {
+  location.hash = '#anime/' + encodeURIComponent(typeof a==='object'&&a!==null ? a.title : String(a));
+}
+
+// ══════════════════════════════════════════════
+// DETAIL PAGE
+// ══════════════════════════════════════════════
+let _detailHasTrailer = false, _detailTrailerUrl = '', _detailImgUrl = '';
+
+function openDetailPage(title) {
+  let a = ALL.find(x=>x.title===title) || ALL.find(x=>x.title.toLowerCase()===title.toLowerCase());
+  if (!a) { showMain(); return; }
+  _renderDetail(a);
+  fetch(`${API}/anime/title/${encodeURIComponent(title)}`).then(r=>r.json()).then(fresh=>{
+    if (fresh && fresh.title) { const idx=ALL.findIndex(x=>x.title.toLowerCase()===title.toLowerCase()); if(idx>=0) ALL[idx]=fresh; _renderDetail(fresh); }
+  }).catch(()=>{});
+}
+
+function _renderDetail(a) {
+  CURRENT = a;
+  _detailHasTrailer = !!(a.trailer_url && a.trailer_url.trim());
+  _detailTrailerUrl = a.trailer_url || '';
+  _detailImgUrl = a.image_url || '';
+
+  document.getElementById('main-app').style.display = 'none';
+  document.getElementById('detail-app').classList.add('open');
+  window.scrollTo(0,0);
+
+  // Hero background
+  var hero = document.getElementById('detail-hero');
+  hero.querySelectorAll('.dh-img').forEach(function(el){el.remove();});
+  if (_detailImgUrl) {
+    var div = document.createElement('div');
+    div.className = 'dh-img';
+    div.style.cssText = "background-image:url('"+_detailImgUrl+"');background-size:cover;background-position:center top;position:absolute;inset:0;filter:brightness(0.5);";
+    hero.insertBefore(div, hero.firstChild);
+  }
+  var trBtn = document.getElementById('dh-trailer-btn');
+  var grad  = document.getElementById('dh-grad');
+  if (trBtn) trBtn.style.display = _detailHasTrailer ? 'flex' : 'none';
+  if (grad)  grad.style.display  = 'block';
+
+  // Info
+  document.getElementById('d-poster').src = a.image_url || PH;
+  document.getElementById('d-title-text').textContent = a.title || '';
+  document.getElementById('d-genre-text').textContent = a.genre || '';
+  document.getElementById('d-syn-text').textContent   = a.synopsis || 'No synopsis available.';
+
+  // Details button - reset to closed
+  var detBody = document.getElementById('d-details-body');
+  var detArrow = document.getElementById('d-details-arrow');
+  var detBtn = document.getElementById('d-details-btn');
+  if (detBody) detBody.style.display = 'none';
+  if (detArrow) detArrow.classList.remove('open');
+  if (detBtn) detBtn.querySelector('span').textContent = '📋 Details';
+
+  // Chips
+  document.getElementById('d-chips').innerHTML = [
+    ['📅', a.year||'—'],
+    ['📺', (a.seasons||'1')+' Season'+(parseInt(a.seasons||1)>1?'s':'')],
+    ['🎬', (a.episodes||'?')+' Eps'],
+    ['⭐', a.tag||a.category||'anime']
+  ].map(function(c){return '<div class="chip"><span>'+c[0]+'</span><span>'+c[1]+'</span></div>';}).join('');
+
+  // Watch Now button
+  var wb = document.getElementById('d-watch-btn');
+  if (wb) { wb.textContent = '▶ WATCH NOW'; wb.onclick = kpWatchNow; }
+
+  // DL button
+  var l1 = a.dl_link1 || a.tg_link || 'https://t.me/kenshin_anime';
+  var dl1 = document.getElementById('d-dl1-btn');
+  if (dl1) { dl1.textContent = '⬇️ ' + (a.dl_label1||'DOWNLOAD').toUpperCase(); dl1.onclick = function(){window.open(l1,'_blank');}; }
+  var dl2 = document.getElementById('d-dl2-btn');
+  if (dl2) {
+    if (a.dl_link2) { dl2.textContent='📺 '+(a.dl_label2||'WATCH NOW').toUpperCase(); dl2.style.display='flex'; dl2.onclick=function(){window.open(a.dl_link2,'_blank');}; }
+    else dl2.style.display='none';
+  }
+
+  // Favorites button
+  updateFavBtn(a.title);
+
+  // Recommendations
+  var g1 = (a.genre||'').split(/[•,·]/)[0].trim().toLowerCase();
+  var recs = ALL.filter(function(x){return x.title!==a.title&&(x.genre||'').toLowerCase().includes(g1)&&x.category!=='manwha';}).slice(0,6);
+  var rr = document.getElementById('rec-row');
+  if (rr) {
+    rr.innerHTML = recs.map(function(r){
+      return '<div class="rec-card" onclick="openAnime(this.dataset.title)" data-title="'+escTitle(r.title)+'">'
+        +'<div class="rec-lang">Hindi</div>'
+        +'<img loading="lazy" class="rec-img" src="'+(r.image_url||PH)+'" onerror="this.src=this.dataset.ph" data-ph="'+PH+'">'
+        +'<div class="rec-name">'+r.title+'</div>'
+      +'</div>';
+    }).join('');
+    document.getElementById('rec-sec').style.display = recs.length ? 'block' : 'none';
+  }
+
+  // Load episodes + comments + restore resume position
+  loadEpisodes(a.title);
+  loadComments(a.title);
+}
+
+// ── SYNOPSIS TOGGLE ──
+function toggleSynopsis() {
+  var body  = document.getElementById('d-details-body');
+  var arrow = document.getElementById('d-details-arrow');
+  var open  = body.style.display !== 'none';
+  body.style.display  = open ? 'none' : 'block';
+  arrow.classList.toggle('open', !open);
+}
+
+// ── FAVORITES ──
+function getFavorites() {
+  try { return JSON.parse(localStorage.getItem('kna_favs') || '[]'); } catch(e) { return []; }
+}
+function saveFavorites(favs) {
+  try { localStorage.setItem('kna_favs', JSON.stringify(favs)); } catch(e) {}
+}
+function toggleFavorite() {
+  if (!CURRENT) return;
+  var favs = getFavorites();
+  var idx  = favs.findIndex(function(f){return f.title === CURRENT.title;});
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+    toast('info', '💔 Removed from favorites');
+  } else {
+    favs.unshift({ title: CURRENT.title, image_url: CURRENT.image_url||'', genre: CURRENT.genre||'' });
+    if (favs.length > 50) favs = favs.slice(0,50);
+    toast('ok', '❤️ Added to favorites!');
+  }
+  saveFavorites(favs);
+  updateFavBtn(CURRENT.title);
+}
+function updateFavBtn(title) {
+  var btn  = document.getElementById('d-fav-btn');
+  if (!btn) return;
+  var favs = getFavorites();
+  var isFav = favs.some(function(f){return f.title===title;});
+  btn.classList.toggle('on', isFav);
+  btn.textContent = isFav ? '♥ Favorited' : '♡ Favorite';
+}
+
+// ── WATCH HISTORY ──
+function saveWatchHistory(title, epTitle, epNum, imageUrl, progress) {
+  try {
+    var hist = JSON.parse(localStorage.getItem('kna_history') || '[]');
+    var idx  = hist.findIndex(function(h){return h.title===title;});
+    var entry = { title:title, epTitle:epTitle||'', epNum:epNum||1, image_url:imageUrl||'', progress:progress||0, ts:Date.now() };
+    if (idx >= 0) hist.splice(idx,1);
+    hist.unshift(entry);
+    if (hist.length > 30) hist = hist.slice(0,30);
+    localStorage.setItem('kna_history', JSON.stringify(hist));
+  } catch(e) {}
+}
+function getResumeProgress(title, epNum) {
+  try {
+    var prog = JSON.parse(localStorage.getItem('kna_prog') || '{}');
+    return prog[title+'_ep'+epNum] || 0;
+  } catch(e) { return 0; }
+}
+function saveProgress(title, epNum, currentTime, duration) {
+  try {
+    var prog = JSON.parse(localStorage.getItem('kna_prog') || '{}');
+    prog[title+'_ep'+epNum] = { t: currentTime, d: duration };
+    localStorage.setItem('kna_prog', JSON.stringify(prog));
+  } catch(e) {}
+}
+function clearWatchHistory() {
+  localStorage.removeItem('kna_history');
+  renderSettings();
+  toast('ok', '🗑 History cleared');
+}
+function setLang(lang, btn) {
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  localStorage.setItem('kna_lang', lang);
+  toast('ok', '🌐 Language: ' + lang);
+}
+function renderSettings() {
+  // Watch history
+  var histEl = document.getElementById('watch-history-list');
+  if (histEl) {
+    var hist = [];
+    try { hist = JSON.parse(localStorage.getItem('kna_history') || '[]'); } catch(e) {}
+    if (!hist.length) {
+      histEl.innerHTML = '<div class="settings-empty">No watch history yet.</div>';
+    } else {
+      var hhtml = '';
+      for(var hi=0;hi<hist.length;hi++){
+        var hh=hist[hi];
+        var pr=getResumeProgress(hh.title,hh.epNum);
+        var pc=(pr&&pr.d&&pr.t)?Math.min(100,Math.round(pr.t/pr.d*100)):0;
+        var ht=escTitle(hh.title);
+        hhtml+='<div class="wh-item" data-t="'+ht+'" onclick="openAnime(this.dataset.t)">'
+          +'<img loading="lazy" class="wh-thumb" src="'+(hh.image_url||PH)+'" onerror="this.src=this.dataset.ph" data-ph="'+PH+'">'
+          +'<div class="wh-info">'
+            +'<div class="wh-title">'+hh.title+'</div>'
+            +'<div class="wh-ep">EP '+hh.epNum+(hh.epTitle?' · '+hh.epTitle:'')+'</div>'
+            +(pc>0?'<div class="wh-prog"><div class="wh-prog-fill" style="width:'+pc+'%"></div></div>':'')
+          +'</div>'
+        +'</div>';
+      }
+      histEl.innerHTML = hhtml;
+    }
+  }
+  // Favorites
+  var favEl=document.getElementById('favorites-list');
+  if(favEl){
+    var favs=getFavorites();
+    if(!favs.length){
+      favEl.innerHTML='<div class="settings-empty">No favorites added yet.</div>';
+    }else{
+      var fhtml='';
+      for(var fi2=0;fi2<favs.length;fi2++){
+        var fv2=favs[fi2];
+        var ft2=escTitle(fv2.title);
+        fhtml+='<div class="fav-card" data-t="'+ft2+'">'
+          +'<button class="fav-remove" data-t="'+ft2+'" onclick="removeFav(this.dataset.t,event)">✕</button>'
+          +'<img loading="lazy" class="fav-img" src="'+(fv2.image_url||PH)+'" onerror="this.src=this.dataset.ph" data-ph="'+PH+'" onclick="openAnime(this.parentNode.dataset.t)">'
+          +'<div class="fav-name" onclick="openAnime(this.parentNode.dataset.t)">'+fv2.title+'</div>'
+        +'</div>';
+      }
+      favEl.innerHTML=fhtml;
+    }
+  }
+  // Language
+  var lang = localStorage.getItem('kna_lang') || 'all';
+  var lb = document.getElementById('lang-'+lang);
+  if (lb) { document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('on');}); lb.classList.add('on'); }
+}
+function removeFav(title, e) {
+  e.stopPropagation();
+  var favs = getFavorites().filter(function(f){return f.title!==title;});
+  saveFavorites(favs);
+  renderSettings();
+  toast('ok', '💔 Removed');
+}
+
+// ══════════════════════════════════════════════
+// EPISODE BROWSER
+// ══════════════════════════════════════════════
+let _epEps = [], _epSeasons = [], _epSeason = 0, _epCurrent = null;
+
+function kpWatchNow() {
+  if (_epEps.length) kpPlay(_epEps[0]);
+  else if (_detailHasTrailer) kpPlayTrailer();
+  else toast('info', 'No video available yet.');
+}
+function kpPlayTrailer() {
+  if (!_detailHasTrailer || !_detailTrailerUrl) { toast('info','No trailer available.'); return; }
+  _kpLaunch(_detailTrailerUrl, CURRENT ? CURRENT.title : '', null);
+}
+
+var _kpLaunchTimer = null;
+function _kpLaunch(url, title, ep) {
+  var container = document.getElementById('detail-hero');
+  if (!container || typeof KenshinPlayer === 'undefined') return;
+  // Cancel any pending launch
+  clearTimeout(_kpLaunchTimer);
+  // If player already open with same anime, just switch episode directly
+  if (ep && typeof KenshinPlayer.playEp === 'function' && document.getElementById('kp7') && document.getElementById('kp7').classList.contains('on')) {
+    KenshinPlayer.playEp(ep);
+    document.getElementById('dh-trailer-btn').style.display = 'none';
+    document.getElementById('dh-grad').style.display = 'none';
+    return;
+  }
+  KenshinPlayer.close();
+  _kpLaunchTimer = setTimeout(function() {
+    KenshinPlayer.launch(url, title, container, ep ? {
+      episodes:    _epEps,
+      seasons:     _epSeasons,
+      subtitles:   ep.subtitles    || [],
+      audioTracks: ep.audioTracks  || []
+    } : {});
+    document.getElementById('dh-trailer-btn').style.display = 'none';
+    document.getElementById('dh-grad').style.display = 'none';
+  }, 50);
+}
+
+// ══════════════════════════════════════════════════════
+// SMART PLAY — auto convert H.265/AC3/DTS via Converter API
+// ══════════════════════════════════════════════════════
+async function kpSmartPlay(ep) {
+  if (!ep || !ep.url) return;
+
+  // Update highlights immediately
+  _epCurrent = ep;
+  if (CURRENT) saveWatchHistory(CURRENT.title, ep.title||'', ep.number||1, CURRENT.image_url||'', 0);
+  if (CURRENT) {
+    var prog = getResumeProgress(CURRENT.title, ep.number||1);
+    window._resumeTarget = (prog && prog.t && prog.d && (prog.t/prog.d) < 0.95) ? prog.t : 0;
+  }
+  document.querySelectorAll('.epb-num-btn').forEach((b,i) => {
+    const eps = _epSeason > 0 && _epSeasons.length > 1 ? _epEps.filter(e=>e.season===_epSeason) : _epEps;
+    b.classList.toggle('on', eps[i] && String(eps[i].id||eps[i].number) === String(ep.id||ep.number));
+  });
+  document.querySelectorAll('.epb-card').forEach(c => c.classList.toggle('on', c.dataset.eid === String(ep.id||ep.number||'')));
+
+  // If no converter URL set, play directly
+  if (!CONVERTER_API || CONVERTER_API.includes('YOUR-APP')) {
+    _kpLaunch(ep.url, (CURRENT?CURRENT.title:'') + ' · ' + (ep.title||'EP '+ep.number), ep);
+    return;
+  }
+
+  // Check if conversion needed
+  try {
+    toast('info', '🔍 Checking video format...');
+    const infoRes = await fetch(`${CONVERTER_API}/info`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ url: ep.url }),
+    });
+    const info = await infoRes.json();
+
+    if (!info.ok || !info.needsConvert) {
+      // ✅ H.264+AAC — play directly, no conversion needed
+      const label = info.video ? ` (${info.video.label} ${info.video.codec.toUpperCase()})` : '';
+      toast('ok', `▶ Playing${label}`);
+      _kpLaunch(ep.url, (CURRENT?CURRENT.title:'') + ' · ' + (ep.title||'EP '+ep.number), ep);
+      return;
+    }
+
+    // ❗ Needs conversion (H.265 / AC3 / DTS)
+    toast('info', `⚙️ Converting ${info.convertReason || 'codec'}... (~10s)`);
+
+    const hlsRes = await fetch(`${CONVERTER_API}/hls`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ url: ep.url, quality: 'source' }),
+    });
+    const hlsData = await hlsRes.json();
+
+    if (!hlsData.ok) {
+      toast('err', '❌ Converter error — playing original');
+      _kpLaunch(ep.url, (CURRENT?CURRENT.title:'') + ' · ' + (ep.title||'EP '+ep.number), ep);
+      return;
+    }
+
+    // Poll until 2+ HLS segments ready (~8s)
+    toast('info', '⏳ Buffering first segments...');
+    const start = Date.now();
+    while (Date.now() - start < 90000) {
+      await new Promise(r => setTimeout(r, 2000));
+      try {
+        const s = await (await fetch(hlsData.statusUrl)).json();
+        if (s.ready || s.status === 'done') break;
+        if (s.status === 'error') throw new Error(s.error);
+      } catch(e) {}
+    }
+
+    toast('ok', '✅ Converted! Playing now...');
+    const convertedEp = { ...ep, url: hlsData.playUrl };
+    _kpLaunch(hlsData.playUrl, (CURRENT?CURRENT.title:'') + ' · ' + (ep.title||'EP '+ep.number), convertedEp);
+
+  } catch(err) {
+    console.error('[SMART]', err);
+    toast('err', '⚠️ Converter offline — playing original');
+    _kpLaunch(ep.url, (CURRENT?CURRENT.title:'') + ' · ' + (ep.title||'EP '+ep.number), ep);
+  }
+}
+
+function kpPlay(ep) {
+  if (!ep || !ep.url) return;
+  kpSmartPlay(ep); // all plays go through smart converter
+}
+
+async function loadEpisodes(title) {
+  const browser = document.getElementById('ep-browser');
+  const grid    = document.getElementById('epb-grid');
+  const numRow  = document.getElementById('epb-nums');
+  const seasEl  = document.getElementById('epb-seasons');
+  const countEl = document.getElementById('epb-count');
+  const wb      = document.getElementById('d-watch-btn');
+
+  _epEps=[]; _epSeasons=[]; _epSeason=0; _epCurrent=null;
+  if (browser) browser.style.display = 'none';
+
+  try {
+    const r    = await fetch(`${API}/episodes/${encodeURIComponent(title)}`);
+    const data = await r.json();
+    if (!data?.episodes?.length) return;
+
+    _epEps     = data.episodes;
+    _epSeasons = data.seasons || [];
+    if (browser) browser.style.display = 'block';
+    if (countEl) countEl.textContent = _epEps.length + ' Episodes';
+
+    // Season tabs
+    if (_epSeasons.length > 1) {
+      if (seasEl) { seasEl.style.display = 'flex'; _renderSeasonTabs(); }
+    } else {
+      if (seasEl) seasEl.style.display = 'none';
+    }
+
+    _renderEpNums(0);
+    _renderEpCards(0);
+
+    // Update watch now
+    if (wb) { wb.textContent = '▶ WATCH NOW · EP 1'; wb.onclick = () => kpPlay(_epEps[0]); }
+  } catch(e) {}
+}
+
+function _renderSeasonTabs() {
+  const el = document.getElementById('epb-seasons');
+  if (!el) return;
+  el.innerHTML = _epSeasons.map((s,i) => `<button class="epb-sea-btn${i===_epSeason?' on':''}" onclick="switchSeason(${i})">${s.label}</button>`).join('');
+}
+function switchSeason(i) { _epSeason=i; _renderSeasonTabs(); _renderEpNums(i); _renderEpCards(i); }
+
+function _getEps(si) {
+  return _epSeasons.length > 1 ? _epEps.filter(e=>e.season===(si+1)) : _epEps;
+}
+
+function _renderEpNums(si) {
+  var row = document.getElementById('epb-nums');
+  if (!row) return;
+  var eps = _getEps(si);
+  if (eps.length <= 1) { row.style.display = 'none'; return; }
+  row.style.display = 'flex';
+  row.innerHTML = eps.map(function(ep,i) {
+    var num = String(ep.number||ep.ep||i+1).padStart(2,'0');
+    var on  = _epCurrent && String(_epCurrent.id||_epCurrent.number) === String(ep.id||ep.number);
+    var epData = encodeURIComponent(JSON.stringify(ep));
+    return '<button class="epb-num-btn'+(on?' on':'')+'" data-ep="'+epData+'" onclick="kpPlayFromCard(this)">'+num+'</button>';
+  }).join('');
+}
+
+function _renderEpCards(si) {
+  var grid = document.getElementById('epb-grid');
+  if (!grid) return;
+  var eps = _getEps(si);
+  if (!eps.length) { grid.innerHTML = '<div class="epb-empty">No episodes yet.</div>'; return; }
+  // Use encoded JSON in data-ep attribute — NOT window._eps (gets overwritten)
+  grid.innerHTML = eps.map(function(ep,i) {
+    var eid = String(ep.id||ep.number||i);
+    var on  = _epCurrent && String(_epCurrent.id||_epCurrent.number) === eid;
+    var epData = encodeURIComponent(JSON.stringify(ep));
+    var thumb = ep.thumbnail
+      ? '<img loading="lazy" class="epb-thumb" src="'+ep.thumbnail+'">'  /* no onerror needed */
+      : '<div class="epb-thumb-ph">▶</div>';
+    var dur  = ep.duration ? '<div class="epb-dur">'+ep.duration+'</div>' : '';
+    var newt = ep.isNew ? '<span class="epb-new-tag">NEW</span>' : '';
+    var now  = on ? '<div class="epb-now">▶ NOW</div>' : '';
+    return '<div class="epb-card'+(on?' on':'')+'" data-eid="'+eid+'" data-ep="'+epData+'" onclick="kpPlayFromCard(this)">'
+      +now+thumb
+      +'<div class="epb-body">'
+        +'<div class="epb-num">EP '+(ep.number||ep.ep||'')+(ep.season?' · S'+ep.season:'')+'</div>'
+        +'<div class="epb-name">'+(ep.title||'Episode '+(ep.number||''))+'</div>'
+        +dur+newt
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+
+// Safe card click - decodes JSON from data attribute, no window._eps needed
+function kpPlayFromCard(card) {
+  try {
+    var ep = JSON.parse(decodeURIComponent(card.dataset.ep));
+    kpPlay(ep);
+  } catch(e) {
+    console.error('[KNA] kpPlayFromCard error:', e);
+  }
+}
+
+// ══════════════════════════════════════════════
+// PLAYER - INLINE
+// ══════════════════════════════════════════════
+
+
+// COMMENTS
+async function loadComments(title) {
+  try {
+    const r = await fetch(`${API}/comments/${encodeURIComponent(title)}`);
+    const cmts = await r.json();
+    const list = document.getElementById('cmt-list');
+    list.innerHTML = cmts.length ? cmts.slice().reverse().map(c =>
+      `<div class="cmt-item">
+        <div class="cmt-user">👤 ${c.username || 'Anonymous'}</div>
+        <div class="cmt-body">${c.comment || ''}</div>
+        <div class="cmt-time">${(c.created_at || '').slice(0, 10)}</div>
+      </div>`
+    ).join('') : '<div style="color:var(--w3);font-size:0.78rem;text-align:center;padding:14px;">Be the first to comment!</div>';
+  } catch(e) {}
+}
+async function submitComment() {
+  const name = document.getElementById('cmt-name-inp').value.trim() || 'Anonymous';
+  const body = document.getElementById('cmt-body-inp').value.trim();
+  if (!body || !CURRENT) return;
+  try {
+    await fetch(`${API}/comments/add`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ anime_title: CURRENT.title, username: name, comment: body })
+    });
+    document.getElementById('cmt-body-inp').value = '';
+    loadComments(CURRENT.title);
+    toast('ok', '✅ Comment posted!');
+  } catch(e) { toast('err', 'Error: ' + e.message); }
+}
+
+// DEMANDS
+async function loadDemands() {
+  try {
+    const r = await fetch(`${API}/demands/top`);
+    const items = await r.json();
+    const el = document.getElementById('demand-list');
+    if (!items || !items.length) {
+      el.innerHTML = '<div class="empty-msg">Koi demand nahi abhi. Pehle karo!</div>'; return;
+    }
+    el.innerHTML = items.map((d, i) =>
+      `<div class="demand-card">
+        <div class="dc-rank">${i+1}</div>
+        <div class="dc-body">
+          <div class="dc-title">${d.title}</div>
+          <div class="dc-meta">${d.category || 'anime'} · by ${d.username || 'Anonymous'}${d.reason ? ' · ' + d.reason : ''}</div>
+          <span class="dc-status ${d.status === 'added' ? 'ds-added' : 'ds-pending'}">${d.status || 'pending'}</span>
+        </div>
+        <div class="dc-votes">
+          <div class="dc-vn">${d.votes || 1}</div>
+          <div class="dc-vl">votes</div>
+          <button class="dc-vote-btn" onclick="voteDemand('${d.title.replace(/'/g,"&#39;")}','${d.category||"anime"}')">+1</button>
+        </div>
+      </div>`
+    ).join('');
+  } catch(e) { document.getElementById('demand-list').innerHTML = '<div class="empty-msg">Error loading</div>'; }
+}
+
+async function submitDemand() {
+  const title = document.getElementById('dem-req-title').value.trim();
+  if (!title) {
+    document.getElementById('dem-req-title').style.borderColor = 'var(--red)';
+    setTimeout(() => document.getElementById('dem-req-title').style.borderColor = '', 2000);
+    return;
+  }
+  const btn = document.querySelector('.d-submit-btn');
+  btn.textContent = '⏳ Sending...'; btn.disabled = true;
+  try {
+    const r = await fetch(`${API}/demands/add`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        title,
+        category: document.getElementById('dem-req-type').value,
+        username: document.getElementById('dem-req-user').value.trim() || 'Anonymous',
+        reason: document.getElementById('dem-req-reason').value.trim()
+      })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      ['dem-req-title','dem-req-user','dem-req-reason'].forEach(id => document.getElementById(id).value = '');
+      const msg = document.getElementById('d-success-msg');
+      msg.textContent = d.msg || '✅ Demand submitted!';
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 4000);
+      loadDemands();
+    }
+  } catch(e) { toast('err', 'Error: ' + e.message); }
+  btn.textContent = '📤 Send Request'; btn.disabled = false;
+}
+
+async function voteDemand(title, category) {
+  try {
+    await fetch(`${API}/demands/add`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ title, category, username: 'Voter', reason: '' })
+    });
+    loadDemands();
+    toast('ok', '👍 Vote added!');
+  } catch(e) {}
+}
+
+// TAB SWITCH
+function switchTab(tab) {
+  if (location.hash.startsWith('#anime/')) { location.hash = ''; }
+  showMain();
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.bn').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.ndl').forEach(b => b.classList.remove('on'));
+  const pg = document.getElementById('pg-' + tab);
+  if (pg) pg.classList.add('active');
+  const bn = document.getElementById('bn-' + tab);
+  if (bn) bn.classList.add('on');
+  const ndl = document.getElementById('ndl-' + tab);
+  if (ndl) ndl.classList.add('on');
+  _activeTab = tab;
+  window.scrollTo(0, 0);
+  if (tab === 'settings') setTimeout(renderSettings, 50);
+}
+
+// MUSIC
+let _musicStarted = false;
+function toggleMusic() {
+  const a = document.getElementById('music-audio');
+  const bar = document.getElementById('music-bar');
+  const btn = document.getElementById('mb-play-btn');
+  if (!a.src) return;
+  if (a.paused) {
+    a.play().then(() => { bar.classList.add('playing'); btn.textContent = '⏸️'; }).catch(() => {});
+  } else {
+    a.pause(); bar.classList.remove('playing'); btn.textContent = '▶️';
+  }
+}
+function setMusicVol(v) { document.getElementById('music-audio').volume = parseFloat(v); }
+function closeMusic() {
+  const a = document.getElementById('music-audio'); a.pause(); a.src = '';
+  document.getElementById('music-bar').classList.remove('show', 'playing');
+}
+function updateMusicProg() {
+  const a = document.getElementById('music-audio');
+  if (!a.duration) return;
+  document.getElementById('mb-prog').style.width = (a.currentTime / a.duration * 100).toFixed(1) + '%';
+}
+document.addEventListener('click', function autoPlayMusic() {
+  const a = document.getElementById('music-audio');
+  if (a.src && a.paused && !_musicStarted) {
+    _musicStarted = true;
+    a.play().then(() => {
+      document.getElementById('music-bar').classList.add('playing');
+      document.getElementById('mb-play-btn').textContent = '⏸️';
+    }).catch(() => {});
+  }
+}, { passive: true });
+
+// TOAST
+function toast(type, msg) {
+  const c = document.getElementById('toast');
+  const el = document.createElement('div');
+  el.className = 't-item' + (type ? ' ' + type : '');
+  el.textContent = msg;
+  c.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+
+// AUTO-REFRESH every 60s
+setInterval(async () => {
+  if (location.hash.startsWith('#anime/')) return;
+  try {
+    const r = await fetch(`${API}/anime`);
+    const f = await r.json();
+    if (!Array.isArray(f)) return;
+    // Always update — trailer/category changes don't change count
+    ALL = f;
+    buildFeatured(); buildNew(); buildClassic();
+    buildAnimeGrid(); buildManwha(); buildMovies();
+    // Only rebuild marquee if count changed
+  } catch(e) {}
+}, 60000);
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && location.hash.startsWith('#anime/')) goBack(); });
+
+
+
+// ═══ KENSHIN PLAYER v7 - INLINE ═══
+/**
+ * KENSHIN PLAYER v6.0 — ULTRA ADVANCED
+ * ✅ Episodes & Seasons Browser (like Crunchyroll)
+ * ✅ Multi-Audio Track Selector
+ * ✅ Quality Selector (360p/480p/720p/1080p)
+ * ✅ Subtitle / Caption Support (.vtt)
+ * ✅ Download Button
+ * ✅ 10GB+ Video Support (optimized HLS chunking)
+ * ✅ Tab/Window close → video stops
+ * ✅ Anti-piracy URL obfuscation
+ */
+;(function(G){'use strict';
+var _hls=null,_quals=[],_activeQ=0,_hideTimer=null;
+var _isOpen=false,_isFS=false,_keyFn=null,_outFn=null;
+var _eps=[],_seasons=[],_curEp=null,_activeSeason=0;
+var _subs=[],_activeSub=-1,_subCues=null;
+var _dlUrl='',_retryUrl='',_lastTU=0,_lastProg=0,_kpTitle='',_lastSave=0;
+function S(id){return document.getElementById(id);}
+function fmt(s){if(!s||isNaN(s)||!isFinite(s))return'0:00';var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=Math.floor(s%60);return h>0?(h+':'+(m<10?'0':'')+m+':'+(sc<10?'0':'')+sc):(m+':'+(sc<10?'0':'')+sc);}
+function isYT(u){return/youtube\.com|youtu\.be/.test(u);}
+function isHLS(u){return/\.m3u8/i.test(u);}
+function ytID(u){var m=u.match(/(?:v=|youtu\.be\/|embed\/)([^&?\/\s]{6,})/);return m?m[1]:null;}
+function parseQ(raw){if(!raw||!raw.trim())return[];if(raw.indexOf('|||')>=0){return raw.split('|||').map(function(p){var i=p.indexOf('::');return i<0?null:{label:p.slice(0,i).trim(),url:p.slice(i+2).trim()};}).filter(Boolean);}return[{label:'AUTO',url:raw.trim()}];}
+function _css(){
+  if(S('kp7css'))return;
+  var s=document.createElement('style');s.id='kp7css';
+  s.textContent='#kp7{position:absolute;inset:0;z-index:999;background:#000;display:none;font-family:Outfit,sans-serif;user-select:none;-webkit-user-select:none;overflow:hidden;isolation:isolate;}'
+  +'#kp7.on{display:block;}'
+  +'#kp7 video{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background:#000;display:block;object-fit:contain;pointer-events:none;}'
+  +'#kp7 iframe{position:absolute;inset:0;width:100%;height:100%;border:none;z-index:1;display:none;}'
+  +'#kp7 iframe.on{display:block;}'
+  +'#kp7shld{position:absolute;inset:0;z-index:2;background:transparent;cursor:pointer;}'
+  +'#kp7spin{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;display:none;flex-direction:column;align-items:center;gap:10px;pointer-events:none;}'
+  +'#kp7spin.on{display:flex;}'
+  +'.kp7ring{width:54px;height:54px;border:3px solid rgba(0,212,255,.12);border-top-color:#00d4ff;border-radius:50%;animation:kp7spin .75s linear infinite;}'
+  +'@keyframes kp7spin{to{transform:rotate(360deg)}}'
+  +'.kp7btxt{font-size:.6rem;color:#8ab;letter-spacing:2px;text-transform:uppercase;}'
+  +'#kp7err{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;display:none;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:20px;}'
+  +'#kp7err.on{display:flex;}'
+  +'.kp7emsg{color:#ff6b6b;font-size:.85rem;font-weight:700;max-width:280px;line-height:1.5;}'
+  +'.kp7ertry{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:#00d4ff;border-radius:8px;padding:8px 20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;}'
+  +'#kp7fl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:11;pointer-events:none;opacity:0;}'
+  +'#kp7fl.pop{animation:kp7pop .38s ease forwards;}'
+  +'@keyframes kp7pop{0%{opacity:.9;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(2)}}'
+  +'.kp7fring{width:64px;height:64px;border-radius:50%;background:rgba(0,212,255,.15);border:2px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;}'
+  +'#kp7top{position:absolute;top:0;left:0;right:0;z-index:20;background:linear-gradient(180deg,rgba(0,0,0,.9),transparent);padding:12px 14px 32px;display:flex;align-items:center;gap:10px;transition:opacity .3s;}'
+  +'#kp7top.hide{opacity:0;pointer-events:none;}'
+  +'.kp7logo{font-family:"Bebas Neue",cursive;font-size:.9rem;letter-spacing:4px;background:linear-gradient(90deg,#00d4ff,#0077ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex:1;}'
+  +'.kp7epbtn{font-size:.58rem;font-weight:800;padding:4px 11px;border-radius:20px;background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.3);color:#00d4ff;cursor:pointer;display:none;font-family:Outfit,sans-serif;}'
+  +'#kp7x{position:absolute;top:10px;right:10px;z-index:25;background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.2);color:#cce;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;transition:all .2s;}'
+  +'#kp7x:hover{background:rgba(220,30,30,.8);color:#fff;}'
+  +'#kp7skb,#kp7skf{position:absolute;top:50%;transform:translateY(-50%);z-index:20;background:rgba(0,0,0,.4);border:none;color:rgba(255,255,255,.9);font-size:.68rem;font-weight:800;width:52px;height:52px;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transition:all .2s;opacity:0;}'
+  +'#kp7:hover #kp7skb,#kp7:hover #kp7skf{opacity:1;}'
+  +'#kp7skb{left:14px;}#kp7skf{right:14px;}'
+  +'#kp7subs{position:absolute;bottom:82px;left:50%;transform:translateX(-50%);z-index:15;max-width:90%;text-align:center;pointer-events:none;}'
+  +'.kp7sub{display:inline-block;background:rgba(0,0,0,.85);color:#fff;font-size:1rem;font-weight:600;padding:4px 14px;border-radius:6px;line-height:1.6;text-shadow:0 2px 6px #000;}'
+  +'#kp7nxt{position:absolute;bottom:90px;right:14px;z-index:22;background:rgba(3,8,16,.96);border:1px solid rgba(0,212,255,.35);border-radius:13px;padding:12px 16px;min-width:180px;display:none;cursor:pointer;animation:kp7si .3s ease;}'
+  +'@keyframes kp7si{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}'
+  +'#kp7nxt.on{display:block;}'
+  +'#kp7nxt:hover{background:rgba(0,212,255,.08);}'
+  +'.kp7nlbl{font-size:.54rem;letter-spacing:2px;color:#00d4ff;font-weight:700;text-transform:uppercase;margin-bottom:4px;}'
+  +'.kp7nttl{font-size:.8rem;font-weight:700;color:#e2e8f0;}'
+  +'.kp7ntmr{position:absolute;top:10px;right:13px;font-family:"Bebas Neue";font-size:1.1rem;color:#00d4ff;}'
+  +'#kp7eps{position:absolute;inset:0;z-index:30;background:rgba(3,8,16,.98);display:none;flex-direction:column;}'
+  +'#kp7eps.on{display:flex;}'
+  +'.kp7ephead{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(0,212,255,.1);flex-shrink:0;}'
+  +'.kp7eptitle{font-family:"Bebas Neue";font-size:1.1rem;letter-spacing:4px;flex:1;color:#00d4ff;}'
+  +'.kp7epclose{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:#aac;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:.75rem;font-family:Outfit,sans-serif;}'
+  +'.kp7seas{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;border-bottom:1px solid rgba(0,212,255,.07);flex-shrink:0;}'
+  +'.kp7seas::-webkit-scrollbar{display:none;}'
+  +'.kp7sea{flex-shrink:0;padding:6px 16px;border-radius:14px;font-size:.72rem;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.1);color:#8ab;background:rgba(255,255,255,.04);font-family:Outfit,sans-serif;transition:all .2s;}'
+  +'.kp7sea.on{background:rgba(0,212,255,.1);color:#00d4ff;border-color:rgba(0,212,255,.3);}'
+  +'.kp7grid{flex:1;overflow-y:auto;padding:12px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;align-content:start;}'
+  +'.kp7grid::-webkit-scrollbar{width:3px;}.kp7grid::-webkit-scrollbar-thumb{background:#0088aa;}'
+  +'.kp7card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s;}'
+  +'.kp7card:hover{border-color:rgba(0,212,255,.4);transform:translateY(-2px);}'
+  +'.kp7card.on{border-color:#00d4ff;background:rgba(0,212,255,.08);}'
+  +'.kp7cthumb{width:100%;aspect-ratio:16/9;background:#0a1628;display:flex;align-items:center;justify-content:center;color:rgba(0,212,255,.5);font-size:1.4rem;overflow:hidden;}'
+  +'.kp7cthumb img{width:100%;height:100%;object-fit:cover;}'
+  +'.kp7cbody{padding:7px 9px;}'
+  +'.kp7cnum{font-size:.56rem;color:#00d4ff;font-weight:700;letter-spacing:1px;}'
+  +'.kp7cname{font-size:.74rem;font-weight:700;line-height:1.3;margin-top:2px;color:#e2e8f0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}'
+  +'.kp7cdur{font-size:.57rem;color:#475569;margin-top:3px;}'
+  +'.kp7cnew{display:inline-block;font-size:.48rem;font-weight:900;background:#00d4ff;color:#030810;padding:1px 5px;border-radius:3px;margin-top:3px;}'
+  +'.kp7cnow{font-size:.46rem;font-weight:900;background:#e50914;color:#fff;padding:2px 6px;border-radius:3px;margin-bottom:3px;display:inline-block;}'
+  +'#kp7ctrl{position:absolute;bottom:0;left:0;right:0;z-index:20;background:linear-gradient(0deg,rgba(0,0,0,.97),rgba(0,0,0,.5) 65%,transparent);padding:6px 12px 16px;transition:opacity .3s;}'
+  +'#kp7ctrl.hide{opacity:0;pointer-events:none;}'
+  +'#kp7pb{position:relative;height:4px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px;transition:height .15s;}'
+  +'#kp7pb:hover{height:7px;}'
+  +'#kp7buf{position:absolute;left:0;top:0;height:100%;background:rgba(255,255,255,.25);border-radius:3px;pointer-events:none;}'
+  +'#kp7pos{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,#00d4ff,#0077ff);border-radius:3px;transition:width .12s linear;pointer-events:none;}'
+  +'#kp7dot{position:absolute;top:50%;right:-7px;transform:translateY(-50%);width:15px;height:15px;border-radius:50%;background:#00d4ff;box-shadow:0 0 10px rgba(0,212,255,.9);opacity:0;transition:opacity .15s;pointer-events:none;}'
+  +'#kp7pb:hover #kp7dot{opacity:1;}'
+  +'#kp7tip{position:absolute;bottom:calc(100% + 8px);transform:translateX(-50%);background:rgba(3,8,16,.97);border:1px solid rgba(0,212,255,.2);border-radius:5px;padding:3px 10px;font-size:.62rem;color:#fff;white-space:nowrap;pointer-events:none;display:none;}'
+  +'#kp7row{display:flex;align-items:center;gap:5px;}'
+  +'.kpb{background:none;border:none;color:#cce8ff;cursor:pointer;font-size:1.1rem;padding:4px 5px;flex-shrink:0;transition:transform .15s;line-height:1;}'
+  +'.kpb:hover{transform:scale(1.2);color:#fff;}.kpb:active{transform:scale(.9);}'
+  +'#kp7time{font-size:.64rem;color:#8ab;white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;}'
+  +'#kp7ttl{flex:1;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 5px;}'
+  +'#kp7vol{display:flex;align-items:center;gap:5px;flex-shrink:0;}'
+  +'#kp7vs{width:56px;height:3px;-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.2);border-radius:3px;outline:none;accent-color:#00d4ff;cursor:pointer;}'
+  +'#kp7vs::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#00d4ff;}'
+  +'.kpm{position:relative;flex-shrink:0;}'
+  +'.kpmbtn{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.25);color:#00d4ff;border-radius:7px;padding:4px 8px;font-size:.58rem;font-weight:800;cursor:pointer;letter-spacing:.8px;font-family:Outfit,sans-serif;white-space:nowrap;transition:background .18s;}'
+  +'.kpmbtn:hover{background:rgba(0,212,255,.18);}'
+  +'.kpmpop{position:absolute;bottom:calc(100% + 8px);right:0;background:rgba(3,8,16,.99);border:1px solid rgba(0,212,255,.18);border-radius:11px;overflow:hidden;min-width:120px;display:none;box-shadow:0 -8px 32px rgba(0,0,0,.9);z-index:100;}'
+  +'.kpmpop.on{display:block;}'
+  +'.kpmhead{padding:8px 14px 5px;font-size:.54rem;font-weight:800;letter-spacing:2px;color:#00d4ff;text-transform:uppercase;border-bottom:1px solid rgba(0,212,255,.1);}'
+  +'.kpmopt{padding:9px 14px;font-size:.72rem;font-weight:600;cursor:pointer;color:#8ab;display:flex;align-items:center;gap:8px;transition:background .14s;}'
+  +'.kpmopt:hover{background:rgba(0,212,255,.08);color:#fff;}'
+  +'.kpmopt.on{color:#00d4ff;background:rgba(0,212,255,.05);}'
+  +'.kpmopt.on::before{content:"✓";color:#00ff88;font-size:.62rem;}'
+  +'.kpmopt:not(.on)::before{content:"";display:inline-block;width:.62rem;}'
+  +'#kp7dl{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);color:#4ade80;border-radius:7px;padding:4px 9px;font-size:.58rem;font-weight:800;cursor:pointer;font-family:Outfit,sans-serif;transition:all .18s;}'
+  +'#kp7dl:hover{background:rgba(74,222,128,.2);}'
+  +'@media(max-width:480px){#kp7vol{display:none;}#kp7ttl{display:none;}#kp7skb,#kp7skf{opacity:1!important;width:44px;height:44px;}.kp7grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));}}';
+  document.head.appendChild(s);
+}
+function _html(container){
+  if(S('kp7'))return;
+  var d=document.createElement('div');
+  d.innerHTML='<div id="kp7">'
+  +'<video id="kp7vid" playsinline webkit-playsinline preload="auto" crossorigin="anonymous" oncontextmenu="return false"></video>'
+  +'<iframe id="kp7yt" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen></iframe>'
+  +'<div id="kp7shld"></div>'
+  +'<div id="kp7spin"><div class="kp7ring"></div><div class="kp7btxt" id="kp7btxt">LOADING...</div></div>'
+  +'<div id="kp7err"><div style="font-size:2.5rem">⚠️</div><div class="kp7emsg" id="kp7emsg">Video load failed</div><button class="kp7ertry" onclick="KenshinPlayer.retry()">🔄 Retry</button></div>'
+  +'<div id="kp7fl"><div class="kp7fring" id="kp7fi">▶</div></div>'
+  +'<button id="kp7skb" onclick="KenshinPlayer.skip(-10)"><span style="font-size:1rem">⏪</span><span style="font-size:.5rem">10s</span></button>'
+  +'<button id="kp7skf" onclick="KenshinPlayer.skip(10)"><span style="font-size:1rem">⏩</span><span style="font-size:.5rem">10s</span></button>'
+  +'<div id="kp7top"><span class="kp7logo" id="kp7logo">KENSHIN</span>'
+  +'<button class="kp7epbtn" id="kp7epbtn" onclick="KenshinPlayer.toggleEps()">📺 EPISODES</button></div>'
+  +'<button id="kp7x" onclick="KenshinPlayer.close()">✕</button>'
+  +'<div id="kp7subs"></div>'
+  +'<div id="kp7nxt" onclick="KenshinPlayer.playNext()"><div class="kp7ntmr" id="kp7ntmr"></div><div class="kp7nlbl">▷ UP NEXT</div><div class="kp7nttl" id="kp7nttl">—</div></div>'
+  +'<div id="kp7eps"><div class="kp7ephead"><div class="kp7eptitle" id="kp7eplbl">EPISODES</div><button class="kp7epclose" onclick="KenshinPlayer.toggleEps()">✕ Close</button></div>'
+  +'<div class="kp7seas" id="kp7seas" style="display:none"></div>'
+  +'<div class="kp7grid" id="kp7grid"></div></div>'
+  +'<div id="kp7ctrl">'
+  +'<div id="kp7pb"><div id="kp7buf"></div><div id="kp7pos" style="width:0%"><div id="kp7dot"></div></div><div id="kp7tip">0:00</div></div>'
+  +'<div id="kp7row">'
+  +'<button class="kpb" id="kp7pp" onclick="KenshinPlayer.togglePlay()">▶</button>'
+  +'<button class="kpb" id="kp7prev" onclick="KenshinPlayer.prevEp()" style="display:none;font-size:.75rem">⏮</button>'
+  +'<button class="kpb" id="kp7nb" onclick="KenshinPlayer.playNext()" style="display:none;font-size:.75rem">⏭</button>'
+  +'<div id="kp7vol"><button class="kpb" id="kp7mu" onclick="KenshinPlayer.toggleMute()">🔊</button>'
+  +'<input type="range" id="kp7vs" min="0" max="1" step="0.05" value="1" oninput="KenshinPlayer.setVol(this.value)"></div>'
+  +'<span id="kp7time">0:00 / 0:00</span><span id="kp7ttl"></span>'
+  +'<div class="kpm" id="kp7qm"><button class="kpmbtn" id="kp7qbtn" onclick="KenshinPlayer.toggleMenu(\'q\')">⚙ AUTO</button>'
+  +'<div class="kpmpop" id="kp7qpop"><div class="kpmhead">Quality</div><div id="kp7qlist"></div></div></div>'
+  +'<div class="kpm" id="kp7sm"><button class="kpmbtn" onclick="KenshinPlayer.toggleMenu(\'s\')">💬 CC</button>'
+  +'<div class="kpmpop" id="kp7spop"><div class="kpmhead">Subtitles</div><div id="kp7slist"></div></div></div>'
+  +'<div class="kpm"><button class="kpmbtn" id="kp7rbtn" onclick="KenshinPlayer.toggleMenu(\'r\')">1× SPD</button>'
+  +'<div class="kpmpop" id="kp7rpop"><div class="kpmhead">Speed</div>'
+  +'<div class="kpmopt" onclick="KenshinPlayer.setSpeed(.5)">0.5×</div>'
+  +'<div class="kpmopt" onclick="KenshinPlayer.setSpeed(.75)">0.75×</div>'
+  +'<div class="kpmopt on" onclick="KenshinPlayer.setSpeed(1)">1×</div>'
+  +'<div class="kpmopt" onclick="KenshinPlayer.setSpeed(1.25)">1.25×</div>'
+  +'<div class="kpmopt" onclick="KenshinPlayer.setSpeed(1.5)">1.5×</div>'
+  +'<div class="kpmopt" onclick="KenshinPlayer.setSpeed(2)">2×</div></div></div>'
+  +'<div class="kpm" id="kp7lm" style="display:none">'
+  +'<button class="kpmbtn" onclick="KenshinPlayer.toggleMenu(\'l\')">🎙 Lang</button>'
+  +'<div class="kpmpop" id="kp7lpop"><div class="kpmhead">Language / Audio</div><div id="kp7llist">'
+  +'</div></div></div>'
+  +'<button id="kp7dl" onclick="KenshinPlayer.download()" style="display:none">⬇ DL</button>'
+  +'<button class="kpb" onclick="KenshinPlayer.pip()">⧉</button>'
+  +'<button class="kpb" id="kp7fs" onclick="KenshinPlayer.fullscreen()">⛶</button>'
+  +'</div></div></div>';
+  container.appendChild(d.firstChild);
+  _bind();
+}
+function _bind(){
+  var vid=S('kp7vid'),pb=S('kp7pb');
+  if(!vid||!pb)return;
+  vid.addEventListener('waiting',function(){S('kp7spin').classList.add('on');S('kp7btxt').textContent='BUFFERING...';});
+  vid.addEventListener('stalled',function(){S('kp7spin').classList.add('on');S('kp7btxt').textContent='SLOW...';});
+  vid.addEventListener('canplay',function(){S('kp7spin').classList.remove('on');S('kp7err').classList.remove('on');});
+  vid.addEventListener('playing',function(){S('kp7spin').classList.remove('on');S('kp7err').classList.remove('on');S('kp7pp').textContent='⏸';});
+  vid.addEventListener('pause',function(){S('kp7pp').textContent='▶';});
+  vid.addEventListener('ended',function(){S('kp7pp').textContent='▶';if(_curEp)setTimeout(function(){KP.playNext();},1500);});
+  vid.addEventListener('loadedmetadata',function(){
+    _detectAudio();
+    _detectTextTracks(vid);
+    // H.265 / audio-only detection: if video has duration but 0x0 video dimensions
+    setTimeout(function(){
+      var v=S('kp7vid');if(!v)return;
+      if(v.duration&&v.readyState>=2&&v.videoWidth===0&&v.videoHeight===0){
+        S('kp7spin').classList.remove('on');
+        S('kp7emsg').textContent='⚠️ Video track unplayable — likely H.265/HEVC encoded. Browser plays audio only. Re-encode to H.264 (x264) for full video.';
+        S('kp7err').classList.add('on');
+      }
+    },800);
+  });
+  // Also detect tracks after a delay (some videos load tracks late)
+  vid.addEventListener('canplay',function(){
+    _detectTextTracks(vid);
+  },{once:true});
+  vid.addEventListener('error',function(){var e=vid.error,msg='Video failed.';if(e){if(e.code===4)msg='⚠️ Format not supported. Audio-only usually means H.265/HEVC codec — re-encode to H.264 for browser playback.';else if(e.code===2)msg='⚠️ Network error. Check your internet & file URL.';else if(e.code===3)msg='⚠️ Decode error — file may be corrupted or unsupported codec.';}S('kp7spin').classList.remove('on');S('kp7emsg').textContent=msg;S('kp7err').classList.add('on');});
+  vid.addEventListener('timeupdate',function(){var now=Date.now();if(now-_lastTU<250)return;_lastTU=now;if(!vid.duration||!isFinite(vid.duration))return;var pct=(vid.currentTime/vid.duration*100).toFixed(2);S('kp7pos').style.width=pct+'%';S('kp7time').textContent=fmt(vid.currentTime)+' / '+fmt(vid.duration);_renderSub(vid.currentTime);if(_curEp){var idx=_getIdx(_curEp),nxt=S('kp7nxt');if(nxt&&idx>=0&&idx<_eps.length-1&&(vid.currentTime/vid.duration)>.88){nxt.classList.add('on');S('kp7ntmr').textContent=Math.ceil(vid.duration-vid.currentTime)+'s';S('kp7nttl').textContent=_eps[idx+1].title||'Episode '+(_eps[idx+1].number||idx+2);}else if(nxt)nxt.classList.remove('on');}});
+  vid.addEventListener('progress',function(){var now=Date.now();if(now-_lastProg<500)return;_lastProg=now;try{if(vid.buffered.length&&vid.duration){var e=vid.buffered.end(vid.buffered.length-1);S('kp7buf').style.width=(e/vid.duration*100)+'%';}}catch(e){}});
+  var _drag=false;
+  function _seek(e){var r=pb.getBoundingClientRect(),p=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));if(vid.duration&&isFinite(vid.duration))vid.currentTime=p*vid.duration;}
+  pb.addEventListener('mousedown',function(e){_drag=true;_seek(e);});
+  pb.addEventListener('touchstart',function(e){_drag=true;_seek(e.touches[0]);},{passive:true});
+  document.addEventListener('mousemove',function(e){if(_drag)_seek(e);});
+  document.addEventListener('touchmove',function(e){if(_drag)_seek(e.touches[0]);},{passive:true});
+  document.addEventListener('mouseup',function(){_drag=false;});
+  document.addEventListener('touchend',function(){_drag=false;});
+  pb.addEventListener('mousemove',function(e){var tip=S('kp7tip'),r=pb.getBoundingClientRect(),p=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));tip.style.left=(p*100)+'%';tip.style.display='block';if(vid.duration)tip.textContent=fmt(p*vid.duration);});
+  pb.addEventListener('mouseleave',function(){S('kp7tip').style.display='none';});
+  var _lt=0;
+  S('kp7shld').addEventListener('click',function(){var now=Date.now();if(now-_lt<300){KP.fullscreen();}else{KP.togglePlay();}; _lt=now;_resetHide();});
+  S('kp7').addEventListener('mousemove',_resetHide);
+  S('kp7').addEventListener('touchstart',_resetHide,{passive:true});
+  _outFn=function(e){if(!e.target.closest('.kpm'))document.querySelectorAll('.kpmpop').forEach(function(p){p.classList.remove('on');});};
+  document.addEventListener('click',_outFn);
+  document.addEventListener('fullscreenchange',_onFS);
+  document.addEventListener('webkitfullscreenchange',_onFS);
+}
+function _onFS(){_isFS=!!(document.fullscreenElement||document.webkitFullscreenElement);var b=S('kp7fs');if(b)b.textContent=_isFS?'⛷':'⛶';}
+function _resetHide(){var c=S('kp7ctrl'),t=S('kp7top');if(c)c.classList.remove('hide');if(t)t.classList.remove('hide');clearTimeout(_hideTimer);_hideTimer=setTimeout(function(){var v=S('kp7vid');if(v&&!v.paused){if(c)c.classList.add('hide');if(t)t.classList.add('hide');}},3200);}
+function _loadSrc(url,qIdx,autoplay){
+  _retryUrl=url;
+  var vid=S('kp7vid');if(!vid)return;
+  vid.pause();
+  if(_hls){try{_hls.destroy();}catch(e){} _hls=null;}
+  S('kp7spin').classList.add('on');S('kp7btxt').textContent='LOADING...';S('kp7err').classList.remove('on');
+  _activeQ=qIdx||0;_updQBtn();
+
+  // Detect URL type:
+  // isHLS = explicit .m3u8
+  // isStream = redirect/stream URL (heroku, stream paths, ?hash=, /stream/, etc.) — try HLS first
+  // isDirect = known direct file (.mp4 .mkv .webm .avi)
+  var lo = url.toLowerCase();
+  var isDirect = /\.(mp4|mkv|webm|avi|mov|flv|ogv)(\?|$)/.test(lo);
+  var isHLSUrl = /\.m3u8(\?|$)/.test(lo);
+  // Treat as HLS/stream if: explicit .m3u8 OR non-direct URL (redirect, stream paths)
+  var tryHLS = isHLSUrl || (!isDirect && G.Hls && G.Hls.isSupported());
+
+  if(tryHLS && G.Hls && G.Hls.isSupported()){
+    _hls=new G.Hls({
+      maxBufferLength:90,              // 90s buffer for 4K/8K
+      maxMaxBufferLength:300,           // 5min max buffer
+      maxBufferSize:150*1000*1000,      // 150MB buffer for high-res
+      startLevel:-1,                    // auto start level
+      capLevelToPlayerSize:false,       // allow 4K/8K above player size
+      enableWorker:true,
+      lowLatencyMode:false,
+      testBandwidth:true,
+      abrBandWidthFactor:0.95,
+      abrBandWidthUpFactor:0.7,
+      abrEwmaDefaultEstimate:1500000,   // start estimate 1.5Mbps
+      maxStarvationDelay:4,
+      maxLoadingDelay:4,
+      fragLoadingMaxRetry:6,
+      manifestLoadingMaxRetry:3,
+      levelLoadingMaxRetry:6,
+      xhrSetup:function(xhr,u){xhr.withCredentials=false;}
+    });
+    _hls.loadSource(url);
+    _hls.attachMedia(vid);
+    _hls.on(G.Hls.Events.MANIFEST_PARSED,function(ev,d){
+      S('kp7spin').classList.remove('on');
+      var lvls=d.levels||[];
+      if(lvls.length>=1){
+        _quals=lvls.map(function(l,i){
+          var h=l.height||0;
+          var lbl=h>=4320?'8K':h>=2160?'4K':h>=1440?'2K':h>=1080?'1080p':h>=720?'720p':h>=480?'480p':h>=360?'360p':(h?h+'p':(l.bitrate?Math.round(l.bitrate/1000)+'k':'L'+i));
+          return{label:lbl,hlsIdx:i,bw:l.bitrate||0};
+        }).sort(function(a,b){return b.bw-a.bw;});
+        _buildQ();
+      }
+      _detectAudio();
+      if(autoplay!==false)vid.play().catch(function(){});
+    });
+    _hls.on(G.Hls.Events.LEVEL_SWITCHED,function(ev,d){_activeQ=d.level;_updQBtn();});
+    _hls.on(G.Hls.Events.ERROR,function(ev,d){
+      if(d.fatal){
+        // HLS failed — if it was a non-.m3u8 redirect URL, fallback to direct src
+        if(!isHLSUrl){
+          console.log('[KP] HLS failed on redirect URL, falling back to direct src');
+          try{_hls.destroy();}catch(e){} _hls=null;
+          _loadDirect(url,autoplay);
+        }else{
+          S('kp7spin').classList.remove('on');
+          S('kp7emsg').textContent='Stream load failed. Check link.';
+          S('kp7err').classList.add('on');
+        }
+      }
+    });
+  }else if(!isDirect && vid.canPlayType('application/vnd.apple.mpegurl')){
+    // Safari native HLS
+    vid.removeAttribute('src');vid.src=url;
+    vid.addEventListener('loadedmetadata',function once(){
+      S('kp7spin').classList.remove('on');
+      vid.removeEventListener('loadedmetadata',once);
+      if(autoplay!==false)vid.play().catch(function(){});
+    });
+  }else{
+    // Direct file (.mp4, .mkv etc)
+    _loadDirect(url,autoplay);
+  }
+}
+
+function _loadDirect(url,autoplay){
+  var vid=S('kp7vid');if(!vid)return;
+
+  // ── Reset video element fully ──
+  vid.pause();
+  // Remove any <source> children from previous MKV load
+  while(vid.firstChild) vid.removeChild(vid.firstChild);
+  vid.removeAttribute('src');
+  vid.preload='auto';
+  try{ vid.load(); }catch(e){}
+
+  var lo=url.toLowerCase();
+  var isMkv=/\.mkv(\?|$)/.test(lo);
+
+  if(isMkv){
+    // MKV: browsers support MKV with H.264/VP8/VP9 — try all MIME hints
+    // Order: VP9 (best open), VP8, H.264 in MKV, generic
+    var mimes=[
+      'video/webm; codecs="vp9,opus"',
+      'video/webm; codecs="vp9,vorbis"',
+      'video/webm; codecs="vp8,opus"',
+      'video/webm; codecs="vp8,vorbis"',
+      'video/x-matroska; codecs="avc1.42E01E,mp4a.40.2"',
+      'video/x-matroska'
+    ];
+    mimes.forEach(function(type){
+      var s=document.createElement('source');
+      s.src=url; s.type=type;
+      vid.appendChild(s);
+    });
+    // Final no-type fallback
+    var sf=document.createElement('source');sf.src=url;vid.appendChild(sf);
+  } else {
+    vid.src=url;
+  }
+
+  if(autoplay!==false){
+    var _played=false;
+    function _tryPlay(){
+      if(_played)return; _played=true;
+      S('kp7spin').classList.remove('on');
+      // ── Quality label: up to 8K ──
+      if(vid.videoWidth&&vid.videoHeight){
+        var h=vid.videoHeight;
+        var ql=h>=4320?'8K':h>=2160?'4K':h>=1440?'2K':h>=1080?'1080p':h>=720?'720p':h>=480?'480p':h>=360?'360p':(h+'p');
+        var qb=S('kp7qbtn');
+        if(qb&&_quals.length<=1)qb.textContent='⚙ '+ql;
+      }
+      // ── Resume ──
+      if(window._resumeTarget&&window._resumeTarget>5){
+        var rt=window._resumeTarget; window._resumeTarget=0;
+        setTimeout(function(){
+          if(vid.duration>rt){
+            vid.currentTime=rt;
+            toast('info','⏩ Resumed from '+Math.floor(rt/60)+'m '+Math.floor(rt%60)+'s');
+          }
+        },400);
+      }
+      vid.play().catch(function(){S('kp7pp').textContent='▶';});
+    }
+    vid.addEventListener('canplay',_tryPlay,{once:true});
+    vid.addEventListener('loadedmetadata',_tryPlay,{once:true});
+    // Fallback: 8s for large 4K/8K files
+    setTimeout(function(){
+      if(!_played&&vid.readyState>=1){
+        S('kp7spin').classList.remove('on');
+        _played=true;
+        vid.play().catch(function(){S('kp7pp').textContent='▶';});
+      }
+    },8000);
+  }
+}
+function _buildQ(){var list=S('kp7qlist'),qm=S('kp7qm');if(!list||!_quals.length){if(qm)qm.style.display='none';return;}if(qm)qm.style.display='';list.innerHTML=_quals.map(function(q,i){var lbl=q.label,badge='';if(lbl.includes('8K')||lbl.includes('4320'))badge='<span style="background:#a855f7;color:#fff;font-size:.44rem;font-weight:900;padding:1px 4px;border-radius:3px;margin-left:4px">8K</span>';else if(lbl.includes('4K')||lbl.includes('2160'))badge='<span style="background:#f97316;color:#fff;font-size:.44rem;font-weight:900;padding:1px 4px;border-radius:3px;margin-left:4px">4K</span>';else if(lbl.includes('1440')||lbl.includes('2K'))badge='<span style="background:#4ade80;color:#030810;font-size:.44rem;font-weight:900;padding:1px 4px;border-radius:3px;margin-left:4px">2K</span>';else if(lbl.includes('1080')||lbl.includes('720'))badge='<span style="background:#00d4ff;color:#030810;font-size:.44rem;font-weight:900;padding:1px 4px;border-radius:3px;margin-left:4px">HD</span>';return'<div class="kpmopt'+(i===_activeQ?' on':'')+'" onclick="KenshinPlayer.switchQ('+i+')">'+lbl+badge+'</div>';}).join('');}
+function _updQBtn(){var b=S('kp7qbtn');if(b)b.textContent='⚙ '+(_quals[_activeQ]?_quals[_activeQ].label:'AUTO');}
+function _detectTextTracks(vid){
+  if(!vid||!vid.textTracks||!vid.textTracks.length) return;
+  var tracks=vid.textTracks;
+  var subs=[];
+  for(var i=0;i<tracks.length;i++){
+    var t=tracks[i];
+    // Disable default mode first
+    if(t.mode==='showing') t.mode='hidden';
+    var label=t.label||(t.language?t.language.toUpperCase():'Track '+(i+1));
+    subs.push({label:label, trackIndex:i, isNative:true});
+  }
+  if(!subs.length) return;
+  var sm=S('kp7sm'); if(sm) sm.style.display='';
+  var list=S('kp7slist'); if(!list) return;
+  list.innerHTML='<div class="kpmopt on" onclick="KenshinPlayer.setSub(-1)">Off</div>'+
+    subs.map(function(s,i){
+      return '<div class="kpmopt" onclick="KenshinPlayer.setNativeSub('+s.trackIndex+')">'+s.label+'</div>';
+    }).join('');
+  // Store native track refs
+  window._nativeTracks = tracks;
+}
+
+function _loadAudioMenu(audioTracks){
+  // audioTracks = [{label:'Hindi', url:'...'}, {label:'English', url:'...'}]
+  if(!audioTracks||!audioTracks.length) return;
+  var lm=S('kp7lm'); if(lm) lm.style.display='';
+  var llist=S('kp7llist'); if(!llist) return;
+  llist.innerHTML=audioTracks.map(function(t,i){
+    return '<div class="kpmopt'+(i===0?' on':'')+'" onclick="KenshinPlayer.switchAudioURL('+i+')">'+t.label+'</div>';
+  }).join('');
+  // Store for switching
+  window._audioTracks = audioTracks;
+  window._activeAudio = 0;
+}
+
+function _detectAudio(){
+  // Also update language/audio menu
+  var tracks=[];
+  var vid2=S('kp7vid');
+  if(vid2&&vid2.audioTracks&&vid2.audioTracks.length>1){
+    for(var i=0;i<vid2.audioTracks.length;i++) tracks.push(vid2.audioTracks[i].label||vid2.audioTracks[i].language||'Track '+(i+1));
+  } else if(_hls&&_hls.audioTracks&&_hls.audioTracks.length>1){
+    tracks=_hls.audioTracks.map(function(t){return t.name||t.lang||'Track';});
+  }
+  var llist=S('kp7llist');
+  if(llist&&tracks.length>1){
+    llist.innerHTML=tracks.map(function(t,i){
+      return '<div class="kpmopt'+(i===0?' on':'')+'" onclick="KenshinPlayer.setAudioTrack('+i+')">'+t+'</div>';
+    }).join('');
+    var lm=S('kp7lm');if(lm)lm.style.display='';
+  } else {
+    var lm2=S('kp7lm');if(lm2)lm2.style.display='none';
+  }
+_detectAudio_inner();
+}
+function _detectAudio_inner(){var vid=S('kp7vid');if(!vid)return;var tracks=[];if(vid.audioTracks&&vid.audioTracks.length>1)for(var i=0;i<vid.audioTracks.length;i++)tracks.push({label:vid.audioTracks[i].label||vid.audioTracks[i].language||'Track '+(i+1),idx:i});else if(_hls&&_hls.audioTracks&&_hls.audioTracks.length>1)tracks=_hls.audioTracks.map(function(t,i){return{label:t.name||t.lang||'Audio '+i,idx:i};});if(!tracks.length)return;var am=S('kp7am');if(!am){var row=S('kp7row'),d=document.createElement('div');d.className='kpm';d.id='kp7am';d.innerHTML='<button class="kpmbtn" onclick="KenshinPlayer.toggleMenu(\'a\')">🎙 Audio</button><div class="kpmpop" id="kp7apop"><div class="kpmhead">Audio</div><div id="kp7alist"></div></div>';row.insertBefore(d,S('kp7dl'));}S('kp7alist').innerHTML=tracks.map(function(t,i){return'<div class="kpmopt'+(i===0?' on':'')+'\" onclick="KenshinPlayer.setAudio('+i+')">'+t.label+'</div>';}).join('');}
+function _loadSubs(subs){_subs=subs||[];_activeSub=-1;_subCues=null;var sm=S('kp7sm'),list=S('kp7slist');if(!sm||!list)return;if(!_subs.length){return;}sm.style.display='';list.innerHTML='<div class="kpmopt on" onclick="KenshinPlayer.setSub(-1)">Off</div>'+_subs.map(function(s,i){return'<div class="kpmopt" onclick="KenshinPlayer.setSub('+i+')">'+s.label+'</div>';}).join('');}
+function _renderSub(t){var d=S('kp7subs');if(!d||_activeSub<0||!_subCues)return;var f=null;for(var i=0;i<_subCues.length;i++){if(t>=_subCues[i].s&&t<=_subCues[i].e){f=_subCues[i];break;}}d.innerHTML=f?'<div class="kp7sub">'+f.t+'</div>':'';}
+function _parseVTT(txt){var cues=[],lines=txt.replace(/\r/g,'').split('\n'),i=0;while(i<lines.length){if(lines[i].indexOf('-->')>=0){var p=lines[i].split('-->'),s=_vttT(p[0].trim()),e=_vttT(p[1].split(' ')[0].trim()),tl=[];i++;while(i<lines.length&&lines[i].trim()!=''){tl.push(lines[i]);i++;}cues.push({s:s,e:e,t:tl.join('<br>')});}else i++;}return cues;}
+function _vttT(s){var p=s.split(':');return p.length===3?+p[0]*3600+ +p[1]*60+parseFloat(p[2]):+p[0]*60+parseFloat(p[1]);}
+function _loadEps(eps,seas,title){_eps=eps||[];_seasons=seas||[];_activeSeason=0;var btn=S('kp7epbtn'),prev=S('kp7prev'),nb=S('kp7nb');if(!_eps.length){if(btn)btn.style.display='none';if(prev)prev.style.display='none';if(nb)nb.style.display='none';return;}if(btn)btn.style.display='';if(prev)prev.style.display='';if(nb)nb.style.display='';var lbl=S('kp7eplbl');if(lbl)lbl.textContent=(title||'EPISODES').toUpperCase();_renderSeas();_renderEps(0);}
+function _renderSeas(){var sc=S('kp7seas');if(!sc)return;if(_seasons.length<2){sc.style.display='none';return;}sc.style.display='flex';sc.innerHTML=_seasons.map(function(s,i){return'<button class="kp7sea'+(i===_activeSeason?' on':'')+'\" onclick="KenshinPlayer.setSeason('+i+')">'+s.label+'</button>';}).join('');}
+function _renderEps(si){var grid=S('kp7grid');if(!grid)return;var eps=_seasons.length>1?_eps.filter(function(e){return e.season===(si+1);}):_eps;if(!eps.length){grid.innerHTML='<div style="padding:30px;color:#475569;font-size:.8rem;grid-column:1/-1">No episodes yet.</div>';return;}grid.innerHTML=eps.map(function(ep){var eid=String(ep.id||ep.number||'');var isCur=_curEp&&String(_curEp.id||_curEp.number||'')===eid;var epData=encodeURIComponent(JSON.stringify(ep));return'<div class="kp7card'+(isCur?' on':'')+'\" data-ep="'+epData+'" data-eid="'+eid+'" onclick="KenshinPlayer.playEpFromCard(this)">'+(isCur?'<div class="kp7cnow">▶ PLAYING</div>':'')+'<div class="kp7cthumb">'+(ep.thumbnail?'<img loading="lazy" src="'+ep.thumbnail+'" onerror="this.hidden=true">':'▶')+'</div><div class="kp7cbody"><div class="kp7cnum">EP '+(ep.number||ep.ep||'')+(ep.season?' · S'+ep.season:'')+'</div><div class="kp7cname">'+(ep.title||'Episode '+(ep.number||''))+'</div>'+(ep.duration?'<div class="kp7cdur">'+ep.duration+'</div>':'')+(ep.isNew?'<span class="kp7cnew">NEW</span>':'')+'</div></div>';}).join('');}
+function _getIdx(ep){var eid=String(ep.id||ep.number||'');for(var i=0;i<_eps.length;i++){if(String(_eps[i].id||_eps[i].number||'')===eid)return i;}return -1;}
+function _guards(){document.addEventListener('visibilitychange',function(){if(document.hidden){var v=S('kp7vid');if(v&&!v.paused)v.pause();}});window.addEventListener('pagehide',function(){var v=S('kp7vid');if(v){v.pause();try{v.removeAttribute('src');}catch(e){}}});window.addEventListener('beforeunload',function(){var v=S('kp7vid');if(v){v.pause();try{v.removeAttribute('src');}catch(e){}}});}
+function _flash(icon){var f=S('kp7fl'),fi=S('kp7fi');if(!f||!fi)return;fi.textContent=icon;f.classList.remove('pop');void f.offsetWidth;f.classList.add('pop');}
+var KP={
+  launch:function(rawUrl,title,container,opts){
+    if(!rawUrl||!rawUrl.trim())return;
+    opts=opts||{};
+    _css();_html(container||document.getElementById('detail-hero'));_guards();
+    _isOpen=true;_quals=[];_activeQ=0;_eps=[];_seasons=[];_curEp=null;_subs=[];_activeSub=-1;_subCues=null;_dlUrl='';_lastTU=0;_lastProg=0;
+    S('kp7').classList.add('on');
+    var logo=S('kp7logo');if(logo)logo.textContent=title||'KENSHIN';
+    _kpTitle=title||'';
+    var ttl=S('kp7ttl');if(ttl)ttl.textContent=title||'';
+    if(opts.episodes&&opts.episodes.length)_loadEps(opts.episodes,opts.seasons||[],title);
+    if(opts.subtitles&&opts.subtitles.length)_loadSubs(opts.subtitles);
+    if(opts.audioTracks&&opts.audioTracks.length)_loadAudioMenu(opts.audioTracks);
+    var dl=S('kp7dl');if(dl){if(!isYT(rawUrl)){dl.style.display='';_dlUrl=rawUrl.trim();}else dl.style.display='none';}
+    var url=rawUrl.trim();
+    if(isYT(url)){
+      var id=ytID(url);if(!id)return;
+      var yt=S('kp7yt');yt.src='https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1';yt.classList.add('on');
+      S('kp7vid').style.display='none';S('kp7ctrl').style.display='none';S('kp7skb').style.display='none';S('kp7skf').style.display='none';
+    }else{
+      var yt2=S('kp7yt');if(yt2)yt2.classList.remove('on');
+      S('kp7vid').style.display='block';S('kp7ctrl').style.display='';
+      _quals=parseQ(url);
+    if(_quals.length>1){
+      _buildQ();
+    }
+    var _qm=S('kp7qm');if(_qm)_qm.style.display='';
+      _loadSrc(_quals[0].url,0,true);_resetHide();
+    }
+    document.body.style.overflow='hidden';
+    _keyFn=function(e){if(!_isOpen)return;if(['INPUT','TEXTAREA','SELECT'].indexOf(e.target.tagName)>=0)return;var v=S('kp7vid');switch(e.code){case'Space':if(v){e.preventDefault();KP.togglePlay();}break;case'ArrowRight':if(v){e.preventDefault();v.currentTime=Math.min(v.duration||0,v.currentTime+10);_flash('+10');}break;case'ArrowLeft':if(v){e.preventDefault();v.currentTime=Math.max(0,v.currentTime-10);_flash('-10');}break;case'KeyF':KP.fullscreen();break;case'KeyM':if(v)KP.toggleMute();break;case'KeyN':KP.playNext();break;case'KeyP':KP.prevEp();break;case'Escape':if(!_isFS)KP.close();break;}};
+    document.addEventListener('keydown',_keyFn);
+  },
+  playEp:function(ep){if(!ep||!ep.url)return;_curEp=ep;var ttl=S('kp7ttl');if(ttl)ttl.textContent=ep.title||('EP '+(ep.number||''));var dl=S('kp7dl');if(dl){dl.style.display='';_dlUrl=ep.url;}if(ep.subtitles&&ep.subtitles.length)_loadSubs(ep.subtitles);document.querySelectorAll('.kp7card').forEach(function(c){c.classList.toggle('on',c.dataset.eid===String(ep.id||ep.number||''));});_quals=parseQ(ep.url);if(_quals.length>1)_buildQ();else{var qm=S('kp7qm');if(qm)qm.style.display='none';}_loadSrc(_quals[0].url,0,true);var panel=S('kp7eps');if(panel)panel.classList.remove('on');},
+  playEpFromCard:function(card){try{var ep=JSON.parse(decodeURIComponent(card.dataset.ep));this.playEp(ep);}catch(e){}},
+  playNext:function(){var n=S('kp7nxt');if(n)n.classList.remove('on');if(!_curEp)return;var i=_getIdx(_curEp);if(i>=0&&i<_eps.length-1)this.playEp(_eps[i+1]);},
+  prevEp:function(){if(!_curEp)return;var i=_getIdx(_curEp);if(i>0)this.playEp(_eps[i-1]);},
+  toggleEps:function(){var p=S('kp7eps');if(!p)return;p.classList.toggle('on');if(p.classList.contains('on'))_renderEps(_activeSeason);},
+  setSeason:function(i){_activeSeason=i;_renderSeas();_renderEps(i);},
+  retry:function(){if(_retryUrl)_loadSrc(_retryUrl,_activeQ,true);},
+  togglePlay:function(){var v=S('kp7vid');if(!v)return;if(v.paused||v.ended){v.play();_flash('▶');}else{v.pause();_flash('⏸');}},
+  toggleMute:function(){var v=S('kp7vid');if(!v)return;v.muted=!v.muted;S('kp7mu').textContent=v.muted?'🔇':'🔊';},
+  setVol:function(val){var v=S('kp7vid');if(!v)return;v.volume=parseFloat(val);if(parseFloat(val)>0)v.muted=false;S('kp7mu').textContent=parseFloat(val)===0?'🔇':(parseFloat(val)<.4?'🔉':'🔊');},
+  skip:function(s){var v=S('kp7vid');if(!v)return;v.currentTime=Math.max(0,Math.min(v.duration||0,v.currentTime+s));_flash((s>0?'+':'')+s+'s');},
+  setSpeed:function(s){var v=S('kp7vid');if(v)v.playbackRate=s;S('kp7rbtn').textContent=s+'× SPD';document.querySelectorAll('#kp7rpop .kpmopt').forEach(function(o){o.classList.toggle('on',parseFloat(o.textContent)===s);});var rp=S('kp7rpop');if(rp)rp.classList.remove('on');},
+  switchQ:function(idx){var qp=S('kp7qpop');if(qp)qp.classList.remove('on');if(idx===_activeQ)return;var vid=S('kp7vid');if(!vid)return;var t=vid.currentTime,was=!vid.paused;if(_hls&&_quals[idx]&&_quals[idx].hlsIdx!==undefined){_hls.currentLevel=_quals[idx].hlsIdx;_activeQ=idx;_updQBtn();document.querySelectorAll('#kp7qlist .kpmopt').forEach(function(o,i){o.classList.toggle('on',i===idx);});return;}_loadSrc(_quals[idx].url,idx,was);vid.addEventListener('canplay',function once(){vid.currentTime=t;vid.removeEventListener('canplay',once);});},
+  switchAudioURL:function(idx){
+    // Switch to different language URL (separate files per language)
+    var tracks=window._audioTracks;
+    if(!tracks||!tracks[idx]) return;
+    window._activeAudio=idx;
+    // Update UI
+    document.querySelectorAll('#kp7llist .kpmopt').forEach(function(o,i){o.classList.toggle('on',i===idx);});
+    var lp=S('kp7lpop');if(lp)lp.classList.remove('on');
+    // Save current position then reload with new URL
+    var vid=S('kp7vid');
+    var savedTime = vid ? vid.currentTime : 0;
+    var wasPlaying = vid ? !vid.paused : true;
+    var newUrl = tracks[idx].url;
+    _loadSrc(newUrl, 0, wasPlaying);
+    // Restore position after load
+    if(savedTime > 2){
+      vid.addEventListener('canplay', function once(){
+        vid.currentTime = savedTime;
+        vid.removeEventListener('canplay', once);
+      },{once:true});
+    }
+    toast('info','🎙 '+tracks[idx].label+' audio loading...');
+  },
+  setAudioTrack:function(idx){
+    // Switch audio track or language
+    var vid=S('kp7vid');
+    if(vid&&vid.audioTracks){
+      for(var i=0;i<vid.audioTracks.length;i++) vid.audioTracks[i].enabled=(i===idx);
+      document.querySelectorAll('#kp7llist .kpmopt').forEach(function(o,i){o.classList.toggle('on',i===idx);});
+    }
+    if(_hls) _hls.audioTrack=idx;
+    var lp=S('kp7lpop');if(lp)lp.classList.remove('on');
+  },
+  setAudio:function(idx){var vid=S('kp7vid');if(vid&&vid.audioTracks)for(var i=0;i<vid.audioTracks.length;i++)vid.audioTracks[i].enabled=(i===idx);if(_hls)_hls.audioTrack=idx;var ap=S('kp7apop');if(ap)ap.classList.remove('on');document.querySelectorAll('#kp7alist .kpmopt').forEach(function(o,i){o.classList.toggle('on',i===idx);});},
+  setNativeSub:function(trackIdx){
+    // Enable native video text track
+    var tracks=window._nativeTracks;
+    if(!tracks) return;
+    for(var i=0;i<tracks.length;i++){
+      tracks[i].mode = (i===trackIdx) ? 'showing' : 'hidden';
+    }
+    _activeSub=trackIdx;
+    // Update UI
+    document.querySelectorAll('#kp7slist .kpmopt').forEach(function(o,i){
+      o.classList.toggle('on', i===trackIdx+1);
+    });
+    var sp=S('kp7spop'); if(sp)sp.classList.remove('on');
+    // Hide our custom subtitle display since native is showing
+    var d=S('kp7subs'); if(d)d.innerHTML='';
+  },
+  setSub:function(idx){_activeSub=idx;_subCues=null;var sp=S('kp7spop');if(sp)sp.classList.remove('on');var opts=document.querySelectorAll('#kp7slist .kpmopt');opts.forEach(function(o,i){o.classList.toggle('on',i===idx+1);});if(opts[0])opts[0].classList.toggle('on',idx===-1);var d=S('kp7subs');if(idx<0){if(d)d.innerHTML='';return;}if(!_subs[idx])return;fetch(_subs[idx].url).then(function(r){return r.text();}).then(function(t){_subCues=_parseVTT(t);}).catch(function(){});},
+  download:function(){if(!_dlUrl)return;var a=document.createElement('a');a.href=_dlUrl;a.download='video.mp4';a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);},
+  toggleMenu:function(w){var m={q:'kp7qpop',s:'kp7spop',r:'kp7rpop',a:'kp7apop',l:'kp7lpop'},t=S(m[w]);document.querySelectorAll('.kpmpop').forEach(function(p){if(p.id!==m[w])p.classList.remove('on');});if(t)t.classList.toggle('on');},
+  fullscreen:function(){
+    var r=S('kp7');if(!r)return;
+    if(!document.fullscreenElement&&!document.webkitFullscreenElement){
+      var fn=r.requestFullscreen||r.webkitRequestFullscreen||r.mozRequestFullScreen;
+      if(fn)fn.call(r).catch(function(){});
+      // Lock to landscape on mobile
+      try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(function(){});}catch(e){}
+    }else{
+      var ex=document.exitFullscreen||document.webkitExitFullscreen||document.mozCancelFullScreen;
+      if(ex)ex.call(document).catch(function(){});
+      // Unlock orientation
+      try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock();}catch(e){}
+    }
+  },
+  pip:function(){var v=S('kp7vid');if(!v)return;if(document.pictureInPictureElement)document.exitPictureInPicture().catch(function(){});else if(v.requestPictureInPicture)v.requestPictureInPicture().catch(function(){});},
+  close:function(){
+    if(!_isOpen)return;_isOpen=false;
+    try{if(document.fullscreenElement||document.webkitFullscreenElement){var ex=document.exitFullscreen||document.webkitExitFullscreen;if(ex)ex.call(document);}}catch(e){}
+    _isFS=false;
+    document.body.style.overflow='';document.body.style.height='';document.body.style.position='';
+    document.documentElement.style.overflow='';document.documentElement.style.height='';
+    var vid=S('kp7vid');if(vid){vid.pause();try{vid.removeAttribute('src');}catch(e){}}
+    if(_hls){try{_hls.destroy();}catch(e){} _hls=null;}
+    var yt=S('kp7yt');if(yt){try{yt.src='about:blank';}catch(e){} yt.classList.remove('on');}
+    var root=S('kp7');if(root)root.classList.remove('on');
+    var ctrl=S('kp7ctrl'),top=S('kp7top');if(ctrl){ctrl.classList.remove('hide');ctrl.style.display='';}if(top)top.classList.remove('hide');
+    var pp=S('kp7pp'),fs=S('kp7fs'),tm=S('kp7time'),pos=S('kp7pos'),buf=S('kp7buf');
+    if(pp)pp.textContent='▶';if(fs)fs.textContent='⛶';if(tm)tm.textContent='0:00 / 0:00';if(pos)pos.style.width='0%';if(buf)buf.style.width='0%';
+    document.querySelectorAll('.kpmpop').forEach(function(p){p.classList.remove('on');});
+    var ep=S('kp7eps');if(ep)ep.classList.remove('on');var nxt=S('kp7nxt');if(nxt)nxt.classList.remove('on');
+    if(_keyFn){document.removeEventListener('keydown',_keyFn);_keyFn=null;}
+    if(_outFn){document.removeEventListener('click',_outFn);_outFn=null;}
+    document.removeEventListener('fullscreenchange',_onFS);document.removeEventListener('webkitfullscreenchange',_onFS);
+    clearTimeout(_hideTimer);
+    _quals=[];_activeQ=0;_eps=[];_seasons=[];_curEp=null;_subs=[];_activeSub=-1;_subCues=null;_dlUrl='';_lastTU=0;_lastProg=0;
+    var trBtn=document.getElementById('dh-trailer-btn');var grad=document.getElementById('dh-grad');
+    if(trBtn)trBtn.style.display='flex';if(grad)grad.style.display='block';
+    document.body.offsetHeight;
+  }
+};
+G.KenshinPlayer=KP;
+})(window);
+
+
+// ════════════════════════════════════════════════════════
+// FIREBASE AUTH + FIRESTORE SYNC
+// ════════════════════════════════════════════════════════
+
+// ⚠️  REPLACE these with YOUR Firebase project config
+// Get from: console.firebase.google.com → Project Settings → Your Apps
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyAB6Nj4mvN1t9-19zcBXhuTDQkfthY7x9I",
+  authDomain:        "kenshin-anime.firebaseapp.com",
+  projectId:         "kenshin-anime",
+  storageBucket:     "kenshin-anime.firebasestorage.app",
+  messagingSenderId: "831849123099",
+  appId:             "1:831849123099:web:63500f6c1ff41fb49217be",
+  measurementId:     "G-X9JNSB5TDW"
+};
+
+let _fbApp=null, _fbAuth=null, _fbDb=null, _currentUser=null;
+let _authReady = false;
+
+// ── APPLE SIGN IN ──
+function signInWithApple(){
+  if(!_fbAuth){ toast('err','Firebase not ready'); return; }
+  var provider = new firebase.auth.OAuthProvider('apple.com');
+  provider.addScope('email');
+  provider.addScope('name');
+  _fbAuth.signInWithPopup(provider)
+    .then(function(result){
+      var name = result.user.displayName || 'Apple User';
+      toast('ok','✅ Welcome, '+name+'!');
+    })
+    .catch(function(e){
+      var msg = e.code==='auth/popup-closed-by-user'?'Sign in cancelled':e.message;
+      toast('err','Apple sign in failed: '+msg);
+    });
+}
+
+function initFirebase(){
+  try {
+    if(typeof firebase === 'undefined'){
+      // Firebase not loaded yet - retry after 500ms
+      setTimeout(initFirebase, 500);
+      return;
+    }
+    if(_fbApp) return;
+    _fbApp  = firebase.initializeApp(FIREBASE_CONFIG);
+    _fbAuth = firebase.auth();
+    _fbDb   = firebase.firestore();
+    // Listen for auth state changes
+    _fbAuth.onAuthStateChanged(function(user){
+      _authReady = true;
+      _currentUser = user;
+      _updateAuthUI(user);
+      if(user){
+        // Sync cloud data to local on login
+        _syncFromCloud(user.uid);
+      }
+    });
+    console.log('[KNA] Firebase ready');
+  } catch(e){
+    console.warn('[KNA] Firebase init failed:', e.message);
+  }
+}
+
+function signInWithGoogle(){
+  if(!_fbAuth){ toast('err','Firebase not configured yet'); return; }
+  var provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('email');
+  provider.addScope('profile');
+  _fbAuth.signInWithPopup(provider).then(function(result){
+    toast('ok','✅ Welcome, ' + result.user.displayName + '!');
+  }).catch(function(e){
+    toast('err','Sign in failed: ' + e.message);
+  });
+}
+
+function showEditName(){
+  var wrap = document.getElementById('edit-name-wrap');
+  var inp  = document.getElementById('edit-name-inp');
+  var nm   = document.getElementById('auth-name');
+  if(wrap) wrap.style.display = wrap.style.display==='none' ? 'block' : 'none';
+  if(inp && nm) inp.value = nm.textContent;
+  if(inp) inp.focus();
+}
+function saveDisplayName(){
+  var inp = document.getElementById('edit-name-inp');
+  if(!inp||!inp.value.trim()) return;
+  var newName = inp.value.trim();
+  if(!_currentUser||!_fbAuth) return;
+  _currentUser.updateProfile({displayName: newName}).then(function(){
+    var nm = document.getElementById('auth-name');
+    if(nm) nm.textContent = newName;
+    var ini = document.getElementById('auth-initials-circle');
+    if(ini && ini.style.display!=='none') ini.textContent = newName.charAt(0).toUpperCase();
+    document.getElementById('edit-name-wrap').style.display='none';
+    toast('ok','✅ Name updated!');
+    // Also save to Firestore
+    if(_fbDb && _currentUser){
+      _fbDb.collection('users').doc(_currentUser.uid).set({displayName:newName},{merge:true}).catch(function(){});
+    }
+  }).catch(function(e){ toast('err','❌ '+e.message); });
+}
+function signOut(){
+  if(!_fbAuth) return;
+  _fbAuth.signOut().then(function(){
+    toast('info','👋 Signed out');
+    _updateAuthUI(null);
+  });
+}
+
+// ── EMAIL/PASSWORD AUTH ──
+function togglePassVis(inputId, btn){
+  var inp = document.getElementById(inputId);
+  if(!inp) return;
+  var isPass = inp.type === 'password';
+  inp.type = isPass ? 'text' : 'password';
+  btn.textContent = isPass ? '🙈' : '👁';
+}
+
+function switchAuthTab(tab){
+  var loginForm = document.getElementById('auth-login-form');
+  var regForm   = document.getElementById('auth-register-form');
+  var loginTab  = document.getElementById('tab-login');
+  var regTab    = document.getElementById('tab-register');
+  var errEl     = document.getElementById('auth-error');
+  if(errEl) errEl.style.display='none';
+  var activeStyle='background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(0,119,255,.15));color:#00d4ff;';
+  var inactiveStyle='background:transparent;color:#475569;';
+  if(tab==='login'){
+    if(loginForm) loginForm.style.display='block';
+    if(regForm)   regForm.style.display='none';
+    if(loginTab)  loginTab.style.cssText=loginTab.style.cssText.replace(/background:[^;]+;color:[^;]+;/,'')+activeStyle;
+    if(regTab)    regTab.style.cssText=regTab.style.cssText.replace(/background:[^;]+;color:[^;]+;/,'')+inactiveStyle;
+  } else {
+    if(loginForm) loginForm.style.display='none';
+    if(regForm)   regForm.style.display='block';
+    if(loginTab)  loginTab.style.cssText=loginTab.style.cssText.replace(/background:[^;]+;color:[^;]+;/,'')+inactiveStyle;
+    if(regTab)    regTab.style.cssText=regTab.style.cssText.replace(/background:[^;]+;color:[^;]+;/,'')+activeStyle;
+  }
+}
+
+function _showAuthError(msg){
+  var el = document.getElementById('auth-error');
+  var et = document.getElementById('auth-error-text');
+  if(el){ el.style.display='flex'; }
+  if(et){ et.textContent=msg; }
+  else if(el){ el.innerHTML='⚠️ '+msg; }
+}
+function _hideAuthError(){
+  var el = document.getElementById('auth-error');
+  if(el) el.style.display='none';
+  var et = document.getElementById('auth-error-text');
+  if(et) et.textContent='';
+}
+
+function signInWithEmail(){
+  if(!_fbAuth){ toast('err','Firebase not ready'); return; }
+  var email = (document.getElementById('auth-email-inp')||{}).value.trim();
+  var pass  = (document.getElementById('auth-pass-inp')||{}).value;
+  if(!email||!pass){ _showAuthError('Please enter email and password'); return; }
+  _hideAuthError();
+  var btn = document.querySelector('#auth-login-form .auth-submit-btn');
+  if(btn){ btn.textContent='Logging in...'; btn.disabled=true; }
+  _fbAuth.signInWithEmailAndPassword(email, pass)
+    .then(function(result){
+      toast('ok','✅ Welcome back, '+(result.user.displayName||result.user.email)+'!');
+      if(btn){ btn.textContent='Login'; btn.disabled=false; }
+    })
+    .catch(function(e){
+      var msg = e.code==='auth/wrong-password'?'Wrong password':
+                e.code==='auth/user-not-found'?'No account with this email':
+                e.code==='auth/invalid-email'?'Invalid email':e.message;
+      _showAuthError(msg);
+      if(btn){ btn.textContent='Login'; btn.disabled=false; }
+    });
+}
+
+function registerWithEmail(){
+  if(!_fbAuth){ toast('err','Firebase not ready'); return; }
+  var name  = (document.getElementById('auth-reg-name')||{}).value.trim();
+  var email = (document.getElementById('auth-reg-email')||{}).value.trim();
+  var pass  = (document.getElementById('auth-reg-pass')||{}).value;
+  var pass2 = (document.getElementById('auth-reg-pass2')||{}).value;
+  if(!name)       { _showAuthError('Please enter your name'); return; }
+  if(!email)      { _showAuthError('Please enter email'); return; }
+  if(!pass)       { _showAuthError('Please enter password'); return; }
+  if(pass.length<6){ _showAuthError('Password must be at least 6 characters'); return; }
+  if(pass!==pass2){ _showAuthError('Passwords do not match'); return; }
+  _hideAuthError();
+  var btn = document.querySelector('#auth-register-form .auth-submit-btn');
+  if(btn){ btn.textContent='Creating...'; btn.disabled=true; }
+  _fbAuth.createUserWithEmailAndPassword(email, pass)
+    .then(function(result){
+      // Set display name
+      return result.user.updateProfile({displayName: name}).then(function(){
+        return result.user;
+      });
+    })
+    .then(function(user){
+      toast('ok','🎉 Account created! Welcome, '+name+'!');
+      if(btn){ btn.textContent='Create Account'; btn.disabled=false; }
+    })
+    .catch(function(e){
+      var msg = e.code==='auth/email-already-in-use'?'Email already registered':
+                e.code==='auth/invalid-email'?'Invalid email':e.message;
+      _showAuthError(msg);
+      if(btn){ btn.textContent='Create Account'; btn.disabled=false; }
+    });
+}
+
+function forgotPassword(){
+  if(!_fbAuth) return;
+  var email = (document.getElementById('auth-email-inp')||{}).value.trim();
+  if(!email){ _showAuthError('Enter your email first'); return; }
+  _fbAuth.sendPasswordResetEmail(email)
+    .then(function(){
+      _hideAuthError();
+      toast('ok','📧 Reset email sent! Check your inbox.');
+    })
+    .catch(function(e){ _showAuthError(e.message); });
+}
+
+// Update _updateAuthUI to show username
+
+
+function _updateAuthUI(user){
+  var loggedOut = document.getElementById('auth-logged-out');
+  var loggedIn  = document.getElementById('auth-logged-in');
+  if(!loggedOut||!loggedIn) return;
+  if(user){
+    loggedOut.style.display='none';
+    loggedIn.style.display='block';
+    var name = user.displayName || (user.email ? user.email.split('@')[0] : 'User') || 'User';
+    var av  = document.getElementById('auth-avatar');
+    var ini = document.getElementById('auth-initials-circle');
+    if(user.photoURL){
+      if(av){ av.src=user.photoURL; av.style.display='block'; }
+      if(ini) ini.style.display='none';
+    } else {
+      if(av) av.style.display='none';
+      if(ini){ ini.style.display='flex'; ini.textContent=name.charAt(0).toUpperCase(); }
+    }
+    var nm=document.getElementById('auth-name');
+    var em=document.getElementById('auth-email');
+    var pb=document.getElementById('auth-provider-badge');
+    if(nm) nm.textContent=name;
+    if(em) em.textContent=user.email||'';
+    if(pb){
+      var prov=user.providerData[0]?user.providerData[0].providerId:'';
+      pb.innerHTML=prov==='google.com'?'<svg width="12" height="12" viewBox="0 0 48 48" style="vertical-align:middle;margin-right:3px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Google Account':'📧 Email Account';
+    }
+    // Pre-fill edit name input
+    var inp=document.getElementById('edit-name-inp');
+    if(inp) inp.value=name;
+  } else {
+    loggedOut.style.display='block';
+    loggedIn.style.display='none';
+    var wrap=document.getElementById('edit-name-wrap');
+    if(wrap) wrap.style.display='none';
+  }
+}
+
+// ── CLOUD SYNC ──
+function _cloudPath(uid){ return _fbDb ? _fbDb.collection('users').doc(uid) : null; }
+
+async function _syncFromCloud(uid){
+  if(!_fbDb) return;
+  try {
+    var doc = await _cloudPath(uid).get();
+    if(doc.exists){
+      var data = doc.data();
+      if(data.favorites) { try{ localStorage.setItem('kna_favs', JSON.stringify(data.favorites)); }catch(e){} }
+      if(data.history)   { try{ localStorage.setItem('kna_history', JSON.stringify(data.history)); }catch(e){} }
+      if(data.progress)  { try{ localStorage.setItem('kna_prog', JSON.stringify(data.progress)); }catch(e){} }
+      var badge = document.getElementById('auth-sync-badge');
+      if(badge){ badge.textContent='✅ Synced'; badge.style.color='#4ade80'; }
+      renderSettings();
+      console.log('[KNA] Data synced from cloud');
+    }
+  } catch(e){ console.warn('[KNA] Sync failed:', e); }
+}
+
+async function _saveToCloud(){
+  if(!_fbDb||!_currentUser) return;
+  try {
+    var favs = JSON.parse(localStorage.getItem('kna_favs')||'[]');
+    var hist = JSON.parse(localStorage.getItem('kna_history')||'[]');
+    var prog = JSON.parse(localStorage.getItem('kna_prog')||'{}');
+    await _cloudPath(_currentUser.uid).set({
+      favorites: favs,
+      history:   hist,
+      progress:  prog,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    var badge = document.getElementById('auth-sync-badge');
+    if(badge){ badge.textContent='✅ Saved'; setTimeout(function(){ if(badge) badge.textContent='✅ Synced'; }, 2000); }
+  } catch(e){ console.warn('[KNA] Save to cloud failed:', e); }
+}
+
+// Override localStorage setItem to also sync to cloud
+var _origSetItem = localStorage.setItem.bind(localStorage);
+localStorage.setItem = function(key, value){
+  _origSetItem(key, value);
+  if((key==='kna_favs'||key==='kna_history'||key==='kna_prog') && _currentUser){
+    clearTimeout(window._cloudSaveTimer);
+    window._cloudSaveTimer = setTimeout(_saveToCloud, 2000);
+  }
+};
+
+// ── DOWNLOAD APP POPUP ──
+function showDownloadApp(e){
+  if(e) e.preventDefault();
+  // Show a modal with app download link + install instructions
+  var existing = document.getElementById('app-download-modal');
+  if(existing){ existing.remove(); return; }
+  var modal = document.createElement('div');
+  modal.id='app-download-modal';
+  modal.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:20px;';
+  modal.innerHTML=
+    '<div style="background:#0d1117;border:1px solid rgba(0,212,255,.2);border-radius:18px;padding:28px;max-width:340px;width:100%;text-align:center;">'
+    +'<div style="font-size:3rem;margin-bottom:10px">📱</div>'
+    +'<div style="font-family:Bebas Neue;font-size:1.6rem;letter-spacing:4px;color:#00d4ff;margin-bottom:8px">KENSHIN ANIME</div>'
+    +'<div style="font-size:.82rem;color:#8ab;margin-bottom:20px;line-height:1.7">Install the app on your phone for the best experience — no browser bar, fullscreen, faster!</div>'
+    +'<div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:12px;padding:14px;margin-bottom:14px;">'
+      +'<div style="font-size:.7rem;color:#00d4ff;font-weight:700;letter-spacing:2px;margin-bottom:8px">📲 INSTALL FROM BROWSER</div>'
+      +'<div style="font-size:.78rem;color:#cbd5e1;line-height:1.8;text-align:left">'
+        +'1. Tap <b style="color:#fff">⋮ Menu</b> (3 dots) in Chrome<br>'
+        +'2. Tap <b style="color:#fff">"Add to Home Screen"</b><br>'
+        +'3. Tap <b style="color:#fff">Add</b> — Done! 🎉'
+      +'</div>'
+    +'</div>'
+    +'<div id="app-apk-link" style="display:none;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:12px;padding:14px;margin-bottom:14px;">'
+      +'<div style="font-size:.7rem;color:#4ade80;font-weight:700;letter-spacing:2px;margin-bottom:8px">⬇ DOWNLOAD APK</div>'
+      +'<a id="app-apk-href" href="#" style="color:#4ade80;font-size:.82rem;font-weight:700;text-decoration:none">Download APK File</a>'
+    +'</div>'
+    +'<button onclick="var m=document.getElementById(\'app-download-modal\');if(m)m.remove();" style="padding:10px 24px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#8ab;cursor:pointer;font-family:Outfit;font-size:.8rem;">Close</button>'
+    +'</div>';
+  modal.addEventListener('click', function(ev){ if(ev.target===modal) modal.remove(); });
+  document.body.appendChild(modal);
+  // If APK URL is set in settings, show it
+  if(SETTINGS && SETTINGS.apk_url){
+    var apkDiv  = document.getElementById('app-apk-link');
+    var apkHref = document.getElementById('app-apk-href');
+    if(apkDiv)  apkDiv.style.display='block';
+    if(apkHref){ apkHref.href=SETTINGS.apk_url; apkHref.textContent='⬇ Download '+SETTINGS.site_name+' APK'; }
+  }
+}
+
+// Init Firebase when DOM ready
+document.addEventListener('DOMContentLoaded', function(){
+  // Init Firebase after a small delay to not block main thread
+  setTimeout(initFirebase, 800);
+});
+
+// Service Worker disabled
+
+// Service Worker for caching
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+
+init();
+</script>
+</body>
+</html>
