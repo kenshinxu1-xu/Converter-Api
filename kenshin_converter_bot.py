@@ -1,90 +1,68 @@
 """
-Kenshin Anime — Video Converter Bot
-Video → WebM VP9 → HLS → Backblaze B2
+Kenshin Anime — Video Converter Bot v2
+H.265 → H.264 MP4 (sab browsers support karte hain!)
 
-SETUP:
-  apt install ffmpeg       ← ffprobe bhi iske saath aata hai
-  pip install pyrogram tgcrypto boto3
-  Set 5 env vars → python kenshin_converter_bot.py
+MODE 1 (Default): Convert karke Telegram pe hi bhej do
+  → Fast, simple, storage ki tension nahi
+  → Website pe direct Telegram video link kaam karta hai
 
-ENV VARS (sirf 5 zaroori):
-  BOT_TOKEN  API_ID  API_HASH  B2_KEY_ID  B2_APP_KEY
+MODE 2 (Optional): B2 pe upload karke HLS link do
+  → Set USE_HLS=true env var karke enable karo
+
+ENV VARS (zaroori):
+  BOT_TOKEN  API_ID  API_HASH
 
 OPTIONAL:
-  B2_BUCKET=kenshin-hls
-  ADMIN_IDS=123456789
+  USE_HLS=true        → HLS mode enable karo
+  B2_KEY_ID           → Backblaze Key ID
+  B2_APP_KEY          → Backblaze App Key
+  B2_BUCKET           → default: kenshin-hls
+  ADMIN_IDS           → tera user ID
 """
 
-import os, asyncio, subprocess, shutil, time, json, threading
+import os, asyncio, subprocess, shutil, time, json
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor
 
-# ── AUTO INSTALL FFMPEG IF MISSING ───────────────────────────────────────
+# ── AUTO INSTALL FFMPEG ───────────────────────────────────────────────────
 def ensure_ffmpeg():
-    ff  = shutil.which("ffmpeg")
-    ffp = shutil.which("ffprobe")
-    if ff and ffp:
-        print(f"✅ ffmpeg: {ff}")
-        print(f"✅ ffprobe: {ffp}")
-        return
-    print("⚠️  ffmpeg/ffprobe not found — trying to install...")
-    # Try different package managers
-    for cmd in [
-        ["apt-get","install","-y","ffmpeg"],
-        ["apt","install","-y","ffmpeg"],
-        ["apk","add","--no-cache","ffmpeg"],
-    ]:
+    import shutil as sh
+    if sh.which("ffmpeg") and sh.which("ffprobe"):
+        print("✅ ffmpeg ready")
+        return True
+    print("⚠️  ffmpeg missing — installing...")
+    for cmd in [["apt-get","install","-y","ffmpeg"],
+                ["apt","install","-y","ffmpeg"],
+                ["apk","add","--no-cache","ffmpeg"]]:
         r = subprocess.run(cmd, capture_output=True)
-        if r.returncode == 0 and shutil.which("ffmpeg"):
+        if r.returncode == 0 and sh.which("ffmpeg"):
             print("✅ ffmpeg installed!")
-            return
-    # Last resort: download static binary
-    print("⚠️  Package install failed, trying static binary...")
-    import urllib.request, tarfile, os
-    url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-    try:
-        bin_dir = Path("/usr/local/bin")
-        tar_path = Path("/tmp/ffmpeg.tar.xz")
-        urllib.request.urlretrieve(url, str(tar_path))
-        with tarfile.open(str(tar_path)) as tar:
-            for member in tar.getmembers():
-                if member.name.endswith("/ffmpeg") or member.name.endswith("/ffprobe"):
-                    member.name = Path(member.name).name
-                    tar.extract(member, str(bin_dir))
-                    os.chmod(str(bin_dir/member.name), 0o755)
-        if shutil.which("ffmpeg"):
-            print("✅ ffmpeg static binary installed!")
-            return
-    except Exception as e:
-        print(f"Static binary failed: {e}")
-    print("❌ Could not install ffmpeg! Add to nixpacks.toml or Dockerfile.")
+            return True
+    print("❌ ffmpeg install failed!")
+    return False
 
 ensure_ffmpeg()
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-try:
-    import boto3
-    from botocore.client import Config
-    HAS_B2 = True
-except ImportError:
-    HAS_B2 = False
+USE_HLS   = os.getenv("USE_HLS","false").lower() == "true"
+BOT_TOKEN = os.environ["BOT_TOKEN"]
+API_ID    = int(os.environ["API_ID"])
+API_HASH  = os.environ["API_HASH"]
+ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_IDS","").split(",") if x.strip().isdigit()]
 
-# ── CONFIG ────────────────────────────────────────────────────────────────
-BOT_TOKEN  = os.environ["BOT_TOKEN"]
-API_ID     = int(os.environ["API_ID"])
-API_HASH   = os.environ["API_HASH"]
-B2_KEY_ID  = os.environ["B2_KEY_ID"]
-B2_APP_KEY = os.environ["B2_APP_KEY"]
-B2_BUCKET  = os.getenv("B2_BUCKET", "kenshin-hls")
-B2_ENDPOINT= os.getenv("B2_ENDPOINT", "s3.us-west-004.backblazeb2.com")
-ADMIN_IDS  = [int(x) for x in os.getenv("ADMIN_IDS","").split(",") if x.strip().isdigit()]
+# B2 config (only needed if USE_HLS=true)
+B2_KEY_ID  = os.getenv("B2_KEY_ID","")
+B2_APP_KEY = os.getenv("B2_APP_KEY","")
+B2_BUCKET  = os.getenv("B2_BUCKET","kenshin-hls")
+B2_ENDPOINT= os.getenv("B2_ENDPOINT","s3.us-west-004.backblazeb2.com")
 B2_PUB     = f"https://f004.backblazeb2.com/file/{B2_BUCKET}"
 
-WORK_DIR = Path("/tmp/kbot"); WORK_DIR.mkdir(exist_ok=True)
+WORK_DIR   = Path("/tmp/kbot"); WORK_DIR.mkdir(exist_ok=True)
 VIDEO_EXTS = {".mp4",".mkv",".avi",".mov",".webm",".ts",".m4v",".3gp"}
-QUALITIES  = [("1080p",1080,31,"128k"),("720p",720,33,"96k"),("480p",480,35,"80k")]
+
+# Qualities for HLS mode
+QUALITIES = [("1080p",1080,28,"128k"),("720p",720,30,"96k"),("480p",480,32,"80k")]
 
 # ── UTILS ─────────────────────────────────────────────────────────────────
 def hsize(b):
@@ -99,13 +77,11 @@ def htime(s):
     if s < 3600: return f"{s//60}m {s%60}s"
     return f"{s//3600}h {(s%3600)//60}m"
 
-def progress_bar(pct, width=16):
-    filled = int(width * pct / 100)
-    bar = "█" * filled + "░" * (width - filled)
-    return f"[{bar}] {pct}%"
+def pbar(pct, w=18):
+    f = int(w * pct / 100)
+    return f"[{'█'*f}{'░'*(w-f)}] {pct}%"
 
 def get_info(path):
-    """Get video info using ffprobe"""
     r = subprocess.run(
         ["ffprobe","-v","quiet","-print_format","json",
          "-show_streams","-show_format", str(path)],
@@ -121,71 +97,19 @@ def get_info(path):
     info["dur"] = float(d.get("format",{}).get("duration",0))
     return info
 
-# ── B2 FAST PARALLEL UPLOAD ───────────────────────────────────────────────
-def _make_b2():
-    return boto3.client("s3",
-        endpoint_url=f"https://{B2_ENDPOINT}",
-        aws_access_key_id=B2_KEY_ID,
-        aws_secret_access_key=B2_APP_KEY,
-        config=Config(signature_version="s3v4",
-                      max_pool_connections=20))   # connection pool
-
-def b2_upload_one(args):
-    """Upload single file — runs in thread"""
-    local, key = args
-    ct = ("application/x-mpegURL" if key.endswith(".m3u8") else
-          "video/MP2T"            if key.endswith(".ts")   else
-          "application/octet-stream")
-    _make_b2().upload_file(local, B2_BUCKET, key,
-        ExtraArgs={"ContentType":ct,"ACL":"public-read"})
-    return f"{B2_PUB}/{key}"
-
-async def b2_upload_dir_parallel(folder, prefix, prog_cb=None):
-    """Upload all files in parallel using thread pool — MUCH faster!"""
-    files = sorted(Path(folder).glob("*.ts")) + sorted(Path(folder).glob("*.m3u8"))
-    tasks = [(str(f), f"{prefix}/{f.name}") for f in files]
-    total = len(tasks)
-    done  = 0
-    urls  = {}
-
-    loop = asyncio.get_event_loop()
-    with ThreadPoolExecutor(max_workers=8) as pool:   # 8 parallel uploads
-        futures = {loop.run_in_executor(pool, b2_upload_one, t): t for t in tasks}
-        for fut in asyncio.as_completed(futures.keys()):
-            local, key = futures[fut]
-            fname = Path(local).name
-            url   = await fut
-            urls[fname] = url
-            done += 1
-            if prog_cb:
-                pct = int(done/total*100)
-                await prog_cb(pct, done, total)
-
-    return urls
-
-# ── FFMPEG CONVERT + SEGMENT ──────────────────────────────────────────────
-async def convert(inp, outdir, name, height, crf, abr, dur_s, cb=None):
-    """
-    inp     → input video path
-    outdir  → output base dir
-    dur_s   → total duration in seconds (for progress %)
-    cb      → async callback(stage_msg, pct)
-    """
-    outdir = Path(outdir)
-    qdir   = outdir / name;  qdir.mkdir(parents=True, exist_ok=True)
-    webm   = outdir / f"_{name}.webm"
-    m3u8   = qdir   / "index.m3u8"
-
-    # ── Step 1: Convert to WebM VP9 ──────────────────────────────────────
+# ── MODE 1: CONVERT TO H.264 MP4 ─────────────────────────────────────────
+async def convert_h264(inp, out, dur_s, cb=None):
+    """H.265/any → H.264 MP4 — works on ALL browsers & devices"""
     cmd = [
-        "ffmpeg","-y","-i", str(inp),
-        "-vf",    f"scale=-2:{height}",
-        "-c:v",   "libvpx-vp9",
-        "-crf",   str(crf), "-b:v","0",
-        "-deadline","realtime", "-cpu-used","4", "-row-mt","1",
-        "-c:a",   "libopus", "-b:a", abr, "-vbr","on",
-        "-progress","pipe:1",
-        str(webm)
+        "ffmpeg", "-y", "-i", str(inp),
+        "-c:v", "libx264",
+        "-preset", "fast",        # fast encode, good quality
+        "-crf", "23",             # quality (18=best, 28=smaller)
+        "-c:a", "aac",
+        "-b:a", "128k",
+        "-movflags", "+faststart", # web optimized
+        "-progress", "pipe:1",
+        str(out)
     ]
 
     proc = await asyncio.create_subprocess_exec(
@@ -193,49 +117,120 @@ async def convert(inp, outdir, name, height, crf, abr, dur_s, cb=None):
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE)
 
-    last_cb = 0
+    last = 0
     while True:
         line = await proc.stdout.readline()
         if not line: break
         line = line.decode().strip()
-        if line.startswith("out_time_us="):
+        if line.startswith("out_time_us=") and cb:
             now = time.time()
-            if now - last_cb < 2.5: continue
-            last_cb = now
+            if now - last < 2.5: continue
+            last = now
             try:
                 us  = int(line.split("=")[1])
                 pct = min(int(us / (dur_s * 1_000_000) * 100), 99) if dur_s > 0 else 0
                 m   = us // 60_000_000
                 s   = (us % 60_000_000) // 1_000_000
-                bar = progress_bar(pct)
-                if cb: await cb(f"⚙️ Converting {name}\n{bar}\n⏱ {m}m{s}s encoded", pct)
+                await cb(pct, f"{m}m {s}s encoded")
+            except: pass
+
+    await proc.wait()
+    err = (await proc.stderr.read()).decode()
+    if proc.returncode != 0 or not Path(out).exists():
+        raise RuntimeError(f"H.264 conversion failed:\n{err[-300:]}")
+    return out
+
+# ── MODE 2: CONVERT TO WEBM + HLS ────────────────────────────────────────
+async def convert_hls(inp, outdir, name, height, crf, abr, dur_s, cb=None):
+    """H.265 → WebM VP9 → HLS segments"""
+    outdir = Path(outdir)
+    qdir   = outdir / name; qdir.mkdir(parents=True, exist_ok=True)
+    webm   = outdir / f"_{name}.webm"
+    m3u8   = qdir / "index.m3u8"
+
+    # Step 1: Convert to WebM
+    cmd = ["ffmpeg","-y","-i",str(inp),
+           "-vf",f"scale=-2:{height}",
+           "-c:v","libvpx-vp9","-crf",str(crf),"-b:v","0",
+           "-deadline","realtime","-cpu-used","4","-row-mt","1",
+           "-c:a","libopus","-b:a",abr,"-vbr","on",
+           "-progress","pipe:1", str(webm)]
+
+    proc = await asyncio.create_subprocess_exec(
+        *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+
+    last = 0
+    while True:
+        line = await proc.stdout.readline()
+        if not line: break
+        line = line.decode().strip()
+        if line.startswith("out_time_us=") and cb:
+            now = time.time()
+            if now - last < 2.5: continue
+            last = now
+            try:
+                us  = int(line.split("=")[1])
+                pct = min(int(us / (dur_s * 1_000_000) * 100), 99) if dur_s > 0 else 0
+                m   = us // 60_000_000
+                s   = (us % 60_000_000) // 1_000_000
+                await cb(pct, f"{name}: {m}m {s}s")
             except: pass
 
     await proc.wait()
     if not webm.exists():
-        err = (await proc.stderr.read()).decode()[-300:]
-        raise RuntimeError(f"WebM failed [{name}]: {err}")
+        raise RuntimeError(f"WebM failed [{name}]")
 
-    if cb: await cb(f"📦 Segmenting {name} → HLS...", 99)
-
-    # ── Step 2: Segment WebM → HLS ────────────────────────────────────────
-    cmd2 = [
+    # Step 2: Segment to HLS
+    if cb: await cb(99, f"{name}: segmenting...")
+    r2 = await asyncio.create_subprocess_exec(
         "ffmpeg","-y","-i",str(webm),"-c","copy",
         "-f","hls","-hls_time","6","-hls_list_size","0",
         "-hls_segment_type","mpegts","-hls_flags","independent_segments",
-        "-hls_segment_filename", str(qdir/"seg_%04d.ts"),
-        str(m3u8)
-    ]
-    r2 = await asyncio.create_subprocess_exec(
-        *cmd2, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+        "-hls_segment_filename",str(qdir/"seg_%04d.ts"), str(m3u8),
+        stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     await r2.wait()
     webm.unlink(missing_ok=True)
 
     if not m3u8.exists():
-        err2 = (await r2.stderr.read()).decode()[-300:]
-        raise RuntimeError(f"HLS failed [{name}]: {err2}")
-
+        raise RuntimeError(f"HLS failed [{name}]")
     return m3u8
+
+# ── B2 UPLOAD (fixed — no asyncio.as_completed bug) ──────────────────────
+def b2_upload_sync(local, key):
+    """Synchronous B2 upload — runs in thread"""
+    import boto3
+    from botocore.client import Config
+    c = boto3.client("s3",
+        endpoint_url=f"https://{B2_ENDPOINT}",
+        aws_access_key_id=B2_KEY_ID,
+        aws_secret_access_key=B2_APP_KEY,
+        config=Config(signature_version="s3v4"))
+    ct = ("application/x-mpegURL" if key.endswith(".m3u8") else
+          "video/MP2T"            if key.endswith(".ts")   else
+          "application/octet-stream")
+    c.upload_file(str(local), B2_BUCKET, key,
+                  ExtraArgs={"ContentType":ct,"ACL":"public-read"})
+    return f"{B2_PUB}/{key}"
+
+async def b2_upload_dir(folder, prefix, prog_cb=None):
+    """Upload all files — proper asyncio threading, no bug"""
+    files  = sorted(Path(folder).glob("*.*"))
+    total  = len(files)
+    done   = 0
+    urls   = {}
+    loop   = asyncio.get_event_loop()
+
+    for f in files:
+        key = f"{prefix}/{f.name}"
+        # run_in_executor = correct way to run sync code in async
+        url = await loop.run_in_executor(None, b2_upload_sync, str(f), key)
+        urls[f.name] = url
+        done += 1
+        if prog_cb:
+            pct = int(done/total*100)
+            await prog_cb(pct, done, total)
+
+    return urls
 
 def rewrite_m3u8(path, seg_urls):
     txt = Path(path).read_text()
@@ -247,26 +242,35 @@ def rewrite_m3u8(path, seg_urls):
 def make_master(q_urls, out_path):
     bw = {"1080p":(5000000,1920,1080),"720p":(2800000,1280,720),"480p":(1200000,854,480)}
     lines = ["#EXTM3U","#EXT-X-VERSION:3",""]
-    for qn,url in q_urls.items():
+    for qn, url in q_urls.items():
         b,w,h = bw.get(qn,(2000000,1280,720))
         lines += [f'#EXT-X-STREAM-INF:BANDWIDTH={b},RESOLUTION={w}x{h},NAME="{qn}"',url,""]
     Path(out_path).write_text("\n".join(lines))
 
 # ── BOT ───────────────────────────────────────────────────────────────────
 bot  = Client("kenshin_conv", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
-jobs = {}   # uid → {"cancel": bool}
+jobs = {}
 
 @bot.on_message(filters.command("start"))
 async def cmd_start(_, m: Message):
+    mode = "HLS → B2 Link" if USE_HLS else "H.264 MP4 → Telegram"
     await m.reply_text(
         "🎌 **Kenshin Video Converter**\n\n"
-        "Koi bhi video bhejo:\n"
-        "✅ H.265/H.264 → WebM VP9\n"
-        "✅ HLS segments (480p/720p/1080p)\n"
-        "✅ Backblaze B2 fast parallel upload\n"
-        "✅ Kenshin Player ready link\n\n"
-        "`/cancel` — rok do"
+        f"Mode: **{mode}**\n\n"
+        "Video bhejo aur main:\n"
+        "✅ H.265 → H.264 convert karunga (sab devices pe chalega)\n"
+        "✅ Real-time progress dikhaunga\n"
+        "✅ Converted video wapas Telegram pe bhejna\n\n"
+        "`/cancel` — rok do\n"
+        "`/mode` — current mode dekho"
     )
+
+@bot.on_message(filters.command("mode"))
+async def cmd_mode(_, m: Message):
+    if USE_HLS:
+        await m.reply_text("🌐 **Mode: HLS** — B2 pe upload → m3u8 link")
+    else:
+        await m.reply_text("📱 **Mode: Telegram** — H.264 MP4 wapas Telegram pe")
 
 @bot.on_message(filters.command("cancel"))
 async def cmd_cancel(_, m: Message):
@@ -283,14 +287,13 @@ async def handle_video(client, m: Message):
     if ADMIN_IDS and uid not in ADMIN_IDS:
         return
 
-    # File detect
     if m.video:
-        f = m.video;  fname = f"video_{m.id}.mp4"
+        f = m.video; fname = f"video_{m.id}.mp4"
     else:
         f = m.document; fname = f.file_name or f"file_{m.id}"
         if Path(fname).suffix.lower() not in VIDEO_EXTS:
             return await m.reply_text(
-                "⚠️ Video file bhejo!\nMP4, MKV, AVI, MOV, WebM, TS support hai.")
+                "⚠️ Video file bhejo!\nMP4, MKV, AVI, MOV, WebM, TS")
 
     if uid in jobs:
         return await m.reply_text("⏳ Pehle wali job chal rahi hai.\n/cancel karke naya bhejo.")
@@ -298,11 +301,11 @@ async def handle_video(client, m: Message):
     st  = await m.reply_text(f"📥 Downloading `{fname}`...")
     job = {"cancel": False}
     jobs[uid] = job
-    wd  = WORK_DIR / f"{uid}_{m.id}";  wd.mkdir(exist_ok=True)
+    wd  = WORK_DIR / f"{uid}_{m.id}"; wd.mkdir(exist_ok=True)
     inp = wd / fname
 
     try:
-        # ── DOWNLOAD WITH PROGRESS ────────────────────────────────────────
+        # ── DOWNLOAD ──────────────────────────────────────────────────────
         t0 = time.time(); last_dl = 0
 
         async def dl_prog(cur, tot):
@@ -314,11 +317,10 @@ async def handle_video(client, m: Message):
             pct = int(cur/tot*100) if tot else 0
             spd = cur / max(now-t0, 0.1)
             eta = (tot-cur) / max(spd, 1)
-            bar = progress_bar(pct)
             await st.edit_text(
                 f"📥 **Downloading**\n"
                 f"`{fname}`\n"
-                f"{bar}\n"
+                f"{pbar(pct)}\n"
                 f"{hsize(cur)} / {hsize(tot)}\n"
                 f"⚡ {hsize(int(spd))}/s  ⏱ {htime(eta)} baki")
 
@@ -329,103 +331,134 @@ async def handle_video(client, m: Message):
         info = get_info(str(inp))
         await st.edit_text(
             f"📊 **Video Info**\n"
-            f"Codec: `{info['codec']}` → WebM VP9\n"
-            f"Res: `{info['w']}x{info['h']}`\n"
+            f"Codec: `{info['codec']}` → H.264\n"
+            f"Resolution: `{info['w']}x{info['h']}`\n"
             f"Duration: `{htime(info['dur'])}`\n"
             f"Size: `{hsize(inp.stat().st_size)}`\n\n"
             f"🚀 Converting...")
 
-        target = [q for q in QUALITIES if q[1] <= info["h"]] or [QUALITIES[-1]]
-        outdir = wd / "out"
-        done   = {}   # qname → m3u8 path
         t_conv = time.time()
 
-        # ── CONVERT EACH QUALITY ──────────────────────────────────────────
-        for i, (qn, qh, qcrf, qabr) in enumerate(target):
-            if job["cancel"]: raise asyncio.CancelledError
+        # ── MODE 1: H.264 MP4 → SEND ON TELEGRAM ─────────────────────────
+        if not USE_HLS:
+            out_mp4 = wd / f"converted_{m.id}.mp4"
 
-            stage_start = time.time()
-            async def cb(msg, pct, i=i, qn=qn):
+            async def conv_cb(pct, info_str):
                 if not job["cancel"]:
                     try:
-                        elapsed = htime(time.time() - t_conv)
                         await st.edit_text(
-                            f"⚙️ **Step {i+1}/{len(target)}: {qn}**\n"
-                            f"{msg}\n"
-                            f"Total elapsed: {elapsed}")
+                            f"⚙️ **Converting to H.264**\n"
+                            f"{pbar(pct)}\n"
+                            f"⏱ {info_str}\n"
+                            f"Elapsed: {htime(time.time()-t_conv)}")
                     except: pass
 
-            done[qn] = await convert(
-                str(inp), outdir, qn, qh, qcrf, qabr, info["dur"], cb=cb)
+            await convert_h264(str(inp), str(out_mp4), info["dur"], cb=conv_cb)
+            inp.unlink(missing_ok=True)  # free space
 
-        # ── UPLOAD TO B2 (PARALLEL) ───────────────────────────────────────
-        q_urls    = {}
-        master_url = ""
+            await st.edit_text(
+                f"✅ Convert done! ({htime(time.time()-t_conv)})\n"
+                f"📤 Uploading to Telegram...")
 
-        if HAS_B2 and B2_KEY_ID:
-            pfx         = f"v/{uid}_{m.id}"
-            total_segs  = sum(len(list((done[qn].parent).glob("*.ts"))) for qn in done)
-            uploaded    = [0]   # mutable counter
-            ul_start    = time.time()
+            # Upload with progress
+            last_ul = 0
+            async def ul_prog(cur, tot):
+                nonlocal last_ul
+                now = time.time()
+                if now - last_ul < 2: return
+                last_ul = now
+                pct = int(cur/tot*100) if tot else 0
+                spd = cur / max(now-t_conv, 0.1)
+                await st.edit_text(
+                    f"📤 **Uploading to Telegram**\n"
+                    f"{pbar(pct)}\n"
+                    f"{hsize(cur)} / {hsize(tot)}\n"
+                    f"⚡ {hsize(int(spd))}/s")
+
+            await m.reply_video(
+                str(out_mp4),
+                caption=(
+                    f"✅ **Converted!**\n"
+                    f"Original: `{info['codec']}` → H.264\n"
+                    f"Resolution: `{info['w']}x{info['h']}`\n"
+                    f"⏱ Conversion time: {htime(time.time()-t_conv)}\n\n"
+                    f"Ab yeh video kisi bhi browser pe chalegi! 🎉"
+                ),
+                progress=ul_prog,
+                supports_streaming=True
+            )
+            await st.delete()
+
+        # ── MODE 2: HLS → BACKBLAZE B2 ────────────────────────────────────
+        else:
+            if not B2_KEY_ID:
+                raise RuntimeError("B2_KEY_ID not set! USE_HLS=true ke liye B2 config zaroori hai.")
+
+            target = [q for q in QUALITIES if q[1] <= info["h"]] or [QUALITIES[-1]]
+            outdir = wd / "out"
+            done   = {}
+
+            for i, (qn, qh, qcrf, qabr) in enumerate(target):
+                if job["cancel"]: raise asyncio.CancelledError
+
+                async def hls_cb(pct, info_str, i=i, qn=qn):
+                    if not job["cancel"]:
+                        try:
+                            await st.edit_text(
+                                f"⚙️ **Step {i+1}/{len(target)}: {qn}**\n"
+                                f"{pbar(pct)}\n"
+                                f"⏱ {info_str}\n"
+                                f"Elapsed: {htime(time.time()-t_conv)}")
+                        except: pass
+
+                done[qn] = await convert_hls(
+                    str(inp), outdir, qn, qh, qcrf, qabr, info["dur"], cb=hls_cb)
+
+            # Upload to B2
+            q_urls = {}
+            pfx    = f"v/{uid}_{m.id}"
+            ul_t   = time.time()
 
             for qn, m3u8 in done.items():
                 if job["cancel"]: raise asyncio.CancelledError
 
-                qdir = m3u8.parent
-                q_total = len(list(qdir.glob("*.ts"))) + 1   # +1 for m3u8
+                async def b2_cb(pct, done_n, tot_n, qn=qn):
+                    try:
+                        await st.edit_text(
+                            f"☁️ **Uploading {qn} → B2**\n"
+                            f"{pbar(pct)}\n"
+                            f"{done_n}/{tot_n} files\n"
+                            f"⏱ {htime(time.time()-ul_t)} elapsed")
+                    except: pass
 
-                async def ul_cb(pct, done_n, tot_n, qn=qn):
-                    elapsed = htime(time.time() - ul_start)
-                    bar = progress_bar(pct)
-                    await st.edit_text(
-                        f"☁️ **Uploading {qn} → B2**\n"
-                        f"{bar}\n"
-                        f"{done_n}/{tot_n} files\n"
-                        f"⏱ {elapsed} elapsed")
-
-                seg_urls = await b2_upload_dir_parallel(qdir, f"{pfx}/{qn}", ul_cb)
-
-                # Rewrite m3u8 with CDN URLs
+                seg_urls = await b2_upload_dir(m3u8.parent, f"{pfx}/{qn}", b2_cb)
                 rewrite_m3u8(m3u8, seg_urls)
+                q_urls[qn] = await asyncio.get_event_loop().run_in_executor(
+                    None, b2_upload_sync, str(m3u8), f"{pfx}/{qn}/index.m3u8")
 
-                # Upload the updated m3u8
-                m3u8_url = b2_upload_one((str(m3u8), f"{pfx}/{qn}/index.m3u8"))
-                q_urls[qn] = m3u8_url
-
-            # Master playlist
             master = outdir / "master.m3u8"
             make_master(q_urls, master)
-            master_url = b2_upload_one((str(master), f"{pfx}/master.m3u8"))
+            master_url = await asyncio.get_event_loop().run_in_executor(
+                None, b2_upload_sync, str(master), f"{pfx}/master.m3u8")
 
-        else:
-            for qn, m3u8 in done.items():
-                q_urls[qn] = str(m3u8)
-            master_url = "⚠️ B2 not configured"
-
-        # ── RESULT ────────────────────────────────────────────────────────
-        player_fmt = "|||".join(f"{k}::{v}" for k,v in q_urls.items())
-        total_time = htime(time.time() - t_conv)
-
-        result = (
-            f"✅ **Done!** ⏱ {total_time}\n\n"
-            f"🎬 **Links:**\n"
-            + "\n".join(f"• **{k}:** `{v}`" for k,v in q_urls.items())
-            + (f"\n\n🌐 **Master:** `{master_url}`" if master_url and not master_url.startswith("⚠️") else "")
-            + f"\n\n📋 **Kenshin Player Format:**\n_(Admin panel → Trailer URL mein paste karo)_\n\n"
-            f"`{player_fmt}`"
-        )
-
-        if len(result) > 4096:
-            txt = wd / "links.txt"
-            txt.write_text(
-                f"Master: {master_url}\n\n"
-                + "\n".join(f"{k}: {v}" for k,v in q_urls.items())
-                + f"\n\nKenshin Player Format:\n{player_fmt}"
+            player_fmt = "|||".join(f"{k}::{v}" for k,v in q_urls.items())
+            result = (
+                f"✅ **Done!** ⏱ {htime(time.time()-t_conv)}\n\n"
+                f"🌐 **Master:** `{master_url}`\n\n"
+                f"🎬 **Quality Links:**\n"
+                + "\n".join(f"• **{k}:** `{v}`" for k,v in q_urls.items())
+                + f"\n\n📋 **Kenshin Player Format:**\n`{player_fmt}`"
             )
-            await st.edit_text("✅ Done! Links file mein hain 👇")
-            await m.reply_document(str(txt), caption="📋 HLS Links")
-        else:
-            await st.edit_text(result)
+
+            if len(result) > 4096:
+                txt = wd/"links.txt"
+                txt.write_text(f"Master: {master_url}\n\n"
+                    + "\n".join(f"{k}: {v}" for k,v in q_urls.items())
+                    + f"\n\nPlayer Format:\n{player_fmt}")
+                await st.edit_text("✅ Done!")
+                await m.reply_document(str(txt), caption="📋 HLS Links")
+            else:
+                await st.edit_text(result)
 
     except asyncio.CancelledError:
         await st.edit_text("⛔ Cancel ho gayi.")
@@ -437,7 +470,7 @@ async def handle_video(client, m: Message):
         shutil.rmtree(wd, ignore_errors=True)
 
 if __name__ == "__main__":
-    print("🎌 Kenshin Converter Bot starting...")
-    print(f"B2 upload: {'✅ Parallel (8 threads)' if HAS_B2 and B2_KEY_ID else '❌ Not configured'}")
-    print(f"Admins: {ADMIN_IDS or 'All users allowed'}")
+    print("🎌 Kenshin Converter Bot v2")
+    print(f"Mode: {'🌐 HLS → B2' if USE_HLS else '📱 H.264 → Telegram'}")
+    print(f"Admins: {ADMIN_IDS or 'All users'}")
     bot.run()
