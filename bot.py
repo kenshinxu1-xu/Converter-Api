@@ -21,16 +21,43 @@ from concurrent.futures import ThreadPoolExecutor
 
 # ── AUTO INSTALL FFMPEG IF MISSING ───────────────────────────────────────
 def ensure_ffmpeg():
-    if shutil.which("ffmpeg") and shutil.which("ffprobe"):
-        print("✅ ffmpeg + ffprobe found")
+    ff  = shutil.which("ffmpeg")
+    ffp = shutil.which("ffprobe")
+    if ff and ffp:
+        print(f"✅ ffmpeg: {ff}")
+        print(f"✅ ffprobe: {ffp}")
         return
-    print("⚠️  ffmpeg not found — installing...")
-    subprocess.run(["apt-get", "install", "-y", "ffmpeg"],
-                   capture_output=True)
-    if shutil.which("ffmpeg"):
-        print("✅ ffmpeg installed!")
-    else:
-        print("❌ ffmpeg install failed! Run: apt install ffmpeg")
+    print("⚠️  ffmpeg/ffprobe not found — trying to install...")
+    # Try different package managers
+    for cmd in [
+        ["apt-get","install","-y","ffmpeg"],
+        ["apt","install","-y","ffmpeg"],
+        ["apk","add","--no-cache","ffmpeg"],
+    ]:
+        r = subprocess.run(cmd, capture_output=True)
+        if r.returncode == 0 and shutil.which("ffmpeg"):
+            print("✅ ffmpeg installed!")
+            return
+    # Last resort: download static binary
+    print("⚠️  Package install failed, trying static binary...")
+    import urllib.request, tarfile, os
+    url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+    try:
+        bin_dir = Path("/usr/local/bin")
+        tar_path = Path("/tmp/ffmpeg.tar.xz")
+        urllib.request.urlretrieve(url, str(tar_path))
+        with tarfile.open(str(tar_path)) as tar:
+            for member in tar.getmembers():
+                if member.name.endswith("/ffmpeg") or member.name.endswith("/ffprobe"):
+                    member.name = Path(member.name).name
+                    tar.extract(member, str(bin_dir))
+                    os.chmod(str(bin_dir/member.name), 0o755)
+        if shutil.which("ffmpeg"):
+            print("✅ ffmpeg static binary installed!")
+            return
+    except Exception as e:
+        print(f"Static binary failed: {e}")
+    print("❌ Could not install ffmpeg! Add to nixpacks.toml or Dockerfile.")
 
 ensure_ffmpeg()
 
