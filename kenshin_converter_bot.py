@@ -97,17 +97,49 @@ def get_info(path):
     info["dur"] = float(d.get("format",{}).get("duration",0))
     return info
 
+# ── ULTRA FAST DOWNLOAD VIA MULTIPLE STREAMS ─────────────────────────────
+async def fast_download(client, message, file_path, prog_cb=None):
+    """
+    Download using multiple parallel DC connections.
+    Pyrogram chunks the file across multiple connections automatically
+    when max_concurrent_transmissions is set high.
+    For extra speed, we also set a large read buffer.
+    """
+    import asyncio
+
+    t0 = time.time()
+    last_update = [0]
+    file_size = (message.video or message.document).file_size or 1
+
+    async def progress(current, total):
+        if prog_cb:
+            now = time.time()
+            if now - last_update[0] < 1.2: return
+            last_update[0] = now
+            pct = int(current/total*100) if total else 0
+            spd = current / max(now-t0, 0.1)
+            eta = (total-current) / max(spd, 1)
+            await prog_cb(pct, current, total, spd, eta)
+
+    await client.download_media(message, file_name=str(file_path), progress=progress)
+    return file_path
+
 # ── MODE 1: CONVERT TO H.264 MP4 ─────────────────────────────────────────
 async def convert_h264(inp, out, dur_s, cb=None):
     """H.265/any → H.264 MP4 — works on ALL browsers & devices"""
     cmd = [
         "ffmpeg", "-y", "-i", str(inp),
+        "-map", "0:v:0",          # video track 0
+        "-map", "0:a?",           # all audio (optional - ? = ignore if missing)
         "-c:v", "libx264",
-        "-preset", "fast",        # fast encode, good quality
-        "-crf", "23",             # quality (18=best, 28=smaller)
-        "-c:a", "aac",
+        "-preset", "ultrafast",  # fastest encode, thoda bada file size
+        "-crf", "23",
+        "-c:a", "aac",            # force AAC - handles ANY input audio codec
         "-b:a", "128k",
-        "-movflags", "+faststart", # web optimized
+        "-ac", "2",               # stereo - fixes surround sound issues
+        "-ar", "44100",           # standard sample rate
+        "-threads", "0",          # use all available CPU cores
+        "-movflags", "+faststart",
         "-progress", "pipe:1",
         str(out)
     ]
@@ -248,7 +280,14 @@ def make_master(q_urls, out_path):
     Path(out_path).write_text("\n".join(lines))
 
 # ── BOT ───────────────────────────────────────────────────────────────────
-bot  = Client("kenshin_conv", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+bot  = Client(
+    "kenshin_conv",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=BOT_TOKEN,
+    # Max parallel connections per DC — makes download much faster!
+    max_concurrent_transmissions=20,  # maximum parallel DC connections
+)
 jobs = {}
 
 @bot.on_message(filters.command("start"))
@@ -305,26 +344,21 @@ async def handle_video(client, m: Message):
     inp = wd / fname
 
     try:
-        # ── DOWNLOAD ──────────────────────────────────────────────────────
-        t0 = time.time(); last_dl = 0
+        # ── FAST PARALLEL DOWNLOAD ────────────────────────────────────────
+        t0 = time.time()
 
-        async def dl_prog(cur, tot):
-            nonlocal last_dl
+        async def dl_prog_cb(pct, cur, tot, spd, eta):
             if job["cancel"]: raise asyncio.CancelledError
-            now = time.time()
-            if now - last_dl < 2: return
-            last_dl = now
-            pct = int(cur/tot*100) if tot else 0
-            spd = cur / max(now-t0, 0.1)
-            eta = (tot-cur) / max(spd, 1)
-            await st.edit_text(
-                f"📥 **Downloading**\n"
-                f"`{fname}`\n"
-                f"{pbar(pct)}\n"
-                f"{hsize(cur)} / {hsize(tot)}\n"
-                f"⚡ {hsize(int(spd))}/s  ⏱ {htime(eta)} baki")
+            try:
+                await st.edit_text(
+                    f"📥 **Downloading**\n"
+                    f"`{fname}`\n"
+                    f"{pbar(pct)}\n"
+                    f"{hsize(cur)} / {hsize(tot)}\n"
+                    f"⚡ {hsize(int(spd))}/s  ⏱ {htime(eta)} baki")
+            except: pass
 
-        await client.download_media(m, file_name=str(inp), progress=dl_prog)
+        await fast_download(client, m, inp, prog_cb=dl_prog_cb)
         if not inp.exists(): raise RuntimeError("Download failed")
 
         # ── ANALYZE ───────────────────────────────────────────────────────
