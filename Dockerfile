@@ -1,9 +1,18 @@
-FROM python:3.11-slim
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+FROM python:3.10-slim
+
+# Install HandBrake CLI and update system
+RUN apt-get update && \
+    apt-get install -y handbrake-cli && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
+
+# Install Python requirements
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY bot.py .
-RUN mkdir -p /tmp/kenshin
-EXPOSE 8080
+
+# Copy the rest of your code
+COPY . .
+
+# Run the bot
 CMD ["python", "bot.py"]
